@@ -2,7 +2,8 @@ Class {
 	#name : 'Game',
 	#superclass : 'Object',
 	#instVars : [
-		'currentState'
+		'currentState',
+		'cells'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -11,7 +12,13 @@ Class {
 { #category : 'as yet unclassified' }
 Game class >> createSimulation [
 
-	^ self new initializeSimulation
+	^ self createSimulationWith: 10
+]
+
+{ #category : 'as yet unclassified' }
+Game class >> createSimulationWith: squares [
+
+	^ self new initializeSimulationWith: squares. 
 ]
 
 { #category : 'as yet unclassified' }
@@ -21,16 +28,20 @@ Game >> initializeSimulation [
 	
 ]
 
-{ #category : 'as yet unclassified' }
-Game >> playSimulation [
+{ #category : 'initialization' }
+Game >> initializeSimulationWith: squares [.
 
-	| returnState |
-	returnState := currentState.
-	currentState := false.
-	^ returnState.
+	currentState := true.
+	cells := squares.
+	
 ]
 
 { #category : 'as yet unclassified' }
-Game >> startSimulation [
-	^ true.
+Game >> playSimulation [
+
+	| returnState throw |
+	returnState := currentState.
+	throw := 11.
+	throw > cells ifTrue: [ currentState:= false ].
+	^ returnState .
 ]
