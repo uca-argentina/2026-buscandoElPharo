@@ -58,7 +58,29 @@ GameTest >> test006WhenAGameHasMoreThanOneShipThenGameKeepsPlayingUntilFinished 
 
 	| aGame squares |
 	squares := 10.
-	aGame := Game createSimulationWith: squares andPlayers: 2.
+	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}).
 	aGame playSimulation.
 	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {15. 10.}).
+]
+
+{ #category : 'tests' }
+GameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
+
+	| aGame squares |
+	
+	squares := 10.
+	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}).
+	
+	self assert: aGame winner equals: 'nobody'.
+]
+
+{ #category : 'tests' }
+GameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
+
+	| aGame squares |
+	
+	squares := 10.
+	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}).
+	aGame playSimulation.
+	self assert: aGame winner equals: 'sombrero'.
 ]
