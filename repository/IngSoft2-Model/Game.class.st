@@ -27,6 +27,11 @@ Game class >> createSimulationWith: squares [
 { #category : 'as yet unclassified' }
 Game class >> createSimulationWith: squares andPlayers: names [
 
+	squares < 0 ifTrue: [
+		Error signal: 'Can start game with negative squares' ].
+	names isEmpty ifTrue: [
+		Error signal: 'Can start game with no players' ].
+
 	^ self new initializeSimulationWith: squares andPlayers: names
 ]
 

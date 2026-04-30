@@ -84,3 +84,34 @@ GameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 	aGame playSimulation.
 	self assert: aGame winner equals: 'sombrero'.
 ]
+
+{ #category : 'tests' }
+GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
+
+	| squares |
+	squares := -10.
+	self
+		should: [ Game createSimulationWith: squares ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: 'Can start game with negative squares' ]
+]
+
+{ #category : 'tests' }
+GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
+
+	| squares |
+	squares := 10.
+	self
+		should: [
+			Game
+				createSimulationWith: squares
+				andPlayers: (OrderedCollection withAll: {  }) ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: 'Can start game with no players' ]
+]
