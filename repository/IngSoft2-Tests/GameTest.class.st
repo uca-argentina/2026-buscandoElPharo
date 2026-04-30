@@ -11,7 +11,7 @@ GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 	| aGame |
 	aGame := Game createSimulation.
 	
-	self assert: aGame started equals: false.
+	self assert: aGame started equals: true.
 ]
 
 { #category : 'tests' }
@@ -20,7 +20,7 @@ GameTest >> test002WhenAGameHasAlreadyStartedThenSimulationCanNotRestart [
 	| aGame |
 	aGame := Game createSimulation.
 	aGame playSimulation.
-	self assert: aGame started equals: true.
+	self assert: aGame finished equals: true.
 ]
 
 { #category : 'tests' }
@@ -30,7 +30,7 @@ GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 	squares := 4.
 	aGame := Game createSimulationWith: squares.
 	aGame playSimulation.
-	self assert: aGame finishSimulation equals: true.
+	self assert: aGame finished equals: true.
 ]
 
 { #category : 'tests' }
@@ -40,7 +40,7 @@ GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilF
 	squares := 10.
 	aGame := Game createSimulationWith: squares.
 	aGame playSimulation.
-	self assert: aGame finishSimulation equals: true.
+	self assert: aGame finished equals: true.
 ]
 
 { #category : 'tests' }

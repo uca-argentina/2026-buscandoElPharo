@@ -14,13 +14,13 @@ Class {
 { #category : 'as yet unclassified' }
 Game class >> createSimulation [
 
-	^ self createSimulationWith: 10
+	^ self createSimulationWith: 10 andPlayers: 2
 ]
 
 { #category : 'as yet unclassified' }
 Game class >> createSimulationWith: squares [
 
-	^ self new initializeSimulationWith: squares. 
+	^ self createSimulationWith: squares andPlayers: 1. 
 ]
 
 { #category : 'as yet unclassified' }
@@ -36,31 +36,14 @@ Game >> currentPositionOfShips [
 ]
 
 { #category : 'as yet unclassified' }
-Game >> finishSimulation [
+Game >> finished [
 	^ currentState finished.
-]
-
-{ #category : 'as yet unclassified' }
-Game >> initializeSimulation [
-
-	currentState := true.
-	
-]
-
-{ #category : 'initialization' }
-Game >> initializeSimulationWith: squares [
-
-	currentState := NotStarted new.
-	cells := squares.
-	currentCell := 0.
-	ships := OrderedCollection withAll: { 0. } 
-	
 ]
 
 { #category : 'initialization' }
 Game >> initializeSimulationWith: squares andPlayers: quantity [
 
-	currentState := NotStarted new.
+	currentState := Started new.
 	cells := squares.
 	currentCell := 0.
 	ships := OrderedCollection new: quantity withAll: 0
@@ -76,16 +59,6 @@ Game >> playSimulation [
 { #category : 'as yet unclassified' }
 Game >> started [
 	^ currentState started.
-]
-
-{ #category : 'as yet unclassified' }
-Game >> throw [
-
-	ships doWithIndex: [ :ship :i |
-		ships at: i put: ship + 5.
-		(ships at: i) > cells
-			ifTrue: [ currentState := Finished new ]
-			ifFalse: [ currentState playTurn: self at: i + 1 ] ]
 ]
 
 { #category : 'accessing' }
