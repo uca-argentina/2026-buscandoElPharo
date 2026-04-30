@@ -11,6 +11,12 @@ Finished >> finished [
 ]
 
 { #category : 'as yet unclassified' }
+Finished >> playTurn: aGame [
+
+	^ Error signal: 'Cannot play a finished game'
+]
+
+{ #category : 'as yet unclassified' }
 Finished >> started [
 	^ true.
 ]

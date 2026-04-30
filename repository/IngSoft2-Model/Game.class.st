@@ -24,12 +24,15 @@ Game class >> createSimulationWith: squares [
 ]
 
 { #category : 'as yet unclassified' }
+Game class >> createSimulationWith: squares andPlayers: quantity [
+
+	^ self new initializeSimulationWith: squares andPlayers: quantity
+]
+
+{ #category : 'as yet unclassified' }
 Game >> currentPositionOfShips [
 
-	| bananaShips |
-	bananaShips := OrderedCollection new.
-	bananaShips add: (ships at:1).
-	^ bananaShips
+	^ ships
 ]
 
 { #category : 'as yet unclassified' }
@@ -54,11 +57,20 @@ Game >> initializeSimulationWith: squares [
 	
 ]
 
+{ #category : 'initialization' }
+Game >> initializeSimulationWith: squares andPlayers: quantity [
+
+	currentState := NotStarted new.
+	cells := squares.
+	currentCell := 0.
+	ships := OrderedCollection new: quantity withAll: 0
+]
+
 { #category : 'as yet unclassified' }
 Game >> playSimulation [
 
 	currentState := Playing new.
-	currentState playTurn: self.
+	currentState playTurn: self at: 1
 ]
 
 { #category : 'as yet unclassified' }
@@ -69,9 +81,21 @@ Game >> started [
 { #category : 'as yet unclassified' }
 Game >> throw [
 
-	currentCell := 5 + currentCell.
-	ships do: [ :ship | ship put: (ship + 5 )].
-	currentCell > cells
-		ifFalse: [ currentState playTurn: self ]
+	ships doWithIndex: [ :ship :i |
+		ships at: i put: ship + 5.
+		(ships at: i) > cells
+			ifTrue: [ currentState := Finished new ]
+			ifFalse: [ currentState playTurn: self at: i + 1 ] ]
+]
+
+{ #category : 'accessing' }
+Game >> throwAt: shipIndex [
+
+	ships at: shipIndex put: (ships at: shipIndex) + 5.
+	(ships at: shipIndex) > cells
 		ifTrue: [ currentState := Finished new ]
+		ifFalse: [
+			shipIndex < ships size
+				ifTrue: [ currentState playTurn: self at: shipIndex + 1 ]
+				ifFalse: [ currentState playTurn: self at: 1 ] ]
 ]

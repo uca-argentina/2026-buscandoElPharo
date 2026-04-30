@@ -11,6 +11,13 @@ Playing >> finished [
 ]
 
 { #category : 'as yet unclassified' }
-Playing >> playTurn: aGame [ 
-	self finished ifFalse: [ aGame throw ].
+Playing >> playTurn: aGame [
+
+	aGame throw
+]
+
+{ #category : 'as yet unclassified' }
+Playing >> playTurn: aGame at: shipIndex [
+
+	aGame throwAt: shipIndex
 ]
