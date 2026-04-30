@@ -41,6 +41,13 @@ Game >> currentPositionOfShips [
 	^ ships values asOrderedCollection
 ]
 
+{ #category : 'accessing' }
+Game >> finishGameWith: shipName [
+
+	currentState := Finished new.
+	winner := shipName
+]
+
 { #category : 'as yet unclassified' }
 Game >> finished [
 	^ currentState finished.
@@ -56,6 +63,20 @@ Game >> initializeSimulationWith: squares andPlayers: names [
 	ships := Dictionary newFrom: (names collect: [:name | name -> 0]).
 	winner := 'nobody'.
 	
+]
+
+{ #category : 'accessing' }
+Game >> moveShip: shipName [
+
+	ships at: shipName put: ((ships at: shipName) + 5 min: cells)
+]
+
+{ #category : 'accessing' }
+Game >> nextTurn: shipIndex at: keys [
+
+	shipIndex < keys size
+		ifTrue: [ currentState playTurn: self at: shipIndex + 1 ]
+		ifFalse: [ currentState playTurn: self at: 1 ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -76,15 +97,16 @@ Game >> throwAt: shipIndex [
 	| keys shipName |
 	keys := ships keys asOrderedCollection.
 	shipName := keys at: shipIndex.
-	ships at: shipName put: ((ships at: shipName) + 5 min: cells).
+	self moveShip: shipName.
+	self verifyWinner: shipIndex orNextTurnFrom: shipName using: keys
+]
+
+{ #category : 'accessing' }
+Game >> verifyWinner: shipIndex orNextTurnFrom: shipName using: keys [
+
 	(ships at: shipName) >= cells
-		ifTrue: [
-			currentState := Finished new.
-			winner := shipName ]
-		ifFalse: [
-			shipIndex < keys size
-				ifTrue: [ currentState playTurn: self at: shipIndex + 1 ]
-				ifFalse: [ currentState playTurn: self at: 1 ] ]
+		ifTrue: [ self finishGameWith: shipName ]
+		ifFalse: [ self nextTurn: shipIndex at: keys ]
 ]
 
 { #category : 'as yet unclassified' }
