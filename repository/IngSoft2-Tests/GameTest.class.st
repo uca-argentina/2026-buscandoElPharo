@@ -8,26 +8,57 @@ Class {
 { #category : 'tests' }
 GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 	
-	| aGame sequenceOfSquares |
+	| aGame |
 	aGame := Game createSimulation.
-	self assert: aGame playSimulation equals: true.
+	
+	self assert: aGame started equals: false.
 ]
 
 { #category : 'tests' }
-GameTest >> test002WhenAGameHasAlreadyStartedThenSimulationCanNotStart [
+GameTest >> test002WhenAGameHasAlreadyStartedThenSimulationCanNotRestart [
 	
 	| aGame |
 	aGame := Game createSimulation.
 	aGame playSimulation.
-	self assert: aGame playSimulation equals: false.
+	self assert: aGame started equals: true.
 ]
 
 { #category : 'tests' }
 GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 
-	| aGame sequenceOfSquares |
-	sequenceOfSquares := 10.
-	aGame := Game createSimulationWith: sequenceOfSquares.
+	| aGame squares |
+	squares := 4.
+	aGame := Game createSimulationWith: squares.
 	aGame playSimulation.
-	self assert: aGame playSimulation equals: false.
+	self assert: aGame finishSimulation equals: true.
+]
+
+{ #category : 'tests' }
+GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilFinished [
+
+	| aGame squares |
+	squares := 10.
+	aGame := Game createSimulationWith: squares.
+	aGame playSimulation.
+	self assert: aGame finishSimulation equals: true.
+]
+
+{ #category : 'tests' }
+GameTest >> test005WhenGameIsFinishedThenGameKnowsShipsFinalPosition [
+
+	| aGame squares |
+	squares := 10.
+	aGame := Game createSimulationWith: squares.
+	aGame playSimulation .
+	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {15.}).
+]
+
+{ #category : 'tests' }
+GameTest >> test006WhenThen [
+
+	| aGame squares |
+	squares := 10.
+	aGame := Game createSimulationWith: squares.
+	aGame playSimulation .
+	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {15. 10.}).
 ]
