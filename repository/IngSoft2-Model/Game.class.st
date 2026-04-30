@@ -74,14 +74,13 @@ Game >> started [
 Game >> throwAt: shipIndex [
 
 	| keys shipName |
-
 	keys := ships keys asOrderedCollection.
 	shipName := keys at: shipIndex.
-
-	ships at: shipName put: ((ships at: shipName) + 5).
-
-	(ships at: shipName) > cells
-		ifTrue: [ currentState := Finished new . winner := shipName]
+	ships at: shipName put: ((ships at: shipName) + 5 min: cells).
+	(ships at: shipName) >= cells
+		ifTrue: [
+			currentState := Finished new.
+			winner := shipName ]
 		ifFalse: [
 			shipIndex < keys size
 				ifTrue: [ currentState playTurn: self at: shipIndex + 1 ]
