@@ -115,3 +115,20 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 				assert: error messageText
 				equals: 'Can start game with no players' ]
 ]
+
+{ #category : 'tests' }
+GameTest >> test011WhenAGameHasNoPlayersThenItCanNotStart [
+
+	| squares |
+	squares := 10.
+	self
+		should: [
+			Game
+				createSimulationWith: squares
+				andPlayers: (OrderedCollection withAll: {  }) ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: 'Can start game with no players' ]
+]
