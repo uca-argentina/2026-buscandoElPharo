@@ -1,17 +1,18 @@
 Class {
-	#name : 'Playing',
+	#name : 'Started',
 	#superclass : 'Object',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'as yet unclassified' }
-Playing >> finished [
+Started >> finished [
+
 	^ false.
 ]
 
 { #category : 'as yet unclassified' }
-Playing >> playTurn: aGame at: shipIndex [
+Started >> started [
 
-	aGame throwAt: shipIndex
+	^ true.
 ]
