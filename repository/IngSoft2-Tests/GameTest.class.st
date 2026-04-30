@@ -54,11 +54,11 @@ GameTest >> test005WhenGameIsFinishedThenGameKnowsShipsFinalPosition [
 ]
 
 { #category : 'tests' }
-GameTest >> test006WhenThen [
+GameTest >> test006WhenAGameHasMoreThanOneShipThenGameKeepsPlayingUntilFinished [
 
 	| aGame squares |
 	squares := 10.
-	aGame := Game createSimulationWith: squares.
-	aGame playSimulation .
+	aGame := Game createSimulationWith: squares andPlayers: 2.
+	aGame playSimulation.
 	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {15. 10.}).
 ]
