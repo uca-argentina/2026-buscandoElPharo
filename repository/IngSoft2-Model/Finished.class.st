@@ -7,16 +7,12 @@ Class {
 
 { #category : 'as yet unclassified' }
 Finished >> finished [
-	^ true.
-]
 
-{ #category : 'as yet unclassified' }
-Finished >> playTurn: aGame [
-
-	^ Error signal: 'Cannot play a finished game'
+	^ true
 ]
 
 { #category : 'as yet unclassified' }
 Finished >> started [
-	^ true.
+
+	^ false
 ]

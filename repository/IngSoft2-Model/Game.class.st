@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'currentState',
 		'cells',
-		'currentCell',
 		'ships',
-		'winner'
+		'winner',
+		'currentPlayerIndex'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -15,22 +15,26 @@ Class {
 { #category : 'as yet unclassified' }
 Game class >> createSimulation [
 
-	^ self createSimulationWith: 10 andPlayers: (OrderedCollection withAll: {'sombrero'. 'bote'}).
+	^ self
+		  createSimulationWith: 10
+		  andPlayers: (OrderedCollection withAll: { 'sombrero'. })
 ]
 
 { #category : 'as yet unclassified' }
-Game class >> createSimulationWith: squares [
+Game class >> createSimulationWith: arg1 [
 
-	^ self createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero'.}). 
+	^ self
+		  createSimulationWith: arg1
+		  andPlayers: (OrderedCollection withAll: { 'sombrero' })
 ]
 
 { #category : 'as yet unclassified' }
 Game class >> createSimulationWith: squares andPlayers: names [
 
 	squares < 0 ifTrue: [
-		Error signal: 'Can start game with negative squares' ].
+		Error signal: 'Can not start game with negative squares' ].
 	names isEmpty ifTrue: [
-		Error signal: 'Can start game with no players' ].
+		Error signal: 'Can not start game with no players' ].
 
 	^ self new initializeSimulationWith: squares andPlayers: names
 ]
@@ -50,59 +54,58 @@ Game >> finishGameWith: shipName [
 
 { #category : 'as yet unclassified' }
 Game >> finished [
-	^ currentState finished.
+
+	^ currentState finished
 ]
 
 { #category : 'initialization' }
 Game >> initializeSimulationWith: squares andPlayers: names [
-	
+
 	currentState := Started new.
 	cells := squares.
-	currentCell := 0.
 	ships := Dictionary new.
-	ships := Dictionary newFrom: (names collect: [:name | name -> 0]).
+	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
 	winner := 'nobody'.
-	
+	currentPlayerIndex := 1
 ]
 
 { #category : 'accessing' }
-Game >> moveShip: shipName [
+Game >> moveShip: shipIndex [
 
-	ships at: shipName put: ((ships at: shipName) + 5 min: cells)
+	ships at: shipIndex put: ((ships at: shipIndex) + 5 min: cells)
 ]
 
 { #category : 'accessing' }
 Game >> nextTurn: shipIndex at: keys [
 
-	shipIndex < keys size
-		ifTrue: [ currentState playTurn: self at: shipIndex + 1 ]
-		ifFalse: [ currentState playTurn: self at: 1 ]
+	currentPlayerIndex := (shipIndex rem: keys size) + 1
+	
+
 ]
 
 { #category : 'as yet unclassified' }
-Game >> playSimulation [
+Game >> playTurn [
 
-	currentState := Playing new.
-	currentState playTurn: self at: 1
+	| keys shipName |
+	currentState finished ifTrue: [
+		^ Error signal: 'Can not restart the game' ].
+	keys := ships keys asOrderedCollection.
+	shipName := keys at: currentPlayerIndex.
+	self moveShip: shipName.
+	self
+		verifyWinner: shipName
+		orNextPlayerFrom: currentPlayerIndex
+		using: keys
 ]
 
 { #category : 'as yet unclassified' }
 Game >> started [
-	^ currentState started.
+
+	^ currentState started 
 ]
 
 { #category : 'accessing' }
-Game >> throwAt: shipIndex [
-
-	| keys shipName |
-	keys := ships keys asOrderedCollection.
-	shipName := keys at: shipIndex.
-	self moveShip: shipName.
-	self verifyWinner: shipIndex orNextTurnFrom: shipName using: keys
-]
-
-{ #category : 'accessing' }
-Game >> verifyWinner: shipIndex orNextTurnFrom: shipName using: keys [
+Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 
 	(ships at: shipName) >= cells
 		ifTrue: [ self finishGameWith: shipName ]
