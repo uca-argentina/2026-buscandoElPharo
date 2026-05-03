@@ -15,20 +15,12 @@ GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 ]
 
 { #category : 'tests' }
-GameTest >> test002WhenAGameHasAlreadyBeenPlayedThenSimulationCanNotRestart [
+GameTest >> test002WhenAGameHasAlreadyStartedThenSimulationCanNotRestart [
 	
 	| aGame |
 	aGame := Game createSimulation.
-	aGame playTurn.
-	aGame playTurn.
-	self
-		should: [
-			aGame playTurn.]
-		raise: Error
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: 'Can not restart the game' ]
+	aGame playSimulation.
+	self assert: aGame finished equals: true.
 ]
 
 { #category : 'tests' }
@@ -37,7 +29,7 @@ GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 	| aGame squares |
 	squares := 4.
 	aGame := Game createSimulationWith: squares.
-	aGame playTurn.
+	aGame playSimulation.
 	self assert: aGame finished equals: true.
 ]
 
@@ -47,30 +39,27 @@ GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilF
 	| aGame squares |
 	squares := 10.
 	aGame := Game createSimulationWith: squares.
-	aGame playTurn.
-	aGame playTurn.
+	aGame playSimulation.
 	self assert: aGame finished equals: true.
 ]
 
 { #category : 'tests' }
-GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
+GameTest >> test005WhenGameIsFinishedThenGameKnowsShipsFinalPosition [
 
 	| aGame squares |
 	squares := 10.
 	aGame := Game createSimulationWith: squares.
-	aGame playTurn .
-	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {5.}).
+	aGame playSimulation .
+	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {10.}).
 ]
 
 { #category : 'tests' }
-GameTest >> test006WhenAGameHasMoreThanOneShipThenGameCanPlayTurnUntilFinished [
+GameTest >> test006WhenAGameHasMoreThanOneShipThenGameKeepsPlayingUntilFinished [
 
 	| aGame squares |
 	squares := 10.
 	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}).
-	aGame playTurn.
-	aGame playTurn.
-	aGame playTurn.
+	aGame playSimulation.
 	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {10. 5.}).
 ]
 
@@ -92,9 +81,7 @@ GameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 	
 	squares := 10.
 	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}).
-	aGame playTurn.
-	aGame playTurn.
-	aGame playTurn.
+	aGame playSimulation.
 	self assert: aGame winner equals: 'sombrero'.
 ]
 
@@ -109,7 +96,7 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with negative squares' ]
+				equals: 'Can start game with negative squares' ]
 ]
 
 { #category : 'tests' }
@@ -126,5 +113,22 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with no players' ]
+				equals: 'Can start game with no players' ]
+]
+
+{ #category : 'tests' }
+GameTest >> test011WhenAGameHasNoPlayersThenItCanNotStart [
+
+	| squares |
+	squares := 10.
+	self
+		should: [
+			Game
+				createSimulationWith: squares
+				andPlayers: (OrderedCollection withAll: {  }) ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: 'Can start game with no players' ]
 ]
