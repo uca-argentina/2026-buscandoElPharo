@@ -186,3 +186,11 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 	self assert: aGame winner equals: 'sombrero'.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals:10
 ]
+
+{ #category : 'tests' }
+GameTest >> test014WhenNoWinnerIsAskedForNameThenItReturnsNobody [
+
+	| noWinner |
+	noWinner := NoWinner new.
+	self assert: noWinner name equals: 'nobody'.
+]
