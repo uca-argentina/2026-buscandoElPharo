@@ -60,3 +60,15 @@ DieTest >> test005WhenDiceAreRolledThenItReturnsTheSumOfEachDieRoll [
 	rolledNumber := dice roll.
 	self assert: rolledNumber equals: 8
 ]
+
+{ #category : 'tests' }
+DieTest >> test006WhenFixedDieIsCreatedWithLessThanOneFaceThenItRaisesAnError [
+
+	self
+		should: [ FixedDie rolling: 0 ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: 'A fixed die must have at least one face' ]
+]

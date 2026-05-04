@@ -10,6 +10,9 @@ Class {
 
 { #category : 'as yet unclassified' }
 FixedDie class >> rolling: aNumberToRoll [
+
+	aNumberToRoll < 1 ifTrue: [
+		^ Error signal: 'A fixed die must have at least one face' ].
 	^ self new initializeRolling: aNumberToRoll
 ]
 
