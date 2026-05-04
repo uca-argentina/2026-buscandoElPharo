@@ -1,3 +1,6 @@
+"
+I am a standard random die used for ship movement.
+"
 Class {
 	#name : 'Die',
 	#superclass : 'Object',
@@ -22,19 +25,21 @@ Die class >> withNumberOfFaces: aNumberOfFaces [
 	^ self new initializeWithNumberOfFaces: aNumberOfFaces
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 Die >> initializeWithNumberOfFaces: aNumberOfFaces [
 
 	numberOfFaces := aNumberOfFaces.
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Die >> numberOfFaces [
-    ^ numberOfFaces
+
+	^ numberOfFaces
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'transform' }
 Die >> roll [
-    ^ numberOfFaces atRandom
+
+	^ numberOfFaces atRandom
 ]

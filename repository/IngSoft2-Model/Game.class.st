@@ -1,3 +1,10 @@
+"
+Key collaborators:
+- Dice: Provides the movement values.
+- State (Started/Finished): Handles the game lifecycle.
+- ships: A Dictionary for positions.
+- turnOrder: An OrderedCollection to ensure deterministic turns.
+"
 Class {
 	#name : 'Game',
 	#superclass : 'Object',
@@ -87,26 +94,26 @@ Game class >> invalidSquaresErrorDescription [
 	^ 'Can not start game with less than 1 squares'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Game >> currentPositionOfShip: shipName [ 
 	
 	^ ships at: shipName ifAbsent: [ ^Error signal: 'Ship name not found' ].
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Game >> currentPositionOfShips [
 
-	^ ships values asOrderedCollection
+	^ ships values asOrderedCollection copy
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - private' }
 Game >> finishGameWith: shipName [
 
 	currentState := Finished new.
 	winner := shipName
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Game >> finished [
 
 	^ currentState finished
@@ -135,13 +142,13 @@ Game >> initializeSimulationWith: squares andPlayers: names using: sequentialDic
 	dice := sequentialDice
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - private' }
 Game >> moveShip: shipIndex [
 
 	ships at: shipIndex put: ((ships at: shipIndex) + (dice roll) min: cells)
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - private' }
 Game >> nextTurn: shipIndex at: keys [
 
 	currentPlayerIndex := (shipIndex rem: keys size) + 1
@@ -149,7 +156,7 @@ Game >> nextTurn: shipIndex at: keys [
 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Game >> playTurn [
 
 	| keys shipName |
@@ -164,13 +171,13 @@ Game >> playTurn [
 		using: keys
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Game >> started [
 
 	^ currentState started 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - private' }
 Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 
 	(ships at: shipName) >= cells
@@ -178,7 +185,7 @@ Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 		ifFalse: [ self nextTurn: shipIndex at: keys ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Game >> winner [
 
 	^ winner

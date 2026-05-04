@@ -1,3 +1,7 @@
+"
+Key collaborators:
+- FixedDie: The individual elements I roll to get a result.
+"
 Class {
 	#name : 'FixedDie',
 	#superclass : 'Object',
@@ -16,13 +20,13 @@ FixedDie class >> rolling: aNumberToRoll [
 	^ self new initializeRolling: aNumberToRoll
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 FixedDie >> initializeRolling: aNumberToRoll [
 	fixedRoll := aNumberToRoll.
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 FixedDie >> roll [
 	^ fixedRoll
 ]

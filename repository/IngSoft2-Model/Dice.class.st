@@ -1,3 +1,7 @@
+"
+Key collaborators:
+- Die : The individual elements I roll to get a result.
+"
 Class {
 	#name : 'Dice',
 	#superclass : 'Object',
@@ -15,8 +19,9 @@ Dice class >> with: aCollectionOfDice [
 
 { #category : 'initialization' }
 Dice >> initializeWith: aCollectionOfDice [
-    dice := aCollectionOfDice.
-    ^ self
+
+	dice := aCollectionOfDice.
+	^ self
 ]
 
 { #category : 'transform' }

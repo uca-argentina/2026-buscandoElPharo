@@ -1,3 +1,7 @@
+"
+Key collaborators:
+- Game: When I am the current state, I trigger error signals if any player attempts to move.
+"
 Class {
 	#name : 'Finished',
 	#superclass : 'Object',
@@ -5,13 +9,13 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Finished >> finished [
 
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Finished >> started [
 
 	^ false
