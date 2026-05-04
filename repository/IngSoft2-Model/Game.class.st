@@ -6,7 +6,8 @@ Class {
 		'cells',
 		'ships',
 		'winner',
-		'currentPlayerIndex'
+		'currentPlayerIndex',
+		'dice'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -15,28 +16,63 @@ Class {
 { #category : 'as yet unclassified' }
 Game class >> createSimulation [
 
+	| firstDie secondDie dice |
+	firstDie := FixedDie rolling: 2.
+	secondDie := FixedDie rolling: 3.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
 	^ self
 		  createSimulationWith: 10
-		  andPlayers: (OrderedCollection withAll: { 'sombrero'. })
+		  andPlayers: (OrderedCollection withAll: { 'sombrero' })
+		  using: dice
 ]
 
 { #category : 'as yet unclassified' }
-Game class >> createSimulationWith: arg1 [
+Game class >> createSimulationWith: squares [
 
+	| firstDie secondDie dice |
+	firstDie := FixedDie rolling: 2.
+	secondDie := FixedDie rolling: 3.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
 	^ self
-		  createSimulationWith: arg1
+		  createSimulationWith: squares
 		  andPlayers: (OrderedCollection withAll: { 'sombrero' })
+		  using: dice
 ]
 
 { #category : 'as yet unclassified' }
 Game class >> createSimulationWith: squares andPlayers: names [
+	
+	| firstDie secondDie dice |
+	
+	names isEmpty ifTrue: [
+		Error signal: self invalidPlayersErrorDescription ].
+	squares < 1 ifTrue: [
+		Error signal: self invalidSquaresErrorDescription ].
+
+	firstDie := FixedDie rolling: 2.
+	secondDie := FixedDie rolling: 3.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
+	^ self
+		  createSimulationWith: squares
+		  andPlayers: names
+		  using: dice
+]
+
+{ #category : 'as yet unclassified' }
+Game class >> createSimulationWith: squares andPlayers: names using: aDice [ 
 
 	names isEmpty ifTrue: [
 		Error signal: self invalidPlayersErrorDescription ].
 	squares < 1 ifTrue: [
 		Error signal: self invalidSquaresErrorDescription ].
 
-	^ self new initializeSimulationWith: squares andPlayers: names
+	^ self new initializeSimulationWith: squares andPlayers: names using: aDice 
 ]
 
 { #category : 'as yet unclassified' }
@@ -49,6 +85,12 @@ Game class >> invalidPlayersErrorDescription [
 Game class >> invalidSquaresErrorDescription [
 
 	^ 'Can not start game with less than 1 squares'
+]
+
+{ #category : 'as yet unclassified' }
+Game >> currentPositionOfShip: shipName [ 
+	
+	^ ships at: shipName ifAbsent: [ ^Error signal: 'Ship name not found' ].
 ]
 
 { #category : 'as yet unclassified' }
@@ -81,10 +123,22 @@ Game >> initializeSimulationWith: squares andPlayers: names [
 	currentPlayerIndex := 1
 ]
 
+{ #category : 'initialization' }
+Game >> initializeSimulationWith: squares andPlayers: names using: sequentialDice [
+
+	currentState := Started new.
+	cells := squares.
+	ships := Dictionary new.
+	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
+	winner := 'nobody'.
+	currentPlayerIndex := 1.
+	dice := sequentialDice
+]
+
 { #category : 'accessing' }
 Game >> moveShip: shipIndex [
 
-	ships at: shipIndex put: ((ships at: shipIndex) + 5 min: cells)
+	ships at: shipIndex put: ((ships at: shipIndex) + (dice roll) min: cells)
 ]
 
 { #category : 'accessing' }

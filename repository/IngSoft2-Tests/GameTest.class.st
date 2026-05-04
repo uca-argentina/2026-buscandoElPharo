@@ -58,8 +58,10 @@ GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
 	| aGame squares |
 	squares := 10.
 	aGame := Game createSimulationWith: squares.
-	aGame playTurn .
-	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {5.}).
+	aGame playTurn.
+	self
+		assert: (aGame currentPositionOfShip: 'sombrero')
+		equals: 5
 ]
 
 { #category : 'tests' }
@@ -127,4 +129,60 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 			self
 				assert: error messageText
 				equals: 'Can not start game with no players' ]
+]
+
+{ #category : 'tests' }
+GameTest >> test011WhenGameUseADiceThenShipsMoveDiceRollResult [
+
+	| aGame squares firstDie secondDie dice |
+	
+	squares := 10.
+	firstDie := FixedDie rolling: 3.
+	secondDie := FixedDie rolling: 5.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
+	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}) using: dice.
+	aGame playTurn.
+
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 8.
+]
+
+{ #category : 'tests' }
+GameTest >> test012WhenGameHasTwoPlayersThenEachPlayerPlayATurn [
+
+	| aGame squares firstDie secondDie dice |
+	
+	squares := 10.
+	firstDie := FixedDie rolling: 3.
+	secondDie := FixedDie rolling: 5.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
+	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}) using: dice.
+	aGame playTurn.
+	aGame playTurn.
+
+	self assert: aGame currentPositionOfShips equals: #(8 8) asOrderedCollection .
+]
+
+{ #category : 'tests' }
+GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSquare [
+
+	| aGame squares firstDie secondDie dice |
+	
+	squares := 10.
+	firstDie := FixedDie rolling: 3.
+	secondDie := FixedDie rolling: 5.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
+	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}) using: dice.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+	
+	self assert: aGame finished equals: true.
+	self assert: aGame winner equals: 'sombrero'.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals:10
 ]
