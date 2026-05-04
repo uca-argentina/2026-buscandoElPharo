@@ -49,3 +49,16 @@ DieTest >> test005WhenDiceAreRolledThenItReturnsTheSumOfEachDieRoll [
 	rolledNumber := dice roll.
 	self assert: rolledNumber equals: 8.
 ]
+
+{ #category : 'tests' }
+DieTest >> test006WhenDiceAreRolledThenItReturnsTheSumOfEachDieRoll [
+	
+	| dice firstDie secondDie rolledNumber |
+	firstDie := FixedDie rolling: 3.
+	secondDie := FixedDie rolling: 5.
+	dice := Dice with: { firstDie. secondDie. }.
+	
+	rolledNumber := dice roll.
+	
+	self assert: rolledNumber equals: 8.
+]
