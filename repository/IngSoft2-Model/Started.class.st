@@ -1,3 +1,7 @@
+"
+Key collaborators:
+- Game: I provide the behavior for the 'started' and 'finished' queries while the game is in progress.
+"
 Class {
 	#name : 'Started',
 	#superclass : 'Object',
@@ -5,14 +9,14 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Started >> finished [
 
-	^ false.
+	^ false
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Started >> started [
 
-	^ true.
+	^ true
 ]
