@@ -12,11 +12,11 @@ Class {
 { #category : 'accessing' }
 Started >> finished [
 
-	^ false.
+	^ false
 ]
 
 { #category : 'accessing' }
 Started >> started [
 
-	^ true.
+	^ true
 ]

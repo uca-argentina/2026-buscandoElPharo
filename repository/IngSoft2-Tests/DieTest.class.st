@@ -16,7 +16,7 @@ DieTest >> test001WhenDieIsCreatedThenItHasTheGivenNumberOfFaces [
 ]
 
 { #category : 'tests' }
-DieTest >> test002WhenDieIsCreatedWithLessThanThreeFaceThenItRaisesAnError [
+DieTest >> test002WhenDieIsCreatedWithLessThanThreeFacesThenItRaisesAnError [
 
 	self
 		should: [ Die withNumberOfFaces: 0 ]
@@ -39,7 +39,7 @@ DieTest >> test003WhenDieIsRolledThenResultIsBetweenOneAndNumberOfFaces [
 ]
 
 { #category : 'tests' }
-DieTest >> test004AFixedDieAlwaysRollsTheExpectedValue [
+DieTest >> test004WhenFixedDieIsRolledThenItReturnsTheExpectedValue [
 
 	| die |
 	
@@ -62,7 +62,7 @@ DieTest >> test005WhenDiceAreRolledThenItReturnsTheSumOfEachDieRoll [
 ]
 
 { #category : 'tests' }
-DieTest >> test006WhenFixedDieIsCreatedWithLessThanThreeFacesThenItRaisesAnError [
+DieTest >> test006WhenFixedDieIsCreatedWithRollLowerThanThreeThenItRaisesAnError [
 
 	self
 		should: [ FixedDie rolling: 0 ]
@@ -71,4 +71,18 @@ DieTest >> test006WhenFixedDieIsCreatedWithLessThanThreeFacesThenItRaisesAnError
 			self
 				assert: error messageText
 				equals: 'A fixed die must have at least three faces' ]
+]
+
+{ #category : 'tests' }
+DieTest >> test007WhenDiceIsCreatedWithoutAFixedDieThenItRaisesAnError [
+
+	| aDie |
+	aDie := Die withNumberOfFaces: 6.
+	self
+		should: [ Dice with: { aDie } ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: 'Dice must have at least one fixed die' ]
 ]

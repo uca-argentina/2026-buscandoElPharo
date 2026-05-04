@@ -13,15 +13,24 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+Dice class >> mustHaveAtLeastOneFixedDieErrorDescription [
+
+	^ 'Dice must have at least one fixed die'
+]
+
+{ #category : 'as yet unclassified' }
 Dice class >> with: aCollectionOfDice [
-    ^ self new initializeWith: aCollectionOfDice
+
+	(aCollectionOfDice anySatisfy: [ :die | die isKindOf: FixedDie ])
+		ifFalse: [
+		self error: self mustHaveAtLeastOneFixedDieErrorDescription ].
+	^ self new initializeWith: aCollectionOfDice
 ]
 
 { #category : 'initialization' }
 Dice >> initializeWith: aCollectionOfDice [
 
 	dice := aCollectionOfDice.
-	^ self
 ]
 
 { #category : 'transform' }

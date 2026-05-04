@@ -29,7 +29,6 @@ Die class >> withNumberOfFaces: aNumberOfFaces [
 Die >> initializeWithNumberOfFaces: aNumberOfFaces [
 
 	numberOfFaces := aNumberOfFaces.
-	^ self
 ]
 
 { #category : 'accessing' }

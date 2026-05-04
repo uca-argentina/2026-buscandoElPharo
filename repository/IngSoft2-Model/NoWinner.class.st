@@ -1,3 +1,6 @@
+"
+Represents the absence of a winner in the game.
+"
 Class {
 	#name : 'NoWinner',
 	#superclass : 'Object',
