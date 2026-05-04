@@ -13,13 +13,13 @@ Dice class >> with: aCollectionOfDice [
     ^ self new initializeWith: aCollectionOfDice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 Dice >> initializeWith: aCollectionOfDice [
     dice := aCollectionOfDice.
     ^ self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'transform' }
 Dice >> roll [
     | total |
     total := 0.

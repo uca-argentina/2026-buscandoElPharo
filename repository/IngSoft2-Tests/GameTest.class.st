@@ -109,7 +109,7 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with negative squares' ]
+				equals: 'Can not start game with less than 1 squares' ]
 ]
 
 { #category : 'tests' }

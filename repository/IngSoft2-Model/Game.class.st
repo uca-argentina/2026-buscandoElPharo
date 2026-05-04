@@ -31,12 +31,24 @@ Game class >> createSimulationWith: arg1 [
 { #category : 'as yet unclassified' }
 Game class >> createSimulationWith: squares andPlayers: names [
 
-	squares < 0 ifTrue: [
-		Error signal: 'Can not start game with negative squares' ].
 	names isEmpty ifTrue: [
-		Error signal: 'Can not start game with no players' ].
+		Error signal: self invalidPlayersErrorDescription ].
+	squares < 1 ifTrue: [
+		Error signal: self invalidSquaresErrorDescription ].
 
 	^ self new initializeSimulationWith: squares andPlayers: names
+]
+
+{ #category : 'as yet unclassified' }
+Game class >> invalidPlayersErrorDescription [
+
+	^ 'Can not start game with no players'
+]
+
+{ #category : 'as yet unclassified' }
+Game class >> invalidSquaresErrorDescription [
+
+	^ 'Can not start game with less than 1 squares'
 ]
 
 { #category : 'as yet unclassified' }
