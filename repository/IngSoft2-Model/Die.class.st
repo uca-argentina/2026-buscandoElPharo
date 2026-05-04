@@ -14,13 +14,13 @@ Class {
 { #category : 'as yet unclassified' }
 Die class >> invalidNumberOfFacesErrorDescription [
 
-	^ 'A die must have at least one face'
+	^ 'A die must have at least three faces'
 ]
 
 { #category : 'as yet unclassified' }
 Die class >> withNumberOfFaces: aNumberOfFaces [
 
-	aNumberOfFaces < 1 ifTrue: [
+	aNumberOfFaces <= 3 ifTrue: [
 		Error signal: self invalidNumberOfFacesErrorDescription ].
 	^ self new initializeWithNumberOfFaces: aNumberOfFaces
 ]

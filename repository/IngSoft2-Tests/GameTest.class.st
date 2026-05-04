@@ -61,7 +61,7 @@ GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
 	aGame playTurn.
 	self
 		assert: (aGame currentPositionOfShip: 'sombrero')
-		equals: 5
+		equals: 6
 ]
 
 { #category : 'tests' }
@@ -73,7 +73,7 @@ GameTest >> test006WhenAGameHasMoreThanOneShipThenGameCanPlayTurnUntilFinished [
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
-	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {10. 5.}).
+	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {10. 6.}).
 ]
 
 { #category : 'tests' }
@@ -84,7 +84,7 @@ GameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 	squares := 10.
 	aGame := Game createSimulationWith: squares andPlayers: (OrderedCollection withAll: {'sombrero' . 'bote'.}).
 	
-	self assert: aGame winner equals: 'nobody'.
+	self deny: aGame hasWinner.
 ]
 
 { #category : 'tests' }
@@ -111,7 +111,7 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with less than 1 squares' ]
+				equals: 'Can not start game with less than 1 square' ]
 ]
 
 { #category : 'tests' }

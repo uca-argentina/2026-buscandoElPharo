@@ -16,7 +16,7 @@ DieTest >> test001WhenDieIsCreatedThenItHasTheGivenNumberOfFaces [
 ]
 
 { #category : 'tests' }
-DieTest >> test002WhenDieIsCreatedWithLessThanOneFaceThenItRaisesAnError [
+DieTest >> test002WhenDieIsCreatedWithLessThanThreeFaceThenItRaisesAnError [
 
 	self
 		should: [ Die withNumberOfFaces: 0 ]
@@ -24,7 +24,7 @@ DieTest >> test002WhenDieIsCreatedWithLessThanOneFaceThenItRaisesAnError [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'A die must have at least one face' ]
+				equals: 'A die must have at least three faces' ]
 ]
 
 { #category : 'tests' }
@@ -62,7 +62,7 @@ DieTest >> test005WhenDiceAreRolledThenItReturnsTheSumOfEachDieRoll [
 ]
 
 { #category : 'tests' }
-DieTest >> test006WhenFixedDieIsCreatedWithLessThanOneFaceThenItRaisesAnError [
+DieTest >> test006WhenFixedDieIsCreatedWithLessThanThreeFacesThenItRaisesAnError [
 
 	self
 		should: [ FixedDie rolling: 0 ]
@@ -70,5 +70,5 @@ DieTest >> test006WhenFixedDieIsCreatedWithLessThanOneFaceThenItRaisesAnError [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'A fixed die must have at least one face' ]
+				equals: 'A fixed die must have at least three faces' ]
 ]

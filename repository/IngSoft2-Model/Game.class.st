@@ -24,7 +24,7 @@ Class {
 Game class >> createSimulation [
 
 	| firstDie secondDie dice |
-	firstDie := FixedDie rolling: 2.
+	firstDie := FixedDie rolling: 3.
 	secondDie := FixedDie rolling: 3.
 	dice := Dice with: {
 			        firstDie.
@@ -39,7 +39,7 @@ Game class >> createSimulation [
 Game class >> createSimulationWith: squares [
 
 	| firstDie secondDie dice |
-	firstDie := FixedDie rolling: 2.
+	firstDie := FixedDie rolling: 3.
 	secondDie := FixedDie rolling: 3.
 	dice := Dice with: {
 			        firstDie.
@@ -60,7 +60,7 @@ Game class >> createSimulationWith: squares andPlayers: names [
 	squares < 1 ifTrue: [
 		Error signal: self invalidSquaresErrorDescription ].
 
-	firstDie := FixedDie rolling: 2.
+	firstDie := FixedDie rolling: 3.
 	secondDie := FixedDie rolling: 3.
 	dice := Dice with: {
 			        firstDie.
@@ -91,7 +91,7 @@ Game class >> invalidPlayersErrorDescription [
 { #category : 'as yet unclassified' }
 Game class >> invalidSquaresErrorDescription [
 
-	^ 'Can not start game with less than 1 squares'
+	^ 'Can not start game with less than 1 square'
 ]
 
 { #category : 'accessing' }
@@ -119,15 +119,10 @@ Game >> finished [
 	^ currentState finished
 ]
 
-{ #category : 'initialization' }
-Game >> initializeSimulationWith: squares andPlayers: names [
+{ #category : 'testing' }
+Game >> hasWinner [
 
-	currentState := Started new.
-	cells := squares.
-	ships := Dictionary new.
-	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
-	winner := 'nobody'.
-	currentPlayerIndex := 1
+	^ winner hasWon.
 ]
 
 { #category : 'initialization' }
@@ -137,7 +132,7 @@ Game >> initializeSimulationWith: squares andPlayers: names using: sequentialDic
 	cells := squares.
 	ships := Dictionary new.
 	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
-	winner := 'nobody'.
+	winner := NoWinner new.
 	currentPlayerIndex := 1.
 	dice := sequentialDice
 ]
