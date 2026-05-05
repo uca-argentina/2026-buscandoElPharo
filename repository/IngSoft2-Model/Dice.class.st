@@ -21,9 +21,8 @@ Dice class >> mustHaveAtLeastOneFixedDieErrorDescription [
 { #category : 'as yet unclassified' }
 Dice class >> with: aCollectionOfDice [
 
-	(aCollectionOfDice anySatisfy: [ :die | die isKindOf: FixedDie ])
-		ifFalse: [
-		self error: self mustHaveAtLeastOneFixedDieErrorDescription ].
+	aCollectionOfDice isEmpty ifTrue: [
+		Error signal: self mustHaveAtLeastOneFixedDieErrorDescription ].
 	^ self new initializeWith: aCollectionOfDice
 ]
 

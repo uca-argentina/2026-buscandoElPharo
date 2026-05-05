@@ -12,6 +12,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+Die class >> dieFacesErrorDescription [
+
+	^ 'A die must have at least three faces'
+]
+
+{ #category : 'as yet unclassified' }
 Die class >> invalidNumberOfFacesErrorDescription [
 
 	^ 'A die must have at least three faces'

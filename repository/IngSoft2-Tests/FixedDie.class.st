@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+FixedDie class >> fixedDieFacesErrorDescription [
+
+	^ 'A fixed die must have at least three faces'
+]
+
+{ #category : 'as yet unclassified' }
 FixedDie class >> rolling: aNumberToRoll [
 
 	aNumberToRoll < 3 ifTrue: [

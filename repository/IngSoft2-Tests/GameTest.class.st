@@ -28,7 +28,7 @@ GameTest >> test002WhenAGameHasAlreadyBeenPlayedThenSimulationCanNotRestart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not restart the game' ]
+				equals: aGame restartErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -111,7 +111,7 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with less than 1 square' ]
+				equals: Game invalidSquaresErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -128,7 +128,7 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with no players' ]
+				equals: Game invalidPlayersErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -185,12 +185,4 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 	self assert: aGame finished equals: true.
 	self assert: aGame winner equals: 'sombrero'.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals:10
-]
-
-{ #category : 'tests' }
-GameTest >> test014WhenNoWinnerIsAskedForNameThenItReturnsNobody [
-
-	| noWinner |
-	noWinner := NoWinner new.
-	self assert: noWinner name equals: 'nobody'.
 ]

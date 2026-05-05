@@ -1,6 +1,3 @@
-"
-Represents the absence of a winner in the game.
-"
 Class {
 	#name : 'NoWinner',
 	#superclass : 'Object',
@@ -8,14 +5,14 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'testing' }
-NoWinner >> hasWon [
+{ #category : 'accessing' }
+NoWinner >> finished [
 
 	^ false
 ]
 
 { #category : 'accessing' }
-NoWinner >> name [
+NoWinner >> winner [
 
 	^ 'nobody'
 ]

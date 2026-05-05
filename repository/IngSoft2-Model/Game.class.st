@@ -12,9 +12,9 @@ Class {
 		'currentState',
 		'cells',
 		'ships',
-		'winner',
 		'currentPlayerIndex',
-		'dice'
+		'dice',
+		'hasWinner'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -110,7 +110,7 @@ Game >> currentPositionOfShips [
 Game >> finishGameWith: shipName [
 
 	currentState := Finished new.
-	winner := shipName
+	hasWinner := Winner with: shipName
 ]
 
 { #category : 'accessing' }
@@ -122,7 +122,7 @@ Game >> finished [
 { #category : 'testing' }
 Game >> hasWinner [
 
-	^ winner hasWon.
+	^ hasWinner finished.
 ]
 
 { #category : 'initialization' }
@@ -132,7 +132,7 @@ Game >> initializeSimulationWith: squares andPlayers: names using: sequentialDic
 	cells := squares.
 	ships := Dictionary new.
 	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
-	winner := NoWinner new.
+	hasWinner := NoWinner new.
 	currentPlayerIndex := 1.
 	dice := sequentialDice
 ]
@@ -166,6 +166,12 @@ Game >> playTurn [
 		using: keys
 ]
 
+{ #category : 'as yet unclassified' }
+Game >> restartErrorDescription [
+
+	^ 'Can not restart the game'
+]
+
 { #category : 'accessing' }
 Game >> started [
 
@@ -183,5 +189,5 @@ Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 { #category : 'accessing' }
 Game >> winner [
 
-	^ winner
+	^ hasWinner winner
 ]
