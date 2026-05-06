@@ -186,3 +186,44 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 	self assert: aGame winner equals: 'sombrero'.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals:10
 ]
+
+{ #category : 'tests' }
+GameTest >> test014WhenGameHasNoWinnerThenWinnerReturnsNobody [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 3. FixedDie rolling: 3 }.
+    aGame := Game
+        createSimulationWith: 10
+        andPlayers: (OrderedCollection withAll: {'sombrero'. 'bote'})
+        using: dice.
+
+    self assert: aGame winner equals: 'nobody'.
+]
+
+{ #category : 'tests' }
+GameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 5. FixedDie rolling: 5 }.
+    aGame := Game
+        createSimulationWith: 4
+        andPlayers: (OrderedCollection withAll: {'sombrero'})
+        using: dice.
+    aGame playTurn.
+
+    self assert: aGame finished.
+]
+
+{ #category : 'tests' }
+GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 5. FixedDie rolling: 5 }.
+    aGame := Game
+        createSimulationWith: 10
+        andPlayers: (OrderedCollection withAll: {'sombrero'})
+        using: dice.
+    aGame playTurn.
+
+    self deny: aGame started.
+]
