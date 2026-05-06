@@ -12,18 +12,17 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Dice class >> mustHaveAtLeastOneFixedDieErrorDescription [
 
 	^ 'Dice must have at least one fixed die'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Dice class >> with: aCollectionOfDice [
 
-	(aCollectionOfDice anySatisfy: [ :die | die isKindOf: FixedDie ])
-		ifFalse: [
-		self error: self mustHaveAtLeastOneFixedDieErrorDescription ].
+	aCollectionOfDice isEmpty ifTrue: [
+		Error signal: self mustHaveAtLeastOneFixedDieErrorDescription ].
 	^ self new initializeWith: aCollectionOfDice
 ]
 

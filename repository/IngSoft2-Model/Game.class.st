@@ -12,15 +12,15 @@ Class {
 		'currentState',
 		'cells',
 		'ships',
-		'winner',
 		'currentPlayerIndex',
-		'dice'
+		'dice',
+		'hasWinner'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulation [
 
 	| firstDie secondDie dice |
@@ -35,7 +35,7 @@ Game class >> createSimulation [
 		  using: dice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulationWith: squares [
 
 	| firstDie secondDie dice |
@@ -50,7 +50,7 @@ Game class >> createSimulationWith: squares [
 		  using: dice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulationWith: squares andPlayers: names [
 	
 	| firstDie secondDie dice |
@@ -71,7 +71,7 @@ Game class >> createSimulationWith: squares andPlayers: names [
 		  using: dice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulationWith: squares andPlayers: names using: aDice [ 
 
 	names isEmpty ifTrue: [
@@ -82,13 +82,13 @@ Game class >> createSimulationWith: squares andPlayers: names using: aDice [
 	^ self new initializeSimulationWith: squares andPlayers: names using: aDice 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Game class >> invalidPlayersErrorDescription [
 
 	^ 'Can not start game with no players'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Game class >> invalidSquaresErrorDescription [
 
 	^ 'Can not start game with less than 1 square'
@@ -110,7 +110,7 @@ Game >> currentPositionOfShips [
 Game >> finishGameWith: shipName [
 
 	currentState := Finished new.
-	winner := shipName
+	hasWinner := Winner with: shipName
 ]
 
 { #category : 'accessing' }
@@ -122,7 +122,7 @@ Game >> finished [
 { #category : 'testing' }
 Game >> hasWinner [
 
-	^ winner hasWon.
+	^ hasWinner hasWon.
 ]
 
 { #category : 'initialization' }
@@ -132,7 +132,7 @@ Game >> initializeSimulationWith: squares andPlayers: names using: sequentialDic
 	cells := squares.
 	ships := Dictionary new.
 	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
-	winner := NoWinner new.
+	hasWinner := NoWinner new.
 	currentPlayerIndex := 1.
 	dice := sequentialDice
 ]
@@ -166,6 +166,12 @@ Game >> playTurn [
 		using: keys
 ]
 
+{ #category : 'validation' }
+Game >> restartErrorDescription [
+
+	^ 'Can not restart the game'
+]
+
 { #category : 'accessing' }
 Game >> started [
 
@@ -183,5 +189,5 @@ Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 { #category : 'accessing' }
 Game >> winner [
 
-	^ winner
+	^ hasWinner winner
 ]

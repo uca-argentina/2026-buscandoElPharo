@@ -24,7 +24,7 @@ DieTest >> test002WhenDieIsCreatedWithLessThanThreeFacesThenItRaisesAnError [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'A die must have at least three faces' ]
+				equals: Die dieFacesErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -70,19 +70,17 @@ DieTest >> test006WhenFixedDieIsCreatedWithRollLowerThanThreeThenItRaisesAnError
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'A fixed die must have at least three faces' ]
+				equals: FixedDie fixedDieFacesErrorDescription ]
 ]
 
 { #category : 'tests' }
 DieTest >> test007WhenDiceIsCreatedWithoutAFixedDieThenItRaisesAnError [
 
-	| aDie |
-	aDie := Die withNumberOfFaces: 6.
 	self
-		should: [ Dice with: { aDie } ]
+		should: [ Dice with: { } ]
 		raise: Error
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Dice must have at least one fixed die' ]
+				equals: Dice mustHaveAtLeastOneFixedDieErrorDescription ]
 ]

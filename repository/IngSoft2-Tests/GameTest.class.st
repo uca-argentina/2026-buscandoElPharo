@@ -28,7 +28,7 @@ GameTest >> test002WhenAGameHasAlreadyBeenPlayedThenSimulationCanNotRestart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not restart the game' ]
+				equals: aGame restartErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -111,7 +111,7 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with less than 1 square' ]
+				equals: Game invalidSquaresErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -128,7 +128,7 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: 'Can not start game with no players' ]
+				equals: Game invalidPlayersErrorDescription ]
 ]
 
 { #category : 'tests' }
@@ -185,4 +185,59 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 	self assert: aGame finished equals: true.
 	self assert: aGame winner equals: 'sombrero'.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals:10
+]
+
+{ #category : 'tests' }
+GameTest >> test014WhenGameHasNoWinnerThenWinnerReturnsNobody [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 3. FixedDie rolling: 3 }.
+    aGame := Game
+        createSimulationWith: 10
+        andPlayers: (OrderedCollection withAll: {'sombrero'. 'bote'})
+        using: dice.
+
+    self assert: aGame winner equals: 'nobody'.
+]
+
+{ #category : 'tests' }
+GameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 5. FixedDie rolling: 5 }.
+    aGame := Game
+        createSimulationWith: 4
+        andPlayers: (OrderedCollection withAll: {'sombrero'})
+        using: dice.
+    aGame playTurn.
+
+    self assert: aGame finished.
+]
+
+{ #category : 'tests' }
+GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 5. FixedDie rolling: 5 }.
+    aGame := Game
+        createSimulationWith: 10
+        andPlayers: (OrderedCollection withAll: {'sombrero'})
+        using: dice.
+    aGame playTurn.
+
+    self deny: aGame started.
+]
+
+{ #category : 'tests' }
+GameTest >> test017WhenGameIsFinishedThenItHasAWinner [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 5 }.
+    aGame := Game
+        createSimulationWith: 4
+        andPlayers: (OrderedCollection withAll: {'sombrero'})
+        using: dice.
+    aGame playTurn.
+
+    self assert: aGame hasWinner.
 ]

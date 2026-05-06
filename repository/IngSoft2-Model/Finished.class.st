@@ -14,3 +14,9 @@ Finished >> finished [
 
 	^ true
 ]
+
+{ #category : 'accessing' }
+Finished >> started [
+
+	^ false
+]

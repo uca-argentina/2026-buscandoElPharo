@@ -1,5 +1,5 @@
 "
-Represents the absence of a winner in the game.
+this class represent the absent of a winner.
 "
 Class {
 	#name : 'NoWinner',
@@ -15,7 +15,7 @@ NoWinner >> hasWon [
 ]
 
 { #category : 'accessing' }
-NoWinner >> name [
+NoWinner >> winner [
 
 	^ 'nobody'
 ]
