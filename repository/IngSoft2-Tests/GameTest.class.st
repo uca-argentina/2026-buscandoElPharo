@@ -227,3 +227,17 @@ GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
 
     self deny: aGame started.
 ]
+
+{ #category : 'tests' }
+GameTest >> test017WhenGameIsFinishedThenItHasAWinner [
+
+    | aGame dice |
+    dice := Dice with: { FixedDie rolling: 5 }.
+    aGame := Game
+        createSimulationWith: 4
+        andPlayers: (OrderedCollection withAll: {'sombrero'})
+        using: dice.
+    aGame playTurn.
+
+    self assert: aGame hasWinner.
+]

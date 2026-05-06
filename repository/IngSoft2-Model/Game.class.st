@@ -122,7 +122,7 @@ Game >> finished [
 { #category : 'testing' }
 Game >> hasWinner [
 
-	^ hasWinner finished.
+	^ hasWinner hasWon.
 ]
 
 { #category : 'initialization' }

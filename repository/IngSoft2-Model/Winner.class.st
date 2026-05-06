@@ -17,8 +17,8 @@ Winner class >> with: name [
 	^ self new initializeWith: name
 ]
 
-{ #category : 'accessing' }
-Winner >> finished [
+{ #category : 'testing' }
+Winner >> hasWon [
 
 	^ true
 ]

@@ -8,8 +8,8 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'accessing' }
-NoWinner >> finished [
+{ #category : 'testing' }
+NoWinner >> hasWon [
 
 	^ false
 ]
