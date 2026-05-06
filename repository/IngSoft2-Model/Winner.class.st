@@ -1,3 +1,6 @@
+"
+this class represent when a game has a winner.
+"
 Class {
 	#name : 'Winner',
 	#superclass : 'Object',

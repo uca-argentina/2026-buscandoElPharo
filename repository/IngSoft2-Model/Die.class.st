@@ -11,19 +11,19 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Die class >> dieFacesErrorDescription [
 
 	^ 'A die must have at least three faces'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Die class >> invalidNumberOfFacesErrorDescription [
 
 	^ 'A die must have at least three faces'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Die class >> withNumberOfFaces: aNumberOfFaces [
 
 	aNumberOfFaces <= 3 ifTrue: [

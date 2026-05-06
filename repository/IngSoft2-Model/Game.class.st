@@ -20,7 +20,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulation [
 
 	| firstDie secondDie dice |
@@ -35,7 +35,7 @@ Game class >> createSimulation [
 		  using: dice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulationWith: squares [
 
 	| firstDie secondDie dice |
@@ -50,7 +50,7 @@ Game class >> createSimulationWith: squares [
 		  using: dice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulationWith: squares andPlayers: names [
 	
 	| firstDie secondDie dice |
@@ -71,7 +71,7 @@ Game class >> createSimulationWith: squares andPlayers: names [
 		  using: dice
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Game class >> createSimulationWith: squares andPlayers: names using: aDice [ 
 
 	names isEmpty ifTrue: [
@@ -82,13 +82,13 @@ Game class >> createSimulationWith: squares andPlayers: names using: aDice [
 	^ self new initializeSimulationWith: squares andPlayers: names using: aDice 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Game class >> invalidPlayersErrorDescription [
 
 	^ 'Can not start game with no players'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Game class >> invalidSquaresErrorDescription [
 
 	^ 'Can not start game with less than 1 square'
@@ -166,7 +166,7 @@ Game >> playTurn [
 		using: keys
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 Game >> restartErrorDescription [
 
 	^ 'Can not restart the game'

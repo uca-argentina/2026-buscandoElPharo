@@ -1,3 +1,6 @@
+"
+this class represent the absent of a winner.
+"
 Class {
 	#name : 'NoWinner',
 	#superclass : 'Object',
