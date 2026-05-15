@@ -6,34 +6,34 @@ Key collaborators:
 - turnOrder: An OrderedCollection to ensure deterministic turns.
 "
 Class {
-	#name : 'Game',
+	#name : 'PharoGame',
 	#superclass : 'Object',
 	#instVars : [
 		'currentState',
 		'cells',
-		'ships',
 		'currentPlayerIndex',
 		'dice',
-		'winnerState'
+		'winnerState',
+		'ships'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'validation' }
-Game class >> invalidShipsErrorDescription [
+PharoGame class >> invalidShipsErrorDescription [
 
 	^ 'Can not start game with no players'
 ]
 
 { #category : 'validation' }
-Game class >> invalidSquaresErrorDescription [
+PharoGame class >> invalidSquaresErrorDescription [
 
 	^ 'Can not start game with less than 1 square'
 ]
 
 { #category : 'creation' }
-Game class >> playedOn: squares by: names throwing: aDice [ 
+PharoGame class >> playedOn: squares by: names throwing: aDice [ 
 
 	names isEmpty ifTrue: [
 		Error signal: self invalidShipsErrorDescription ].
@@ -44,7 +44,7 @@ Game class >> playedOn: squares by: names throwing: aDice [
 ]
 
 { #category : 'accessing' }
-Game >> currentPositionOfShip: shipName [
+PharoGame >> currentPositionOfShip: shipName [
 
 	^ ships
 		  at: shipName
@@ -52,50 +52,51 @@ Game >> currentPositionOfShip: shipName [
 ]
 
 { #category : 'accessing' }
-Game >> currentPositionOfShips [
+PharoGame >> currentPositionOfShips [
 
 	^ ships values asOrderedCollection copy
 ]
 
 { #category : 'accessing - private' }
-Game >> finishGameWith: shipName [
+PharoGame >> finishGameWith: shipName [
 
 	currentState := Finished new.
 	winnerState := Winner with: shipName
 ]
 
 { #category : 'accessing' }
-Game >> finished [
+PharoGame >> finished [
 
 	^ currentState finished
 ]
 
 { #category : 'testing' }
-Game >> hasWinner [
+PharoGame >> hasWinner [
 
 	^ winnerState hasWon.
 ]
 
 { #category : 'initialization' }
-Game >> initializePharoGamePlayedOn: squares by: names using: playableDice [
+PharoGame >> initializePharoGamePlayedOn: squares by: names using: playableDice [
 
 	currentState := Started new.
 	cells := squares.
 	ships := Dictionary new.
-	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
+	ships := Dictionary newFrom:
+		              (names collect: [ :name | name -> 0 ]).
 	winnerState := NoWinner new.
 	currentPlayerIndex := 1.
 	dice := playableDice
 ]
 
 { #category : 'accessing - private' }
-Game >> moveShip: shipIndex [
+PharoGame >> moveShip: shipIndex [
 
 	ships at: shipIndex put: ((ships at: shipIndex) + (dice roll) min: cells)
 ]
 
 { #category : 'accessing - private' }
-Game >> nextTurn: shipIndex at: keys [
+PharoGame >> nextTurn: shipIndex at: keys [
 
 	currentPlayerIndex := (shipIndex rem: keys size) + 1
 	
@@ -103,7 +104,7 @@ Game >> nextTurn: shipIndex at: keys [
 ]
 
 { #category : 'actions' }
-Game >> playTurn [
+PharoGame >> playTurn [
 
 	| keys shipName |
 	currentState finished ifTrue: [
@@ -113,24 +114,24 @@ Game >> playTurn [
 	self moveShip: shipName.
 	self
 		verifyWinner: shipName
-		orNextPlayerFrom: currentPlayerIndex
+		orNextSpaceShipFrom: currentPlayerIndex
 		using: keys
 ]
 
 { #category : 'validation' }
-Game >> restartErrorDescription [
+PharoGame >> restartErrorDescription [
 
 	^ 'Can not restart the game'
 ]
 
 { #category : 'accessing' }
-Game >> started [
+PharoGame >> started [
 
 	^ currentState started 
 ]
 
 { #category : 'accessing - private' }
-Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
+PharoGame >> verifyWinner: shipName orNextSpaceShipFrom: shipIndex using: keys [
 
 	(ships at: shipName) >= cells
 		ifTrue: [ self finishGameWith: shipName ]
@@ -138,7 +139,7 @@ Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 ]
 
 { #category : 'accessing' }
-Game >> winner [
+PharoGame >> winner [
 
 	^ winnerState winner
 ]

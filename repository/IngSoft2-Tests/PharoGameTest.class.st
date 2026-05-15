@@ -1,16 +1,30 @@
 Class {
-	#name : 'GameTest',
+	#name : 'PharoGameTest',
 	#superclass : 'TestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
-GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
+PharoGameTest >> CHECKEARtest018WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSameName [
+
+	| firstSpaceShip |
+	firstSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	self
+		should: [ SpaceShip namedAfter: 'sombrero' ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: SpaceShip repeatedNameErrorDescription ]
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 4
 		         by: (OrderedCollection withAll: { 'sombrero' })
 		         throwing: dice.
@@ -19,11 +33,11 @@ GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 ]
 
 { #category : 'tests' }
-GameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
+PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
 	
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 3) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 4
 		         by: (OrderedCollection withAll: { 'sombrero' })
 		         throwing: dice.
@@ -40,11 +54,11 @@ GameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
 ]
 
 { #category : 'tests' }
-GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
+PharoGameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 4
 		         by: (OrderedCollection withAll: { 'sombrero' })
 		         throwing: dice.
@@ -53,11 +67,11 @@ GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 ]
 
 { #category : 'tests' }
-GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilFinished [
+PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilFinished [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero' })
 		         throwing: dice.
@@ -67,11 +81,11 @@ GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilF
 ]
 
 { #category : 'tests' }
-GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
+PharoGameTest >> test005WhenGamePlayATurnThenGameKnowsSpaceShipsPosition [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero' })
 		         throwing: dice.
@@ -82,11 +96,11 @@ GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
 ]
 
 { #category : 'tests' }
-GameTest >> test006WhenAGameHasMoreThanOneShipThenGameCanPlayTurnUntilFinished [
+PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntilFinished [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
 		         throwing: dice.
@@ -98,11 +112,11 @@ GameTest >> test006WhenAGameHasMoreThanOneShipThenGameCanPlayTurnUntilFinished [
 ]
 
 { #category : 'tests' }
-GameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
+PharoGameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
 		         throwing: dice.
@@ -111,11 +125,11 @@ GameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 ]
 
 { #category : 'tests' }
-GameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
+PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 
 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
 		         throwing: dice.
@@ -126,14 +140,14 @@ GameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 ]
 
 { #category : 'tests' }
-GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
+PharoGameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 
 	| squares |
 	squares := -10.
 	self
 		should: [ 	| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: -10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
 		         throwing: dice. ]
@@ -141,11 +155,11 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: Game invalidSquaresErrorDescription ]
+				equals: PharoGame invalidSquaresErrorDescription ]
 ]
 
 { #category : 'tests' }
-GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
+PharoGameTest >> test010WhenAGameHasNoSpaceShipThenItCanNotStart [
 
 	| squares |
 	squares := 10.
@@ -153,7 +167,7 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 		should: [
 			| aGame dice |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { })
 		         throwing: dice.]
@@ -161,11 +175,11 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: Game invalidShipsErrorDescription ]
+				equals: PharoGame invalidShipsErrorDescription ]
 ]
 
 { #category : 'tests' }
-GameTest >> test011WhenGameUseADiceThenShipsMoveDiceRollResult [
+PharoGameTest >> test011WhenGameUseADiceThenSpaceShipsMoveDiceRollResult [
 
 	| aGame firstDie secondDie dice |
 	firstDie := FixedDie withNumberOfFaces: 3.
@@ -173,7 +187,7 @@ GameTest >> test011WhenGameUseADiceThenShipsMoveDiceRollResult [
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by:
 		         (OrderedCollection withAll: { 'sombrero'. 'bote' })
@@ -184,7 +198,7 @@ GameTest >> test011WhenGameUseADiceThenShipsMoveDiceRollResult [
 ]
 
 { #category : 'tests' }
-GameTest >> test012WhenGameHasTwoPlayersThenEachPlayerPlayATurn [
+PharoGameTest >> test012WhenGameHasTwoSpaceShipsThenEachPlayerPlayATurn [
 
 	| aGame squares firstDie secondDie dice |
 	squares := 10.
@@ -193,7 +207,7 @@ GameTest >> test012WhenGameHasTwoPlayersThenEachPlayerPlayATurn [
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by:
 		         (OrderedCollection withAll: { 'sombrero'. 'bote' })
@@ -207,7 +221,7 @@ GameTest >> test012WhenGameHasTwoPlayersThenEachPlayerPlayATurn [
 ]
 
 { #category : 'tests' }
-GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSquare [
+PharoGameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSquare [
 
 	| aGame squares firstDie secondDie dice |
 	
@@ -217,7 +231,7 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.
-	aGame := Game playedOn: squares by: (OrderedCollection withAll: {'sombrero' . 'bote'.}) throwing: dice.
+	aGame := PharoGame playedOn: squares by: (OrderedCollection withAll: {'sombrero' . 'bote'.}) throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
@@ -228,13 +242,13 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 ]
 
 { #category : 'tests' }
-GameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
+PharoGameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 
 	| aGame dice |
 	dice := Dice with: {
 			        (FixedDie withNumberOfFaces: 3).
 			        (FixedDie withNumberOfFaces: 3) }.
-	aGame := Game
+	aGame := PharoGame
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
 		         throwing: dice.
@@ -247,11 +261,11 @@ GameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 ]
 
 { #category : 'tests' }
-GameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
+PharoGameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
 
     | aGame dice |
     dice := Dice with: { FixedDie withNumberOfFaces: 5. FixedDie withNumberOfFaces: 5 }.
-    aGame := Game
+    aGame := PharoGame
         playedOn: 4
         by: (OrderedCollection withAll: {'sombrero'})
         throwing: dice.
@@ -261,11 +275,11 @@ GameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
 ]
 
 { #category : 'tests' }
-GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
+PharoGameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
 
     | aGame dice |
     dice := Dice with: { FixedDie withNumberOfFaces: 5. FixedDie withNumberOfFaces: 5 }.
-    aGame := Game
+    aGame := PharoGame
         playedOn: 10
         by: (OrderedCollection withAll: {'sombrero'})
         throwing: dice.
@@ -275,11 +289,11 @@ GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
 ]
 
 { #category : 'tests' }
-GameTest >> test017WhenGameIsFinishedThenItHasAWinner [
+PharoGameTest >> test017WhenGameIsFinishedThenItHasAWinner [
 
     | aGame dice |
     dice := Dice with: { FixedDie withNumberOfFaces: 5 }.
-    aGame := Game
+    aGame := PharoGame
         playedOn: 4
         by: (OrderedCollection withAll: {'sombrero'})
         throwing: dice.
