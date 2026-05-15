@@ -15,7 +15,7 @@ Class {
 { #category : 'validation' }
 Dice class >> mustHaveAtLeastOneFixedDieErrorDescription [
 
-	^ 'Dice must have at least one fixed die'
+	^ 'Dice must have at least one die'
 ]
 
 { #category : 'creation' }

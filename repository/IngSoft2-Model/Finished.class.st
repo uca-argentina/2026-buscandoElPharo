@@ -1,6 +1,6 @@
 "
 Key collaborators:
-- Game: When I am the current state, I trigger error signals if any player attempts to move.
+- Game: When I am the current state, I represent the finished state of the game.
 "
 Class {
 	#name : 'Finished',
