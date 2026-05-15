@@ -14,7 +14,8 @@ Class {
 		'currentPlayerIndex',
 		'dice',
 		'winnerState',
-		'spaceShips'
+		'spaceShips',
+		'turnManager'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -64,6 +65,12 @@ PharoGame >> currentPositionOfShip: shipName [
 	^ foundShip position
 ]
 
+{ #category : 'playing' }
+PharoGame >> currentShip [
+
+	^ turnManager currentShipIdentification
+]
+
 { #category : 'accessing - private' }
 PharoGame >> finishGameWith: shipName [
 
@@ -88,16 +95,18 @@ PharoGame >> initializePharoGamePlayedOn: squares by: ships using: playableDice 
 
 	currentState := Started new.
 	cells := squares.
-	spaceShips := ships collect: [ :nombre | SpaceShip namedAfter: nombre ].
+	spaceShips := ships collect: [ :nombre |
+		              SpaceShip namedAfter: nombre ].
+	turnManager := TurnManager withShips: spaceShips.
 	winnerState := NoWinner new.
 	currentPlayerIndex := 1.
 	dice := playableDice
 ]
 
 { #category : 'accessing - private' }
-PharoGame >> moveShip: currentShip [
+PharoGame >> moveSpaceShip: currentSpaceShip [
 
-	currentShip move: (dice roll min: cells) top: cells
+	currentSpaceShip move: (dice roll min: cells) top: cells
 ]
 
 { #category : 'accessing - private' }
@@ -109,12 +118,12 @@ PharoGame >> nextTurn: shipIndex [
 { #category : 'actions' }
 PharoGame >> playTurn [
 
-	| shipName |
+	| currentSpaceShip |
 	currentState finished ifTrue: [
 		Error signal: self restartErrorDescription ].
-	shipName := spaceShips at: currentPlayerIndex.
-	self moveShip: shipName.
-	self verifyWinner: shipName orNextSpaceShipFrom: currentPlayerIndex
+	currentSpaceShip := turnManager currentShip.
+	self moveSpaceShip: currentSpaceShip.
+	self verifyWinner: currentSpaceShip
 ]
 
 { #category : 'validation' }
@@ -130,11 +139,11 @@ PharoGame >> started [
 ]
 
 { #category : 'accessing - private' }
-PharoGame >> verifyWinner: shipName orNextSpaceShipFrom: shipIndex [
+PharoGame >> verifyWinner: spaceShip [
 
-	(shipName reachedTheEnd: cells)
-		ifTrue: [ self finishGameWith: shipName ]
-		ifFalse: [ self nextTurn: shipIndex ]
+	(spaceShip reachedTheEnd: cells)
+		ifTrue: [ self finishGameWith: spaceShip ]
+		ifFalse: [ turnManager nextTurn ]
 ]
 
 { #category : 'accessing' }
