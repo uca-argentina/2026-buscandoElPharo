@@ -14,7 +14,7 @@ Class {
 		'currentPlayerIndex',
 		'dice',
 		'winnerState',
-		'ships'
+		'spaceShips'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -33,28 +33,27 @@ PharoGame class >> invalidSquaresErrorDescription [
 ]
 
 { #category : 'creation' }
-PharoGame class >> playedOn: squares by: names throwing: aDice [ 
+PharoGame class >> playedOn: squares by: ships throwing: aDice [
 
-	names isEmpty ifTrue: [
+	ships isNil ifTrue: [
 		Error signal: self invalidShipsErrorDescription ].
 	squares < 1 ifTrue: [
 		Error signal: self invalidSquaresErrorDescription ].
 
-	^ self new initializePharoGamePlayedOn: squares by: names using: aDice 
+	^ self new
+		  initializePharoGamePlayedOn: squares
+		  by: ships
+		  using: aDice
 ]
 
 { #category : 'accessing' }
 PharoGame >> currentPositionOfShip: shipName [
 
-	^ ships
-		  at: shipName
-		  ifAbsent: [ Error signal: 'Ship name not found' ]
-]
-
-{ #category : 'accessing' }
-PharoGame >> currentPositionOfShips [
-
-	^ ships values asOrderedCollection copy
+	| foundShip |
+	foundShip := spaceShips
+		             detect: [ :spaceShip | spaceShip identification = shipName ]
+		             ifNone: [ ^ Error signal: 'SpaceShip not found' ].
+	^ foundShip position
 ]
 
 { #category : 'accessing - private' }
@@ -77,45 +76,37 @@ PharoGame >> hasWinner [
 ]
 
 { #category : 'initialization' }
-PharoGame >> initializePharoGamePlayedOn: squares by: names using: playableDice [
+PharoGame >> initializePharoGamePlayedOn: squares by: ships using: playableDice [
 
 	currentState := Started new.
 	cells := squares.
-	ships := Dictionary new.
-	ships := Dictionary newFrom:
-		              (names collect: [ :name | name -> 0 ]).
+	spaceShips := ships collect: [ :nombre | SpaceShip namedAfter: nombre ].
 	winnerState := NoWinner new.
 	currentPlayerIndex := 1.
 	dice := playableDice
 ]
 
 { #category : 'accessing - private' }
-PharoGame >> moveShip: shipIndex [
+PharoGame >> moveShip: currentShip [
 
-	ships at: shipIndex put: ((ships at: shipIndex) + (dice roll) min: cells)
+	currentShip move: (dice roll min: cells) top: cells
 ]
 
 { #category : 'accessing - private' }
-PharoGame >> nextTurn: shipIndex at: keys [
+PharoGame >> nextTurn: shipIndex [
 
-	currentPlayerIndex := (shipIndex rem: keys size) + 1
-	
-
+    currentPlayerIndex := (shipIndex rem: spaceShips size) + 1
 ]
 
 { #category : 'actions' }
 PharoGame >> playTurn [
 
-	| keys shipName |
+	| shipName |
 	currentState finished ifTrue: [
 		Error signal: self restartErrorDescription ].
-	keys := ships keys asOrderedCollection.
-	shipName := keys at: currentPlayerIndex.
+	shipName := spaceShips at: currentPlayerIndex.
 	self moveShip: shipName.
-	self
-		verifyWinner: shipName
-		orNextSpaceShipFrom: currentPlayerIndex
-		using: keys
+	self verifyWinner: shipName orNextSpaceShipFrom: currentPlayerIndex
 ]
 
 { #category : 'validation' }
@@ -131,11 +122,11 @@ PharoGame >> started [
 ]
 
 { #category : 'accessing - private' }
-PharoGame >> verifyWinner: shipName orNextSpaceShipFrom: shipIndex using: keys [
+PharoGame >> verifyWinner: shipName orNextSpaceShipFrom: shipIndex [
 
-	(ships at: shipName) >= cells
+	(shipName reachedTheEnd: cells)
 		ifTrue: [ self finishGameWith: shipName ]
-		ifFalse: [ self nextTurn: shipIndex at: keys ]
+		ifFalse: [ self nextTurn: shipIndex ]
 ]
 
 { #category : 'accessing' }

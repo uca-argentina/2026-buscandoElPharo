@@ -41,11 +41,29 @@ SpaceShip >> advanceBy: newPosition [
 	currentPosition := currentPosition + newPosition
 ]
 
+{ #category : 'as yet unclassified' }
+SpaceShip >> identification [
+
+	^ name
+]
+
 { #category : 'initialization' }
 SpaceShip >> initializeSpaceShipWithName: tag [
 
 	name := tag.
-	currentPosition := 0
+	currentPosition := 1
+]
+
+{ #category : 'accessing' }
+SpaceShip >> move: nextMove [
+
+	currentPosition := currentPosition + nextMove
+]
+
+{ #category : 'as yet unclassified' }
+SpaceShip >> move: nextMove top: maxMove [
+
+	currentPosition := (currentPosition + nextMove) min: maxMove
 ]
 
 { #category : 'accessing' }
@@ -58,4 +76,10 @@ SpaceShip >> nameTag [
 SpaceShip >> position [
 
 	^ currentPosition
+]
+
+{ #category : 'playing' }
+SpaceShip >> reachedTheEnd: lastCell [
+
+	^ currentPosition = lastCell
 ]

@@ -22,12 +22,10 @@ PharoGameTest >> CHECKEARtest018WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHa
 { #category : 'tests' }
 PharoGameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 4
-		         by: (OrderedCollection withAll: { 'sombrero' })
-		         throwing: dice.
+	ships := OrderedCollection with: 'sombrero'.
+	aGame := PharoGame playedOn: 4 by: ships throwing: dice.
 
 	self assert: aGame started equals: true
 ]
@@ -35,12 +33,10 @@ PharoGameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 { #category : 'tests' }
 PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
 	
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 3) }.
-	aGame := PharoGame
-		         playedOn: 4
-		         by: (OrderedCollection withAll: { 'sombrero' })
-		         throwing: dice.
+	ships := OrderedCollection with: 'sombrero'.
+	aGame := PharoGame playedOn: 6 by: ships throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	self
@@ -55,27 +51,23 @@ PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotRepla
 
 { #category : 'tests' }
 PharoGameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
-
-	| aGame dice |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 4
-		         by: (OrderedCollection withAll: { 'sombrero' })
-		         throwing: dice.
+	
+	| aGame dice ships |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 3) }.
+	ships := OrderedCollection with: 'sombrero'.
+	aGame := PharoGame playedOn: 5 by: ships throwing: dice.
 	aGame playTurn.
-	self assert: aGame finished equals: true.
+	aGame playTurn.
+	self assert: aGame finished equals: true
 ]
 
 { #category : 'tests' }
 PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilFinished [
 
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 10
-		         by: (OrderedCollection withAll: { 'sombrero' })
-		         throwing: dice.
-	aGame playTurn.
+	ships := OrderedCollection with: 'sombrero'.
+	aGame := PharoGame playedOn: 4 by: ships throwing: dice.
 	aGame playTurn.
 	self assert: aGame finished equals: true.
 ]
@@ -83,60 +75,50 @@ PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingU
 { #category : 'tests' }
 PharoGameTest >> test005WhenGamePlayATurnThenGameKnowsSpaceShipsPosition [
 
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 10
-		         by: (OrderedCollection withAll: { 'sombrero' })
-		         throwing: dice.
+	ships := OrderedCollection with: 'sombrero'.
+	aGame := PharoGame playedOn: 10 by: ships throwing: dice.
 	aGame playTurn.
-	self
-		assert: (aGame currentPositionOfShip: 'sombrero')
-		equals: 6
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
 ]
 
 { #category : 'tests' }
 PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntilFinished [
 
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 10
-		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
-		         throwing: dice.
+	ships := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	aGame := PharoGame playedOn: 10 by: ships throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 10.
-	self assert: (aGame currentPositionOfShip: 'bote') equals: 6
+	self assert: (aGame currentPositionOfShip: 'bote') equals: 7
 ]
 
 { #category : 'tests' }
 PharoGameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 10
-		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
-		         throwing: dice.
-	
-	self deny: aGame hasWinner.
+	ships := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	aGame := PharoGame playedOn: 10 by: ships throwing: dice.
+
+	self deny: aGame hasWinner
 ]
 
 { #category : 'tests' }
 PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 
-	| aGame dice |
+	| aGame dice ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	aGame := PharoGame
-		         playedOn: 10
-		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
-		         throwing: dice.
+	ships := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	aGame := PharoGame playedOn: 10 by: ships throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
-	self assert: aGame winner equals: 'sombrero'.
+	self assert: aGame winner equals: 'sombrero'
 ]
 
 { #category : 'tests' }
@@ -209,15 +191,13 @@ PharoGameTest >> test012WhenGameHasTwoSpaceShipsThenEachPlayerPlayATurn [
 			        secondDie }.
 	aGame := PharoGame
 		         playedOn: 10
-		         by:
-		         (OrderedCollection withAll: { 'sombrero'. 'bote' })
+		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
 		         throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 
-	self
-		assert: aGame currentPositionOfShips
-		equals: #( 8 8 ) asOrderedCollection
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 8.
+	self assert: (aGame currentPositionOfShip: 'bote') equals: 8
 ]
 
 { #category : 'tests' }
