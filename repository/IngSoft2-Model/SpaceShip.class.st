@@ -29,12 +29,6 @@ SpaceShip class >> namedAfter: tag [
 	^ self new initializeSpaceShipWithName: tag
 ]
 
-{ #category : 'validation' }
-SpaceShip class >> repeatedNameErrorDescription [
-
-	^ 'SpaceShips can not have the same name'
-]
-
 { #category : 'playing' }
 SpaceShip >> advanceBy: newPosition [
 
@@ -52,12 +46,6 @@ SpaceShip >> initializeSpaceShipWithName: tag [
 
 	name := tag.
 	currentPosition := 1
-]
-
-{ #category : 'accessing' }
-SpaceShip >> move: nextMove [
-
-	currentPosition := currentPosition + nextMove
 ]
 
 { #category : 'as yet unclassified' }

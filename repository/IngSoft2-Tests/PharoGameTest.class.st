@@ -6,20 +6,6 @@ Class {
 }
 
 { #category : 'tests' }
-PharoGameTest >> CHECKEARtest018WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSameName [
-
-	| firstSpaceShip |
-	firstSpaceShip := SpaceShip namedAfter: 'sombrero'.
-	self
-		should: [ SpaceShip namedAfter: 'sombrero' ]
-		raise: Error
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: SpaceShip repeatedNameErrorDescription ]
-]
-
-{ #category : 'tests' }
 PharoGameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 
 	| aGame dice ships |
@@ -271,4 +257,24 @@ PharoGameTest >> test017WhenGameIsFinishedThenItHasAWinner [
 	aGame playTurn.
 
 	self assert: aGame hasWinner
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test018WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSameName [
+
+	| aGame firstDie secondDie dice ships |
+	firstDie := FixedDie withNumberOfFaces: 3.
+	secondDie := FixedDie withNumberOfFaces: 5.
+	dice := Dice with: {
+			        firstDie.
+			        secondDie }.
+	ships := OrderedCollection withAll: { 'sombrero'. 'sombrero' }.
+
+	self
+		should: [ aGame := PharoGame playedOn: 10 by: ships throwing: dice ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: PharoGame duplicatedShipNamesErrorDescription ]
 ]

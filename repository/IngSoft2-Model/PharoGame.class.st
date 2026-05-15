@@ -21,6 +21,12 @@ Class {
 }
 
 { #category : 'validation' }
+PharoGame class >> duplicatedShipNamesErrorDescription [
+
+	^ 'PharoGame can not have SpaceShips with the same name'
+]
+
+{ #category : 'validation' }
 PharoGame class >> invalidShipsErrorDescription [
 
 	^ 'Can not start game with no players'
@@ -39,6 +45,8 @@ PharoGame class >> playedOn: squares by: ships throwing: aDice [
 		Error signal: self invalidShipsErrorDescription ].
 	squares < 1 ifTrue: [
 		Error signal: self invalidSquaresErrorDescription ].
+	ships asSet size ~= ships size ifTrue: [
+		Error signal: self duplicatedShipNamesErrorDescription ].
 
 	^ self new
 		  initializePharoGamePlayedOn: squares
