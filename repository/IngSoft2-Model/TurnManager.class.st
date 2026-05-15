@@ -12,10 +12,22 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'creation' }
+TurnManager class >> withShips: names [
+
+	^ self new initializeWithShips: names
+]
+
 { #category : 'playing' }
 TurnManager >> currentShip [
 
 	^ (spaceShipsOrder at: currentTurn)
+]
+
+{ #category : 'accessing' }
+TurnManager >> currentShipIdentification [
+
+	^ (spaceShipsOrder at: currentTurn) identification
 ]
 
 { #category : 'initialization' }
