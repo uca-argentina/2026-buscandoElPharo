@@ -10,7 +10,7 @@ FixedDieTest >> test001WhenFixedDieIsRolledThenItReturnsTheExpectedValue [
 
 	| die |
 	
-	die := FixedDie rolling: 5.
+	die := FixedDie withNumberOfFaces: 5.
 
 	self assert: die roll equals: 5
 ]
@@ -19,7 +19,7 @@ FixedDieTest >> test001WhenFixedDieIsRolledThenItReturnsTheExpectedValue [
 FixedDieTest >> test002WhenFixedDieIsCreatedWithRollLowerThanThreeThenItRaisesAnError [
 
 	self
-		should: [ FixedDie rolling: 0 ]
+		should: [ FixedDie withNumberOfFaces: 0 ]
 		raise: Error
 		withExceptionDo: [ :error |
 			self

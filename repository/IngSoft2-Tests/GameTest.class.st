@@ -9,7 +9,7 @@ Class {
 GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 4
 		         by: (OrderedCollection withAll: { 'sombrero' })
@@ -19,10 +19,10 @@ GameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 ]
 
 { #category : 'tests' }
-GameTest >> test002WhenAGameHasAlreadyBeenPlayedThenSimulationCanNotRestart [
+GameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
 	
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 3) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 3) }.
 	aGame := Game
 		         playedOn: 4
 		         by: (OrderedCollection withAll: { 'sombrero' })
@@ -43,7 +43,7 @@ GameTest >> test002WhenAGameHasAlreadyBeenPlayedThenSimulationCanNotRestart [
 GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 4
 		         by: (OrderedCollection withAll: { 'sombrero' })
@@ -56,7 +56,7 @@ GameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilFinished [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero' })
@@ -70,7 +70,7 @@ GameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilF
 GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero' })
@@ -85,7 +85,7 @@ GameTest >> test005WhenGamePlayATurnThenGameKnowsShipsPosition [
 GameTest >> test006WhenAGameHasMoreThanOneShipThenGameCanPlayTurnUntilFinished [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
@@ -93,14 +93,15 @@ GameTest >> test006WhenAGameHasMoreThanOneShipThenGameCanPlayTurnUntilFinished [
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
-	self assert: aGame currentPositionOfShips equals: (OrderedCollection withAll: {10. 6.}).
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 10.
+	self assert: (aGame currentPositionOfShip: 'bote') equals: 6
 ]
 
 { #category : 'tests' }
 GameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
@@ -113,7 +114,7 @@ GameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 GameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 
 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
@@ -131,7 +132,7 @@ GameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
 	squares := -10.
 	self
 		should: [ 	| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: -10
 		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
@@ -151,7 +152,7 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 	self
 		should: [
 			| aGame dice |
-	dice := Dice with: { (FixedDie rolling: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	aGame := Game
 		         playedOn: 10
 		         by: (OrderedCollection withAll: { })
@@ -160,15 +161,15 @@ GameTest >> test010WhenAGameHasNoPlayersThenItCanNotStart [
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: Game invalidPlayersErrorDescription ]
+				equals: Game invalidShipsErrorDescription ]
 ]
 
 { #category : 'tests' }
 GameTest >> test011WhenGameUseADiceThenShipsMoveDiceRollResult [
 
 	| aGame firstDie secondDie dice |
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 5.
+	firstDie := FixedDie withNumberOfFaces: 3.
+	secondDie := FixedDie withNumberOfFaces: 5.
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.
@@ -187,8 +188,8 @@ GameTest >> test012WhenGameHasTwoPlayersThenEachPlayerPlayATurn [
 
 	| aGame squares firstDie secondDie dice |
 	squares := 10.
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 5.
+	firstDie := FixedDie withNumberOfFaces: 3.
+	secondDie := FixedDie withNumberOfFaces: 5.
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.
@@ -211,8 +212,8 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 	| aGame squares firstDie secondDie dice |
 	
 	squares := 10.
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 5.
+	firstDie := FixedDie withNumberOfFaces: 3.
+	secondDie := FixedDie withNumberOfFaces: 5.
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.
@@ -227,23 +228,29 @@ GameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSqu
 ]
 
 { #category : 'tests' }
-GameTest >> test014WhenGameHasNoWinnerThenWinnerReturnsNobody [
+GameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 
-    | aGame dice |
-    dice := Dice with: { FixedDie rolling: 3. FixedDie rolling: 3 }.
-    aGame := Game
-        playedOn: 10
-        by: (OrderedCollection withAll: {'sombrero'. 'bote'})
-        throwing: dice.
+	| aGame dice |
+	dice := Dice with: {
+			        (FixedDie withNumberOfFaces: 3).
+			        (FixedDie withNumberOfFaces: 3) }.
+	aGame := Game
+		         playedOn: 10
+		         by: (OrderedCollection withAll: { 'sombrero'. 'bote' })
+		         throwing: dice.
 
-    self assert: aGame winner equals: 'nobody'.
+	self
+		should: [ aGame winner ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self assert: error messageText equals: 'The game has no winner yet' ]
 ]
 
 { #category : 'tests' }
 GameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
 
     | aGame dice |
-    dice := Dice with: { FixedDie rolling: 5. FixedDie rolling: 5 }.
+    dice := Dice with: { FixedDie withNumberOfFaces: 5. FixedDie withNumberOfFaces: 5 }.
     aGame := Game
         playedOn: 4
         by: (OrderedCollection withAll: {'sombrero'})
@@ -257,7 +264,7 @@ GameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
 GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
 
     | aGame dice |
-    dice := Dice with: { FixedDie rolling: 5. FixedDie rolling: 5 }.
+    dice := Dice with: { FixedDie withNumberOfFaces: 5. FixedDie withNumberOfFaces: 5 }.
     aGame := Game
         playedOn: 10
         by: (OrderedCollection withAll: {'sombrero'})
@@ -271,7 +278,7 @@ GameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
 GameTest >> test017WhenGameIsFinishedThenItHasAWinner [
 
     | aGame dice |
-    dice := Dice with: { FixedDie rolling: 5 }.
+    dice := Dice with: { FixedDie withNumberOfFaces: 5 }.
     aGame := Game
         playedOn: 4
         by: (OrderedCollection withAll: {'sombrero'})

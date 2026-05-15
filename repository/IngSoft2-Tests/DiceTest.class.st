@@ -9,8 +9,8 @@ Class {
 DiceTest >> test001WhenDiceAreRolledThenItReturnsTheSumOfEachDieRoll [
 
 	| dice firstDie secondDie rolledNumber |
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 5.
+	firstDie := FixedDie withNumberOfFaces: 3.
+	secondDie := FixedDie withNumberOfFaces: 5.
 	dice := Dice with: {
 			        firstDie.
 			        secondDie }.

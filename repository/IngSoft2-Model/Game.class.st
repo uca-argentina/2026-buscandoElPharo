@@ -21,7 +21,7 @@ Class {
 }
 
 { #category : 'validation' }
-Game class >> invalidPlayersErrorDescription [
+Game class >> invalidShipsErrorDescription [
 
 	^ 'Can not start game with no players'
 ]
@@ -36,17 +36,19 @@ Game class >> invalidSquaresErrorDescription [
 Game class >> playedOn: squares by: names throwing: aDice [ 
 
 	names isEmpty ifTrue: [
-		Error signal: self invalidPlayersErrorDescription ].
+		Error signal: self invalidShipsErrorDescription ].
 	squares < 1 ifTrue: [
 		Error signal: self invalidSquaresErrorDescription ].
 
-	^ self new initializeSimulationWith: squares andPlayers: names using: aDice 
+	^ self new initializePharoGamePlayedOn: squares by: names using: aDice 
 ]
 
 { #category : 'accessing' }
-Game >> currentPositionOfShip: shipName [ 
-	
-	^ ships at: shipName ifAbsent: [ ^Error signal: 'Ship name not found' ].
+Game >> currentPositionOfShip: shipName [
+
+	^ ships
+		  at: shipName
+		  ifAbsent: [ Error signal: 'Ship name not found' ]
 ]
 
 { #category : 'accessing' }
@@ -75,7 +77,7 @@ Game >> hasWinner [
 ]
 
 { #category : 'initialization' }
-Game >> initializeSimulationWith: squares andPlayers: names using: playableDice [
+Game >> initializePharoGamePlayedOn: squares by: names using: playableDice [
 
 	currentState := Started new.
 	cells := squares.

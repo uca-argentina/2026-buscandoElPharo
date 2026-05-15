@@ -17,5 +17,5 @@ NoWinner >> hasWon [
 { #category : 'accessing' }
 NoWinner >> winner [
 
-	^ 'nobody'
+	^ Error signal: self noWinnerErrorDescription
 ]
