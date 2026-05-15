@@ -109,12 +109,6 @@ PharoGame >> moveSpaceShip: currentSpaceShip [
 	currentSpaceShip move: (dice roll min: cells) top: cells
 ]
 
-{ #category : 'accessing - private' }
-PharoGame >> nextTurn: shipIndex [
-
-    currentPlayerIndex := (shipIndex rem: spaceShips size) + 1
-]
-
 { #category : 'actions' }
 PharoGame >> playTurn [
 
