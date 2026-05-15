@@ -11,12 +11,6 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'instance creation' }
-Winner class >> with: name [
-
-	^ self new initializeWithShip: name
-]
-
 { #category : 'as yet unclassified' }
 Winner class >> withShip: name [
 
@@ -30,15 +24,9 @@ Winner >> hasWon [
 ]
 
 { #category : 'initialization' }
-Winner >> initializeWith: name [
-
-	winner := name
-]
-
-{ #category : 'initialization' }
 Winner >> initializeWithShip: name [
 
-	winnerShip := name
+	winnerShip := name identification 
 ]
 
 { #category : 'accessing' }

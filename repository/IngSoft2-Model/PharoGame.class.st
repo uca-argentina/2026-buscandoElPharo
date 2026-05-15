@@ -35,7 +35,7 @@ PharoGame class >> invalidSquaresErrorDescription [
 { #category : 'creation' }
 PharoGame class >> playedOn: squares by: ships throwing: aDice [
 
-	ships isNil ifTrue: [
+	ships isEmpty ifTrue: [
 		Error signal: self invalidShipsErrorDescription ].
 	squares < 1 ifTrue: [
 		Error signal: self invalidSquaresErrorDescription ].
@@ -60,7 +60,7 @@ PharoGame >> currentPositionOfShip: shipName [
 PharoGame >> finishGameWith: shipName [
 
 	currentState := Finished new.
-	winnerState := Winner with: shipName
+	winnerState := Winner withShip: shipName
 ]
 
 { #category : 'accessing' }

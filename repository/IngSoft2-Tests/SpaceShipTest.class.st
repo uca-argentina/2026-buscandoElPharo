@@ -15,12 +15,12 @@ SpaceShipTest >> test001WhenASpaceShipIsCreatedThenItHasAName [
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test002WhenASpaceShipIsCreatedThenItHasAInitialPositionZero [
+SpaceShipTest >> test002WhenASpaceShipIsCreatedThenItHasAInitialPositionInOne [
 
 	| aSpaceShip |
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
 
-	self assert: aSpaceShip position equals: 0
+	self assert: aSpaceShip position equals: 1
 ]
 
 { #category : 'tests' }
@@ -42,5 +42,5 @@ SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
 	aSpaceShip  advanceBy: 4.
 
-	self assert: aSpaceShip position equals: 4
+	self assert: aSpaceShip position equals: 5
 ]
