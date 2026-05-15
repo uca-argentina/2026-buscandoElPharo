@@ -15,11 +15,43 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'validation' }
+SpaceShip class >> invalidNameErrorDescription [
+
+	^ 'SpaceShip must have a name'
+]
+
+{ #category : 'creation' }
+SpaceShip class >> namedAfter: tag [
+
+	tag isEmpty ifTrue: [
+		Error signal: self invalidNameErrorDescription ].
+	^ self new initializeSpaceShipWithName: tag
+]
+
+{ #category : 'validation' }
+SpaceShip class >> repeatedNameErrorDescription [
+
+	^ 'SpaceShips can not have the same name'
+]
+
+{ #category : 'playing' }
+SpaceShip >> advanceBy: newPosition [
+
+	currentPosition := currentPosition + newPosition
+]
+
 { #category : 'initialization' }
 SpaceShip >> initializeSpaceShipWithName: tag [
 
 	name := tag.
 	currentPosition := 0
+]
+
+{ #category : 'accessing' }
+SpaceShip >> nameTag [
+
+	^ name
 ]
 
 { #category : 'accessing' }
