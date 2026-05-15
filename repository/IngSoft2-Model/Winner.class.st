@@ -5,16 +5,16 @@ Class {
 	#name : 'Winner',
 	#superclass : 'Object',
 	#instVars : [
-		'winner'
+		'winnerShip'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'instance creation' }
-Winner class >> with: name [
+{ #category : 'as yet unclassified' }
+Winner class >> withShip: name [
 
-	^ self new initializeWith: name
+	^ self new initializeWithShip: name
 ]
 
 { #category : 'testing' }
@@ -24,13 +24,13 @@ Winner >> hasWon [
 ]
 
 { #category : 'initialization' }
-Winner >> initializeWith: name [
+Winner >> initializeWithShip: name [
 
-	winner := name
+	winnerShip := name identification 
 ]
 
 { #category : 'accessing' }
 Winner >> winner [
 
-	^ winner
+	^ winnerShip 
 ]
