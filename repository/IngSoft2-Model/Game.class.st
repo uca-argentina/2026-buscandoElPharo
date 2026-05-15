@@ -102,12 +102,12 @@ Game >> nextTurn: shipIndex at: keys [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'actions' }
 Game >> playTurn [
 
 	| keys shipName |
 	currentState finished ifTrue: [
-		^ Error signal: 'Can not restart the game' ].
+		Error signal: self restartErrorDescription ].
 	keys := ships keys asOrderedCollection.
 	shipName := keys at: currentPlayerIndex.
 	self moveShip: shipName.

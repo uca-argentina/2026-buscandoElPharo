@@ -14,6 +14,12 @@ NoWinner >> hasWon [
 	^ false
 ]
 
+{ #category : 'validation' }
+NoWinner >> noWinnerErrorDescription [
+
+	^ 'The game has no winner yet'
+]
+
 { #category : 'accessing' }
 NoWinner >> winner [
 
