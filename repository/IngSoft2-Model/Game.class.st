@@ -14,73 +14,11 @@ Class {
 		'ships',
 		'currentPlayerIndex',
 		'dice',
-		'hasWinner'
+		'winnerState'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
-
-{ #category : 'creation' }
-Game class >> createSimulation [
-
-	| firstDie secondDie dice |
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 3.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
-	^ self
-		  createSimulationWith: 10
-		  andPlayers: (OrderedCollection withAll: { 'sombrero' })
-		  using: dice
-]
-
-{ #category : 'creation' }
-Game class >> createSimulationWith: squares [
-
-	| firstDie secondDie dice |
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 3.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
-	^ self
-		  createSimulationWith: squares
-		  andPlayers: (OrderedCollection withAll: { 'sombrero' })
-		  using: dice
-]
-
-{ #category : 'creation' }
-Game class >> createSimulationWith: squares andPlayers: names [
-	
-	| firstDie secondDie dice |
-	
-	names isEmpty ifTrue: [
-		Error signal: self invalidPlayersErrorDescription ].
-	squares < 1 ifTrue: [
-		Error signal: self invalidSquaresErrorDescription ].
-
-	firstDie := FixedDie rolling: 3.
-	secondDie := FixedDie rolling: 3.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
-	^ self
-		  createSimulationWith: squares
-		  andPlayers: names
-		  using: dice
-]
-
-{ #category : 'creation' }
-Game class >> createSimulationWith: squares andPlayers: names using: aDice [ 
-
-	names isEmpty ifTrue: [
-		Error signal: self invalidPlayersErrorDescription ].
-	squares < 1 ifTrue: [
-		Error signal: self invalidSquaresErrorDescription ].
-
-	^ self new initializeSimulationWith: squares andPlayers: names using: aDice 
-]
 
 { #category : 'validation' }
 Game class >> invalidPlayersErrorDescription [
@@ -92,6 +30,17 @@ Game class >> invalidPlayersErrorDescription [
 Game class >> invalidSquaresErrorDescription [
 
 	^ 'Can not start game with less than 1 square'
+]
+
+{ #category : 'creation' }
+Game class >> playedOn: squares by: names throwing: aDice [ 
+
+	names isEmpty ifTrue: [
+		Error signal: self invalidPlayersErrorDescription ].
+	squares < 1 ifTrue: [
+		Error signal: self invalidSquaresErrorDescription ].
+
+	^ self new initializeSimulationWith: squares andPlayers: names using: aDice 
 ]
 
 { #category : 'accessing' }
@@ -110,7 +59,7 @@ Game >> currentPositionOfShips [
 Game >> finishGameWith: shipName [
 
 	currentState := Finished new.
-	hasWinner := Winner with: shipName
+	winnerState := Winner with: shipName
 ]
 
 { #category : 'accessing' }
@@ -122,19 +71,19 @@ Game >> finished [
 { #category : 'testing' }
 Game >> hasWinner [
 
-	^ hasWinner hasWon.
+	^ winnerState hasWon.
 ]
 
 { #category : 'initialization' }
-Game >> initializeSimulationWith: squares andPlayers: names using: sequentialDice [
+Game >> initializeSimulationWith: squares andPlayers: names using: playableDice [
 
 	currentState := Started new.
 	cells := squares.
 	ships := Dictionary new.
 	ships := Dictionary newFrom: (names collect: [ :name | name -> 0 ]).
-	hasWinner := NoWinner new.
+	winnerState := NoWinner new.
 	currentPlayerIndex := 1.
-	dice := sequentialDice
+	dice := playableDice
 ]
 
 { #category : 'accessing - private' }
@@ -189,5 +138,5 @@ Game >> verifyWinner: shipName orNextPlayerFrom: shipIndex using: keys [
 { #category : 'accessing' }
 Game >> winner [
 
-	^ hasWinner winner
+	^ winnerState winner
 ]
