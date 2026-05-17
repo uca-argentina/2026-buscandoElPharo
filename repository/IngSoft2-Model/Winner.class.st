@@ -11,10 +11,10 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-Winner class >> withShip: name [
+{ #category : 'creation' }
+Winner class >> withShip: nameTag [
 
-	^ self new initializeWithShip: name
+	^ self new initializeWithShip: nameTag
 ]
 
 { #category : 'testing' }

@@ -35,6 +35,12 @@ SpaceShip >> advanceBy: newRoll top: maxCell [
 	currentPosition := currentPosition + newRoll min: maxCell
 ]
 
+{ #category : 'validation' }
+SpaceShip >> checkEndOn: aGame limitedTo: cells [
+
+	currentPosition >= cells ifTrue: [ aGame finishGameWith: self ]
+]
+
 { #category : 'accessing' }
 SpaceShip >> identification [
 
