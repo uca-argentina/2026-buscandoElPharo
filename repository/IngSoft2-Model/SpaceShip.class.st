@@ -9,7 +9,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
-		'currentPosition'
+		'currentPosition',
+		'laps'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -45,7 +46,13 @@ SpaceShip >> identification [
 SpaceShip >> initializeSpaceShipWithName: tag [
 
 	name := tag.
-	currentPosition := 1
+	currentPosition := 1.
+	laps := 0
+]
+
+{ #category : 'accessing' }
+SpaceShip >> laps [
+	^ laps
 ]
 
 { #category : 'as yet unclassified' }

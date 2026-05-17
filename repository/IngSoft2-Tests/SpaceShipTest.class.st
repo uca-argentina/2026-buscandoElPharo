@@ -44,3 +44,12 @@ SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 
 	self assert: aSpaceShip position equals: 5
 ]
+
+{ #category : 'tests' }
+SpaceShipTest >> test005WhenASpaceShipIsCreatedThenItStartsWithZeroLaps [
+
+	| aSpaceShip |
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+
+	self assert: aSpaceShip laps equals: 0
+]
