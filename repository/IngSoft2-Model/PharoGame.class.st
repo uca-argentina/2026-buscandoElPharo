@@ -2,8 +2,6 @@
 Key collaborators:
 - Dice: Provides the movement values.
 - State (Started/Finished): Handles the game lifecycle.
-- ships: A Dictionary for positions.
-- turnOrder: An OrderedCollection to ensure deterministic turns.
 "
 Class {
 	#name : 'PharoGame',
@@ -11,10 +9,8 @@ Class {
 	#instVars : [
 		'currentState',
 		'cells',
-		'currentPlayerIndex',
 		'dice',
 		'winnerState',
-		'spaceShips',
 		'turnManager'
 	],
 	#category : 'IngSoft2-Model',
@@ -58,17 +54,26 @@ PharoGame class >> playedOn: squares by: ships throwing: aDice [
 { #category : 'accessing' }
 PharoGame >> currentPositionOfShip: shipName [
 
-	| foundShip |
-	foundShip := spaceShips
-		             detect: [ :spaceShip | spaceShip identification = shipName ]
-		             ifNone: [ ^ Error signal: 'SpaceShip not found' ].
-	^ foundShip position
+	^ turnManager positionOf: shipName
 ]
 
 { #category : 'playing' }
 PharoGame >> currentShip [
 
-	^ turnManager currentShipIdentification
+	^ turnManager currentShipIdentification 
+]
+
+{ #category : 'playing' }
+PharoGame >> executeNextTurn [
+
+	turnManager playTurnOn: self
+]
+
+{ #category : 'playing' }
+PharoGame >> executeTurnFor: currentSpaceShip [
+
+	currentSpaceShip advanceBy: (dice roll) top: cells.
+	self verifyWinner: currentSpaceShip
 ]
 
 { #category : 'accessing - private' }
@@ -93,31 +98,21 @@ PharoGame >> hasWinner [
 { #category : 'initialization' }
 PharoGame >> initializePharoGamePlayedOn: squares by: ships using: playableDice [
 
+	| spaceShips |
 	currentState := Started new.
 	cells := squares.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
 	turnManager := TurnManager withShips: spaceShips.
 	winnerState := NoWinner new.
-	currentPlayerIndex := 1.
 	dice := playableDice
-]
-
-{ #category : 'accessing - private' }
-PharoGame >> moveSpaceShip: currentSpaceShip [
-
-	currentSpaceShip move: (dice roll min: cells) top: cells
 ]
 
 { #category : 'actions' }
 PharoGame >> playTurn [
 
-	| currentSpaceShip |
-	currentState finished ifTrue: [
-		Error signal: self restartErrorDescription ].
-	currentSpaceShip := turnManager currentShip.
-	self moveSpaceShip: currentSpaceShip.
-	self verifyWinner: currentSpaceShip
+	currentState playTurnOn: self.
+
 ]
 
 { #category : 'validation' }
@@ -135,9 +130,7 @@ PharoGame >> started [
 { #category : 'accessing - private' }
 PharoGame >> verifyWinner: spaceShip [
 
-	(spaceShip reachedTheEnd: cells)
-		ifTrue: [ self finishGameWith: spaceShip ]
-		ifFalse: [ turnManager nextTurn ]
+	spaceShip checkEndOn: self limitedTo: cells
 ]
 
 { #category : 'accessing' }

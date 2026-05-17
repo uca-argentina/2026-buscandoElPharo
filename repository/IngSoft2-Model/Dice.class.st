@@ -35,10 +35,5 @@ Dice >> initializeWith: aCollectionOfDice [
 { #category : 'transform' }
 Dice >> roll [
 
-	| total |
-	
-	total := 0.
-	dice do: [ :die | total := total + die roll ].
-	
-	^ total
+	^ dice sum: [ :die | die roll ]
 ]

@@ -42,3 +42,19 @@ TurnManager >> nextTurn [
 
 	currentTurn := (currentTurn \\ spaceShipsOrder size) + 1
 ]
+
+{ #category : 'playing' }
+TurnManager >> playTurnOn: aGame [
+
+	| currentSpaceShip |
+	currentSpaceShip := spaceShipsOrder at: currentTurn.
+	aGame executeTurnFor: currentSpaceShip.
+	self nextTurn
+]
+
+{ #category : 'accessing' }
+TurnManager >> positionOf: aName [
+
+	^ (spaceShipsOrder detect: [ :ship | ship identification = aName ])
+		  position
+]
