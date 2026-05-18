@@ -30,12 +30,18 @@ SpaceShip class >> namedAfter: tag [
 ]
 
 { #category : 'playing' }
-SpaceShip >> advanceBy: newPosition [
+SpaceShip >> advanceBy: newRoll top: maxCell [
 
-	currentPosition := currentPosition + newPosition
+	currentPosition := currentPosition + newRoll min: maxCell
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
+SpaceShip >> checkEndOn: aGame limitedTo: cells [
+
+	currentPosition >= cells ifTrue: [ aGame finishGameWith: self ]
+]
+
+{ #category : 'accessing' }
 SpaceShip >> identification [
 
 	^ name
@@ -48,26 +54,8 @@ SpaceShip >> initializeSpaceShipWithName: tag [
 	currentPosition := 1
 ]
 
-{ #category : 'as yet unclassified' }
-SpaceShip >> move: nextMove top: maxMove [
-
-	currentPosition := (currentPosition + nextMove) min: maxMove
-]
-
-{ #category : 'accessing' }
-SpaceShip >> nameTag [
-
-	^ name
-]
-
 { #category : 'accessing' }
 SpaceShip >> position [
 
 	^ currentPosition
-]
-
-{ #category : 'playing' }
-SpaceShip >> reachedTheEnd: lastCell [
-
-	^ currentPosition = lastCell
 ]

@@ -11,7 +11,7 @@ SpaceShipTest >> test001WhenASpaceShipIsCreatedThenItHasAName [
 	| aSpaceShip |
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
 
-	self assert: aSpaceShip nameTag equals: 'sombrero'
+	self assert: aSpaceShip identification equals: 'sombrero'
 ]
 
 { #category : 'tests' }
@@ -40,7 +40,7 @@ SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 
 	| aSpaceShip |
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
-	aSpaceShip  advanceBy: 4.
+	aSpaceShip advanceBy: 4 top: 10.
 
 	self assert: aSpaceShip position equals: 5
 ]

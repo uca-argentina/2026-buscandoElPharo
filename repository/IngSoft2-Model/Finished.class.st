@@ -15,6 +15,12 @@ Finished >> finished [
 	^ true
 ]
 
+{ #category : 'playing' }
+Finished >> playTurnOn: aGame [
+
+	Error signal: aGame restartErrorDescription
+]
+
 { #category : 'accessing' }
 Finished >> started [
 
