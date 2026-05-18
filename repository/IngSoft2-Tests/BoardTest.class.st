@@ -8,17 +8,24 @@ Class {
 { #category : 'tests' }
 BoardTest >> test001WhenABoardIsCreatedThenItHasCells [
 
-	| aBoard |
-	aBoard := Board withCells: 10.
+	| aBoard fixedCells |
+	fixedCells := OrderedCollection
+		              with: NoEffect new
+		              with: NoEffect new
+		              with: NoEffect new.
+	aBoard := Board withCells: fixedCells.
 
-	self assert: aBoard cells equals: 10
+	self assert: aBoard cells equals: 3
 ]
 
 { #category : 'tests' }
 BoardTest >> test002WhenCellsIsLessThanOneThenBoardCannotBeCreated [
 
+	| fixedCells |
+	fixedCells := OrderedCollection new.
+
 	self
-		should: [ Board withCells: 0 ]
+		should: [ Board withCells: fixedCells ]
 		raise: Error
 		withExceptionDo: [ :error |
 			self
@@ -27,10 +34,14 @@ BoardTest >> test002WhenCellsIsLessThanOneThenBoardCannotBeCreated [
 ]
 
 { #category : 'tests' }
-BoardTest >> test003WhenCellHasSpeednUpThenItCausesAnEffectOfFourCellsForward [
+BoardTest >> test003WhenABoardHasAllCellsWithSpeedUpThenAllCellsEffectsMovesFourCellsForward [
 
-	| aBoard |
-	aBoard := Board withCells: 10 andEffect: SpeedUp new.
+	| aBoard fixedCells |
+	fixedCells := OrderedCollection
+		              with: SpeedUp new
+		              with: SpeedUp new
+		              with: SpeedUp new.
+	aBoard := Board withCells: fixedCells.
 
-	self assert: aBoard effectOnCell equals: 4
+	self assert: (aBoard effectAtCell: 1) equals: 4
 ]

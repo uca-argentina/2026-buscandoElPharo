@@ -18,16 +18,8 @@ Board class >> invalidCellsErrorDescription [
 { #category : 'creation' }
 Board class >> withCells: squares [
 
-	squares > 1 ifFalse: [ Error signal: self invalidCellsErrorDescription ].
+	squares isEmpty ifTrue: [ Error signal: self invalidCellsErrorDescription ].
 	^ self new initializeWithCells: squares
-]
-
-{ #category : 'as yet unclassified' }
-Board class >> withCells: squares andEffect: type [
-
-	squares < 1 ifTrue: [
-		Error signal: self invalidCellsErrorDescription ].
-	^ self new initializeWithCells: squares andEffect: type
 ]
 
 { #category : 'as yet unclassified' }
@@ -45,12 +37,5 @@ Board >> effectOnCell [
 { #category : 'initialization' }
 Board >> initializeWithCells: squares [
 
-	tiles := squares
-]
-
-{ #category : 'initialization' }
-Board >> initializeWithCells: squares andEffect: type [
-
 	tiles := squares.
-	typeOfCell := type
 ]
