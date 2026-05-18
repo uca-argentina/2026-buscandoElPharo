@@ -190,7 +190,7 @@ PharoGameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 		should: [ aGame winner ]
 		raise: Error
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: 'The game has no winner yet' ]
+			self assert: error messageText equals: (NoWinner new) noWinnerErrorDescription ]
 ]
 
 { #category : 'tests' }
