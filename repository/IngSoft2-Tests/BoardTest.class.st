@@ -45,3 +45,29 @@ BoardTest >> test003WhenABoardHasAllCellsWithSpeedUpThenAllCellsEffectsMovesFour
 
 	self assert: (aBoard effectAtCell: 1) equals: 4
 ]
+
+{ #category : 'tests' }
+BoardTest >> test004WhenABoardHasAllCellsWithNoEffectThenAllCellsHaveNoImpact [
+
+	| aBoard fixedCells |
+	fixedCells := OrderedCollection
+		              with: SpeedUp new
+		              with: SpeedUp new
+		              with: SpeedUp new.
+	aBoard := Board withCells: fixedCells.
+
+	self assert: (aBoard effectAtCell: 1) equals: 4
+]
+
+{ #category : 'tests' }
+BoardTest >> test005WhenABoardHasAllCellsWithWormHoleThenAllCellsEffectsMovesFourCellsBackwards [
+
+	| aBoard fixedCells |
+	fixedCells := OrderedCollection
+		              with: WormHole new
+		              with: WormHole new
+		              with: WormHole new.
+	aBoard := Board withCells: fixedCells.
+	
+	self assert: (aBoard effectAtCell: 1) equals: -4
+]

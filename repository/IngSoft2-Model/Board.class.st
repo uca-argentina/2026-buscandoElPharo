@@ -25,7 +25,13 @@ Board class >> withCells: squares [
 { #category : 'as yet unclassified' }
 Board >> cells [
 
-	^ tiles
+	^ tiles size
+]
+
+{ #category : 'as yet unclassified' }
+Board >> effectAtCell: aCellNumber [
+
+	^ (tiles at: aCellNumber) effectImpact 
 ]
 
 { #category : 'as yet unclassified' }
