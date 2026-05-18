@@ -12,27 +12,28 @@ Class {
 	#package : 'IngSoft2-Tests'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 FixedDie class >> fixedDieFacesErrorDescription [
 
-	^ 'A fixed die must have at least three faces'
+	^ 'A fixed die must have at least one face'
 ]
 
-{ #category : 'as yet unclassified' }
-FixedDie class >> rolling: aNumberToRoll [
+{ #category : 'playing' }
+FixedDie class >> withNumberOfFaces: faces [
 
-	aNumberToRoll < 3 ifTrue: [
-		^ Error signal: 'A fixed die must have at least three faces' ].
-	^ self new initializeRolling: aNumberToRoll
+	faces < 1 ifTrue: [
+		^ Error signal: self fixedDieFacesErrorDescription ].
+	^ self new initializeRolling: faces
 ]
 
 { #category : 'initialization' }
 FixedDie >> initializeRolling: aNumberToRoll [
+
 	fixedRoll := aNumberToRoll.
-	^ self
 ]
 
 { #category : 'accessing' }
 FixedDie >> roll [
+
 	^ fixedRoll
 ]

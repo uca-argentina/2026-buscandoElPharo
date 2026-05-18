@@ -15,6 +15,12 @@ Started >> finished [
 	^ false
 ]
 
+{ #category : 'playing' }
+Started >> playTurnOn: aPharoGame [
+
+	aPharoGame executeNextTurn
+]
+
 { #category : 'accessing' }
 Started >> started [
 

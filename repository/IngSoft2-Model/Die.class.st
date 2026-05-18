@@ -12,12 +12,6 @@ Class {
 }
 
 { #category : 'validation' }
-Die class >> dieFacesErrorDescription [
-
-	^ 'A die must have at least three faces'
-]
-
-{ #category : 'validation' }
 Die class >> invalidNumberOfFacesErrorDescription [
 
 	^ 'A die must have at least three faces'
@@ -26,7 +20,7 @@ Die class >> invalidNumberOfFacesErrorDescription [
 { #category : 'creation' }
 Die class >> withNumberOfFaces: aNumberOfFaces [
 
-	aNumberOfFaces <= 3 ifTrue: [
+	aNumberOfFaces < 3 ifTrue: [
 		Error signal: self invalidNumberOfFacesErrorDescription ].
 	^ self new initializeWithNumberOfFaces: aNumberOfFaces
 ]
