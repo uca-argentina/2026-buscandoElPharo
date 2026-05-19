@@ -85,5 +85,4 @@ BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectio
 	aBoard := Board withCells: generatedCells.
 	
 	self assert: aBoard cells equals: 100.
-	"lograr llevar esta logica a PharoGame"
 ]

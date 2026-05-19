@@ -42,5 +42,9 @@ Board >> initializeWithCells: squares [
 { #category : 'playing' }
 Board >> movingTo: newPosition crossMaxCellFor: currentSpaceShip from: aGame [
 
-	currentSpaceShip advanceBy: newPosition top: self cells from: aGame
+	| tile effect position |
+	tile := tiles at: (newPosition min: self cells).
+	effect := tile effectImpact.
+	position := newPosition + effect.
+	currentSpaceShip advanceBy: position top: self cells from: aGame
 ]
