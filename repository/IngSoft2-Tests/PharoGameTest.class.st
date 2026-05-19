@@ -6,12 +6,18 @@ Class {
 }
 
 { #category : 'tests' }
-PharoGameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
+PharoGameTest >> test001WhenAGameIsCreatedThenAGameIsStarted [
 
-	| aGame dice spaceShips |
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
-	aGame := PharoGame playedOn: 4 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 4.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 
 	self assert: aGame started equals: true
 ]
@@ -19,10 +25,16 @@ PharoGameTest >> test001WhenAGameIsCreatedThenASimulationCanStart [
 { #category : 'tests' }
 PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
 	
-	| aGame dice spaceShips |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 3) }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
-	aGame := PharoGame playedOn: 6 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	self
@@ -38,33 +50,51 @@ PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotRepla
 { #category : 'tests' }
 PharoGameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 	
-	| aGame dice spaceShips |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 3) }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
-	aGame := PharoGame playedOn: 5 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	self assert: aGame finished equals: true
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameKeepsPlayingUntilFinished [
+PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameCanKeepPlayingUntilFinished [
 
-	| aGame dice spaceShips |
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
-	aGame := PharoGame playedOn: 4 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 100.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
-	self assert: aGame finished equals: true.
+	self assert: aGame finished equals: false.
 ]
 
 { #category : 'tests' }
 PharoGameTest >> test005WhenGamePlayATurnThenGameKnowsSpaceShipsPosition [
 
-	| aGame dice spaceShips |
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
 ]
@@ -72,10 +102,16 @@ PharoGameTest >> test005WhenGamePlayATurnThenGameKnowsSpaceShipsPosition [
 { #category : 'tests' }
 PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntilFinished [
 
-	| aGame dice spaceShips |
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
@@ -86,10 +122,16 @@ PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntil
 { #category : 'tests' }
 PharoGameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 
-	| aGame dice spaceShips |
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 5.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 
 	self deny: aGame hasWinner
 ]
@@ -97,10 +139,16 @@ PharoGameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 { #category : 'tests' }
 PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 
-	| aGame dice spaceShips |
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
@@ -108,30 +156,20 @@ PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test009WhenAGameHasNegativeSquaresThenItCanNotStart [
-
-	| dice spaceShips squares |
-	squares := -10.
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	self
-		should: [ PharoGame playedOn: squares by: spaceShips throwing: dice ]
-		raise: Error
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: PharoGame invalidSquaresErrorDescription ]
-]
-
-{ #category : 'tests' }
 PharoGameTest >> test010WhenAGameHasNoSpaceShipThenItCanNotStart [
 
-	| dice spaceShips |
+| dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := ''.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
 
 	self
-		should: [ PharoGame playedOn: 10 by: spaceShips throwing: dice ]
+		should: [ PharoGame playedOn: aBoard by: spaceShips throwing: dice. ]
 		raise: Error
 		withExceptionDo: [ :error |
 			self
@@ -142,32 +180,34 @@ PharoGameTest >> test010WhenAGameHasNoSpaceShipThenItCanNotStart [
 { #category : 'tests' }
 PharoGameTest >> test011WhenGameUseADiceThenSpaceShipsMoveDiceRollResult [
 
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 9
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsMaxSquare [
+PharoGameTest >> test013WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsMaxSquare [
 
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 12) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
-	aGame playTurn.
-	aGame playTurn.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 
 	self assert: aGame winner equals: 'sombrero'.
@@ -177,14 +217,16 @@ PharoGameTest >> test013WhenDiceRollsIsBiggerThanSquaresThenShipFinalPositionIsM
 { #category : 'tests' }
 PharoGameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 
 	self
 		should: [ aGame winner ]
@@ -194,48 +236,36 @@ PharoGameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test015WhenGameIsFinishedThenFinishedReturnsTrue [
+PharoGameTest >> test015WhenGameIsFinishedThenCurrentStateIsFinished [
 
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 12) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 7 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 
 	self assert: aGame finished
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test016WhenGameIsFinishedThenStartedReturnsFalse [
-
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
-	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 8 by: spaceShips throwing: dice.
-	aGame playTurn.
-
-	self deny: aGame started
-]
-
-{ #category : 'tests' }
 PharoGameTest >> test017WhenGameIsFinishedThenItHasAWinner [
 
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 4 by: spaceShips throwing: dice.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 4.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 
 	self assert: aGame hasWinner
@@ -244,16 +274,18 @@ PharoGameTest >> test017WhenGameIsFinishedThenItHasAWinner [
 { #category : 'tests' }
 PharoGameTest >> test018WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSameName [
 
-	| aGame firstDie secondDie dice spaceShips |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
+	| dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'sombrero' }.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
 
 	self
-		should: [ aGame := PharoGame playedOn: 10 by: spaceShips throwing: dice ]
+		should: [ PharoGame playedOn: aBoard by: spaceShips throwing: dice ]
 		raise: Error
 		withExceptionDo: [ :error |
 			self

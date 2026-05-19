@@ -30,15 +30,10 @@ SpaceShip class >> namedAfter: tag [
 ]
 
 { #category : 'playing' }
-SpaceShip >> advanceBy: newRoll top: maxCell [
+SpaceShip >> advanceBy: newRoll top: maxCell from: aGame [
 
-	currentPosition := currentPosition + newRoll min: maxCell
-]
-
-{ #category : 'validation' }
-SpaceShip >> checkEndOn: aGame limitedTo: cells [
-
-	currentPosition >= cells ifTrue: [ aGame finishGameWith: self ]
+	currentPosition := currentPosition + newRoll min: maxCell.
+	currentPosition >= maxCell ifTrue: [ aGame finishGameWith: self ]
 ]
 
 { #category : 'accessing' }
