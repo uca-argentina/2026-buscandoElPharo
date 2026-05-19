@@ -38,9 +38,17 @@ SpaceShipTest >> test003WhenASpaceShipIsBeingCreatedThenItCannotHaveEmptyName [
 { #category : 'tests' }
 SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 
-	| aSpaceShip |
-	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
-	aSpaceShip advanceBy: 4 top: 10.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 4) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
 
-	self assert: aSpaceShip position equals: 5
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 10.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame playTurn.
+
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 5
 ]

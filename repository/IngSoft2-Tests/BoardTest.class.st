@@ -71,3 +71,19 @@ BoardTest >> test005WhenABoardHasAllCellsWithWormHoleThenAllCellsEffectsMovesFou
 	
 	self assert: (aBoard effectAtCell: 1) equals: -4
 ]
+
+{ #category : 'tests' }
+BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectionOfCells [
+	| distribution probabilities generatedCells aBoard |
+	
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 0.4.
+	probabilities at: SpeedUp put: 0.6.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 100. 
+	aBoard := Board withCells: generatedCells.
+	
+	self assert: aBoard cells equals: 100.
+	"lograr llevar esta logica a PharoGame"
+]

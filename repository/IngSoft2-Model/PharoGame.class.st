@@ -8,10 +8,10 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'currentState',
-		'cells',
 		'dice',
 		'winnerState',
-		'turnManager'
+		'turnManager',
+		'board'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -36,17 +36,15 @@ PharoGame class >> invalidSquaresErrorDescription [
 ]
 
 { #category : 'creation' }
-PharoGame class >> playedOn: squares by: ships throwing: aDice [
+PharoGame class >> playedOn: aBoard by: ships throwing: aDice [
 
 	ships isEmpty ifTrue: [
 		Error signal: self invalidShipsErrorDescription ].
-	squares < 1 ifTrue: [
-		Error signal: self invalidSquaresErrorDescription ].
 	ships asSet size ~= ships size ifTrue: [
 		Error signal: self duplicatedShipNamesErrorDescription ].
 
 	^ self new
-		  initializePharoGamePlayedOn: squares
+		  initializePharoGamePlayedOn: aBoard
 		  by: ships
 		  using: aDice
 ]
@@ -72,8 +70,9 @@ PharoGame >> executeNextTurn [
 { #category : 'playing' }
 PharoGame >> executeTurnFor: currentSpaceShip [
 
-	currentSpaceShip advanceBy: (dice roll) top: cells.
-	self verifyWinner: currentSpaceShip
+	"currentSpaceShip advanceBy: (dice roll) top: board."
+	board movingTo: (dice roll) crossMaxCellFor: currentSpaceShip from: self.
+	"self verifyWinner: currentSpaceShip"
 ]
 
 { #category : 'accessing - private' }
@@ -96,11 +95,11 @@ PharoGame >> hasWinner [
 ]
 
 { #category : 'initialization' }
-PharoGame >> initializePharoGamePlayedOn: squares by: ships using: playableDice [
+PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice [
 
 	| spaceShips |
 	currentState := Started new.
-	cells := squares.
+	board := aBoard.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
 	turnManager := TurnManager withShips: spaceShips.
@@ -125,12 +124,6 @@ PharoGame >> restartErrorDescription [
 PharoGame >> started [
 
 	^ currentState started 
-]
-
-{ #category : 'accessing - private' }
-PharoGame >> verifyWinner: spaceShip [
-
-	spaceShip checkEndOn: self limitedTo: cells
 ]
 
 { #category : 'accessing' }

@@ -17,14 +17,16 @@ TurnManagerTest >> test001WhenTurnManagerIsCreatedThenFirstSpaceShipHasTheTurn [
 { #category : 'tests' }
 TurnManagerTest >> test002WhenTurnAdvancesThenSecondSpaceShipHasTheTurn [
 
-	| aGame firstDie secondDie dice ships |
-	firstDie := FixedDie withNumberOfFaces: 3.
-	secondDie := FixedDie withNumberOfFaces: 5.
-	dice := Dice with: {
-			        firstDie.
-			        secondDie }.
-	ships := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aGame := PharoGame playedOn: 10 by: ships throwing: dice.
+	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	probabilities := Dictionary new.
+	probabilities at: NoEffect put: 1.
+
+	distribution := EffectDistribution withProbabilities: probabilities.
+	generatedCells := distribution generateCells: 4.
+	aBoard := Board withCells: generatedCells.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 
 	self assert: aGame currentShip equals: 'bote'

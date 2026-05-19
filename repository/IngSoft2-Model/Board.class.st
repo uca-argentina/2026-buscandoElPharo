@@ -34,12 +34,6 @@ Board >> effectAtCell: aCellNumber [
 	^ (tiles at: aCellNumber) effectImpact 
 ]
 
-{ #category : 'as yet unclassified' }
-Board >> effectOnCell [
-
-	^ typeOfCell effectImpact
-]
-
 { #category : 'initialization' }
 Board >> initializeWithCells: squares [
 
