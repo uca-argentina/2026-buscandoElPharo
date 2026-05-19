@@ -22,13 +22,13 @@ Board class >> withCells: squares [
 	^ self new initializeWithCells: squares
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Board >> cells [
 
 	^ tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 Board >> effectAtCell: aCellNumber [
 
 	^ (tiles at: aCellNumber) effectImpact 
@@ -38,4 +38,10 @@ Board >> effectAtCell: aCellNumber [
 Board >> initializeWithCells: squares [
 
 	tiles := squares.
+]
+
+{ #category : 'playing' }
+Board >> movingTo: newPosition crossMaxCellFor: currentSpaceShip from: aGame [
+
+	currentSpaceShip advanceBy: newPosition top: self cells from: aGame
 ]
