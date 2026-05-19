@@ -86,3 +86,33 @@ BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectio
 	
 	self assert: aBoard cells equals: 100.
 ]
+
+{ #category : 'tests' }
+BoardTest >> test007WhenCellsIsNegativeThenBoardCannotBeCreated [
+
+	| fixedCells |
+	fixedCells := OrderedCollection with: -1.
+
+	self
+		should: [ Board withCells: fixedCells ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: Board negativeCellsErrorDescription ]
+]
+
+{ #category : 'tests' }
+BoardTest >> test008WhenCellsContainsFloatNumberThenBoardCannotBeCreated [
+
+	| fixedCells |
+	fixedCells := OrderedCollection with: 1.5.
+
+	self
+		should: [ Board withCells: fixedCells ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: Board floatCellsErrorDescription ]
+]

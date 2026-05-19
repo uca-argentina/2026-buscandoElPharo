@@ -83,7 +83,7 @@ PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameCanKeepPlayin
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test005WhenGamePlayATurnThenGameKnowsSpaceShipsPosition [
+PharoGameTest >> test005WhenAGamePlayATurnThenGameKnowsSpaceShipsPosition [
 
 	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
@@ -156,7 +156,7 @@ PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test010WhenAGameHasNoSpaceShipThenItCanNotStart [
+PharoGameTest >> test009WhenAGameHasNoSpaceShipThenItCanNotStart [
 
 | dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
@@ -178,7 +178,7 @@ PharoGameTest >> test010WhenAGameHasNoSpaceShipThenItCanNotStart [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test011WhenGameUseADiceThenSpaceShipsMoveDiceRollResult [
+PharoGameTest >> test010WhenAGameUseADiceThenSpaceShipsMoveDiceRollResult [
 
 	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
@@ -196,7 +196,7 @@ PharoGameTest >> test011WhenGameUseADiceThenSpaceShipsMoveDiceRollResult [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test013WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsMaxSquare [
+PharoGameTest >> test011WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsMaxSquare [
 
 	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 12) }.
@@ -215,7 +215,7 @@ PharoGameTest >> test013WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsM
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
+PharoGameTest >> test012WhenAGameHasNotPlayedThenItHasNoWinner [
 
 	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
@@ -236,7 +236,7 @@ PharoGameTest >> test014WhenGameHasNotPlayedThenItHasNoWinner [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test015WhenGameIsFinishedThenCurrentStateIsFinished [
+PharoGameTest >> test013WhenAGameIsFinishedThenCurrentStateIsFinished [
 
 	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 12) }.
@@ -254,7 +254,7 @@ PharoGameTest >> test015WhenGameIsFinishedThenCurrentStateIsFinished [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test017WhenGameIsFinishedThenItHasAWinner [
+PharoGameTest >> test014WhenAGameIsFinishedThenItHasAWinner [
 
 	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
@@ -272,7 +272,7 @@ PharoGameTest >> test017WhenGameIsFinishedThenItHasAWinner [
 ]
 
 { #category : 'tests' }
-PharoGameTest >> test018WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSameName [
+PharoGameTest >> test015WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSameName [
 
 	| dice spaceShips probabilities distribution generatedCells aBoard |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
