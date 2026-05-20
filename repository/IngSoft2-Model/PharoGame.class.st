@@ -59,6 +59,14 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 		  laps: laps
 ]
 
+{ #category : 'playing' }
+PharoGame >> checkWinnerFor: aSpaceShip with: laps [
+
+	laps = lapsToWin ifFalse: [ ^ self ].
+	currentState := Finished new.
+	winnerState := Winner withShip: aSpaceShip
+]
+
 { #category : 'accessing' }
 PharoGame >> currentLapOfShip: shipName [
 
@@ -115,7 +123,7 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	dice := playableDice
 ]
 
-{ #category : 'actions' }
+{ #category : 'playing' }
 PharoGame >> playTurn [
 
 	currentState playTurnOn: self.
