@@ -1,0 +1,44 @@
+Class {
+	#name : 'Parsec',
+	#superclass : 'Object',
+	#instVars : [
+		'distance'
+	],
+	#category : 'IngSoft2-Model',
+	#package : 'IngSoft2-Model'
+}
+
+{ #category : 'accessing' }
+Parsec class >> distance: aDistance [
+
+	^ self new initializeWithDistance: aDistance
+]
+
+{ #category : 'comparing' }
+Parsec >> = anotherParsec [
+
+	^ self distance = anotherParsec distance
+]
+
+{ #category : 'comparing' }
+Parsec >> > anotherParsec [
+
+	^ distance > anotherParsec distance
+]
+
+{ #category : 'accessing' }
+Parsec >> distance [
+	^ distance
+]
+
+{ #category : 'comparing' }
+Parsec >> hash [
+
+	^ distance hash
+]
+
+{ #category : 'initialization' }
+Parsec >> initializeWithDistance: aDistance [
+
+	distance := aDistance
+]

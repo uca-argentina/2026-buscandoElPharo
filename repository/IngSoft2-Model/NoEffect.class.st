@@ -6,6 +6,13 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+NoEffect >> applyTo: aSpaceShip affecting: allShips from: aGame [
+	"do nothing"
+
+	
+]
+
+{ #category : 'as yet unclassified' }
 NoEffect >> effectImpact [
 
 	^ 0

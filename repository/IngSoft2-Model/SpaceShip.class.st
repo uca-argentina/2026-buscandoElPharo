@@ -63,6 +63,12 @@ SpaceShip >> laps [
 	^ currentLap
 ]
 
+{ #category : 'as yet unclassified' }
+SpaceShip >> moveToFirstCell [
+
+	currentPosition := 1
+]
+
 { #category : 'accessing' }
 SpaceShip >> position [
 

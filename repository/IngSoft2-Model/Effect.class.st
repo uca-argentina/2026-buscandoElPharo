@@ -5,6 +5,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'as yet unclassified' }
+Effect >> applyTo: aSpaceShip affecting: allShips from: aGame [
+
+	self subclassResponsibility
+]
+
 { #category : 'testing' }
 Effect >> isAtomicBomb [
 

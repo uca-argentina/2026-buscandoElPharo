@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+SpeedUp >> applyTo: aSpaceShip affecting: allShips from: aGame [
+
+	aSpaceShip advanceBy: 4 top: aGame boardSize from: aGame
+]
+
+{ #category : 'as yet unclassified' }
 SpeedUp >> effectImpact [
 
 	^ 4

@@ -18,10 +18,16 @@ TurnManager class >> withShips: names [
 	^ self new initializeWithShips: names
 ]
 
+{ #category : 'accessing' }
+TurnManager >> allShips [
+
+	^ spaceShipsOrder
+]
+
 { #category : 'playing' }
 TurnManager >> currentShip [
 
-	^ (spaceShipsOrder at: currentTurn)
+	^ spaceShipsOrder at: currentTurn
 ]
 
 { #category : 'accessing' }
