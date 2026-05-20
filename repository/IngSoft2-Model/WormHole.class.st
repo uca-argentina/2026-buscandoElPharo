@@ -1,3 +1,8 @@
+"
+I represent a WormHole effect.
+
+When applied, I move a spaceship four cells backward.
+"
 Class {
 	#name : 'WormHole',
 	#superclass : 'Effect',

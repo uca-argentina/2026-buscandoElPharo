@@ -1,3 +1,7 @@
+"
+I represent an AtomicBomb effect.
+When applied, I move all spaceships back to the first cell while preserving their completed laps.
+"
 Class {
 	#name : 'AtomicBomb',
 	#superclass : 'Effect',

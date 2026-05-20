@@ -1,3 +1,8 @@
+"
+I represent a distance measured in parsecs.
+
+I behave as a domain object and can be compared with other parsec values.
+"
 Class {
 	#name : 'Parsec',
 	#superclass : 'Object',

@@ -1,3 +1,9 @@
+"
+I represent a MoonWalk effect.
+
+When applied, I move all other spaceships backwards a configurable number of cells.
+The spaceship that triggered the effect is not affected.
+"
 Class {
 	#name : 'MoonWalk',
 	#superclass : 'Effect',

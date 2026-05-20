@@ -1,3 +1,6 @@
+"
+I represent an effect that can be applied when a spaceship lands on a board cell.
+"
 Class {
 	#name : 'Effect',
 	#superclass : 'Object',

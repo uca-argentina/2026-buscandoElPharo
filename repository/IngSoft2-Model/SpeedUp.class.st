@@ -1,3 +1,8 @@
+"
+I represent a SpeedUp effect.
+
+When applied, I move a spaceship four cells forward.
+"
 Class {
 	#name : 'SpeedUp',
 	#superclass : 'Effect',

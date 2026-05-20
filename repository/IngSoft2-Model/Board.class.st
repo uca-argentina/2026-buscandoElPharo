@@ -1,3 +1,8 @@
+"
+I represent the game board.
+
+I contain a collection of cells with effects and provide access to them during gameplay.
+"
 Class {
 	#name : 'Board',
 	#superclass : 'Object',

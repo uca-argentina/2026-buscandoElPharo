@@ -1,3 +1,8 @@
+"
+I create collections of board effects according to configurable probabilities.
+
+I am responsible for generating effect distributions used to build game boards.
+"
 Class {
 	#name : 'EffectDistribution',
 	#superclass : 'Object',

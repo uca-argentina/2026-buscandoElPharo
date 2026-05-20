@@ -1,3 +1,9 @@
+"
+I represent a HyperJump effect.
+
+I move a spaceship forward using parsec values in descending order.
+After all values are used, the sequence starts again from the beginning.
+"
 Class {
 	#name : 'HyperJump',
 	#superclass : 'Effect',
