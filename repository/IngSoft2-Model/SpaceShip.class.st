@@ -9,7 +9,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
-		'currentPosition'
+		'currentPosition',
+		'currentLap'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -32,8 +33,14 @@ SpaceShip class >> namedAfter: tag [
 { #category : 'playing' }
 SpaceShip >> advanceBy: newRoll top: maxCell from: aGame [
 
-	currentPosition := currentPosition + newRoll min: maxCell.
-	currentPosition >= maxCell ifTrue: [ aGame finishGameWith: self ]
+	| newPosition |
+	newPosition := currentPosition + newRoll.
+	newPosition > maxCell ifTrue: [
+		newPosition := newPosition - maxCell.
+		currentLap := currentLap + 1.
+		aGame checkWinnerFor: self with: self laps ].
+	newPosition := newPosition max: 1.
+	currentPosition := newPosition
 ]
 
 { #category : 'accessing' }
@@ -46,7 +53,14 @@ SpaceShip >> identification [
 SpaceShip >> initializeSpaceShipWithName: tag [
 
 	name := tag.
-	currentPosition := 1
+	currentPosition := 1.
+	currentLap := 0.
+]
+
+{ #category : 'as yet unclassified' }
+SpaceShip >> laps [
+
+	^ currentLap
 ]
 
 { #category : 'accessing' }

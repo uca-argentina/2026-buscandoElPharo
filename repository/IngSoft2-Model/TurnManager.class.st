@@ -37,6 +37,13 @@ TurnManager >> initializeWithShips: names [
 	currentTurn := 1.
 ]
 
+{ #category : 'accessing' }
+TurnManager >> lapOf: aName [
+
+	^ (spaceShipsOrder detect: [ :ship | ship identification = aName ])
+		  laps
+]
+
 { #category : 'playing' }
 TurnManager >> nextTurn [
 

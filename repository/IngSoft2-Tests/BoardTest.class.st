@@ -74,15 +74,18 @@ BoardTest >> test005WhenABoardHasAllCellsWithWormHoleThenAllCellsEffectsMovesFou
 
 { #category : 'tests' }
 BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectionOfCells [
-	| distribution probabilities generatedCells aBoard |
-	
-	probabilities := Dictionary new.
-	probabilities at: NoEffect put: 0.4.
-	probabilities at: SpeedUp put: 0.6.
 
-	distribution := EffectDistribution withProbabilities: probabilities.
-	generatedCells := distribution generateCells: 100. 
-	aBoard := Board withCells: generatedCells.
-	
-	self assert: aBoard cells equals: 100.
+	| distribution tiles aBoard |
+	distribution := EffectDistribution generateForSize: 100.
+	distribution addNoEffect: 0.4.
+	distribution addSpeedUp: 0.2.
+	distribution addWormHole: 0.2.
+	distribution addHyperJump: 0.08.
+	distribution addMoonWalk: 0.1.
+	distribution addAtomicBomb: 0.02.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	self assert: aBoard cells equals: 100
 ]

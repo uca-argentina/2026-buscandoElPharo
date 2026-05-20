@@ -17,7 +17,10 @@ Board class >> invalidCellsErrorDescription [
 { #category : 'creation' }
 Board class >> withCells: squares [
 
-	squares isEmpty ifTrue: [ Error signal: self invalidCellsErrorDescription ].
+	squares isEmpty ifTrue: [
+		Error signal: self invalidCellsErrorDescription ].
+
+
 	^ self new initializeWithCells: squares
 ]
 

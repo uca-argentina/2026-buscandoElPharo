@@ -1,6 +1,6 @@
 Class {
 	#name : 'SpeedUp',
-	#superclass : 'Object',
+	#superclass : 'Effect',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
@@ -9,4 +9,10 @@ Class {
 SpeedUp >> effectImpact [
 
 	^ 4
+]
+
+{ #category : 'testing' }
+SpeedUp >> isSpeedUp [
+
+	^ true
 ]

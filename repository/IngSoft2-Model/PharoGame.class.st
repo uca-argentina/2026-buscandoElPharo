@@ -11,7 +11,9 @@ Class {
 		'dice',
 		'winnerState',
 		'turnManager',
-		'board'
+		'board',
+		'lapsToWin',
+		'numberOfLaps'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -35,18 +37,40 @@ PharoGame class >> invalidSquaresErrorDescription [
 	^ 'Can not start game with less than 1 square'
 ]
 
+{ #category : 'validation' }
+PharoGame class >> negativeLapErrorDescription [
+
+	^ 'Laps can not be negative'
+]
+
 { #category : 'creation' }
-PharoGame class >> playedOn: aBoard by: ships throwing: aDice [
+PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 
 	ships isEmpty ifTrue: [
 		Error signal: self invalidShipsErrorDescription ].
 	ships asSet size ~= ships size ifTrue: [
 		Error signal: self duplicatedShipNamesErrorDescription ].
 
+	laps < 0 ifTrue: [ Error signal: self negativeLapErrorDescription ].
 	^ self new
 		  initializePharoGamePlayedOn: aBoard
 		  by: ships
 		  using: aDice
+		  laps: laps
+]
+
+{ #category : 'playing' }
+PharoGame >> checkWinnerFor: aSpaceShip with: laps [
+
+	laps = lapsToWin ifFalse: [ ^ self ].
+	currentState := Finished new.
+	winnerState := Winner withShip: aSpaceShip
+]
+
+{ #category : 'accessing' }
+PharoGame >> currentLapOfShip: shipName [
+
+	^ turnManager lapOf: shipName
 ]
 
 { #category : 'accessing' }
@@ -70,16 +94,7 @@ PharoGame >> executeNextTurn [
 { #category : 'playing' }
 PharoGame >> executeTurnFor: currentSpaceShip [
 
-	"currentSpaceShip advanceBy: (dice roll) top: board."
 	board movingTo: (dice roll) crossMaxCellFor: currentSpaceShip from: self.
-	"self verifyWinner: currentSpaceShip"
-]
-
-{ #category : 'accessing - private' }
-PharoGame >> finishGameWith: shipName [
-
-	currentState := Finished new.
-	winnerState := Winner withShip: shipName
 ]
 
 { #category : 'accessing' }
@@ -95,11 +110,12 @@ PharoGame >> hasWinner [
 ]
 
 { #category : 'initialization' }
-PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice [
+PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice laps: laps [
 
 	| spaceShips |
 	currentState := Started new.
 	board := aBoard.
+	lapsToWin := laps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
 	turnManager := TurnManager withShips: spaceShips.
@@ -107,7 +123,7 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice [
 	dice := playableDice
 ]
 
-{ #category : 'actions' }
+{ #category : 'playing' }
 PharoGame >> playTurn [
 
 	currentState playTurnOn: self.
