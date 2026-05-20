@@ -1,3 +1,8 @@
+"
+I represent the game board.
+
+I contain a collection of cells with effects and provide access to them during gameplay.
+"
 Class {
 	#name : 'Board',
 	#superclass : 'Object',
@@ -33,7 +38,7 @@ Board >> cells [
 { #category : 'playing' }
 Board >> effectAtCell: aCellNumber [
 
-	^ (tiles at: aCellNumber) effectImpact 
+	^ (tiles at: aCellNumber) effectImpact
 ]
 
 { #category : 'initialization' }
@@ -45,9 +50,9 @@ Board >> initializeWithCells: squares [
 { #category : 'playing' }
 Board >> movingTo: newPosition crossMaxCellFor: currentSpaceShip from: aGame [
 
-	| tile effect position |
+	| tile finalPosition |
 	tile := tiles at: (newPosition min: self cells).
-	effect := tile effectImpact.
-	position := newPosition + effect.
-	currentSpaceShip advanceBy: position top: self cells from: aGame
+	finalPosition := newPosition + tile effectImpact.
+	currentSpaceShip advanceBy: finalPosition top: self cells from: aGame.
+	tile applyTo: currentSpaceShip affecting: aGame allShips from: aGame
 ]

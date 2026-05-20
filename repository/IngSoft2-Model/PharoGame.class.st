@@ -59,6 +59,18 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 		  laps: laps
 ]
 
+{ #category : 'accessing' }
+PharoGame >> allShips [
+
+	^ turnManager allShips
+]
+
+{ #category : 'as yet unclassified' }
+PharoGame >> boardSize [
+
+	^ board cells
+]
+
 { #category : 'playing' }
 PharoGame >> checkWinnerFor: aSpaceShip with: laps [
 

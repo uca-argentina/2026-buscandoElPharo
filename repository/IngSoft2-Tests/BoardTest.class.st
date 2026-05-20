@@ -89,3 +89,18 @@ BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectio
 
 	self assert: aBoard cells equals: 100
 ]
+
+{ #category : 'tests' }
+BoardTest >> test007WhenABoardHasDifferentMoonWalksThenEachCellHasItsOwnEffectImpact [
+
+	| aBoard fixedCells |
+	fixedCells := OrderedCollection
+		              with: (MoonWalk movingBack: 3)
+		              with: (MoonWalk movingBack: 5)
+		              with: NoEffect new.
+
+	aBoard := Board withCells: fixedCells.
+
+	self assert: (aBoard effectAtCell: 1) equals: -3.
+	self assert: (aBoard effectAtCell: 2) equals: -5
+]
