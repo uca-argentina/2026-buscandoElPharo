@@ -1,6 +1,6 @@
 Class {
 	#name : 'NoEffect',
-	#superclass : 'Object',
+	#superclass : 'Effect',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
@@ -9,4 +9,10 @@ Class {
 NoEffect >> effectImpact [
 
 	^ 0
+]
+
+{ #category : 'testing' }
+NoEffect >> isNoEffect [
+
+	^ true
 ]

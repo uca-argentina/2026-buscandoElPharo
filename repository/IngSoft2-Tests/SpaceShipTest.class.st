@@ -38,15 +38,19 @@ SpaceShipTest >> test003WhenASpaceShipIsBeingCreatedThenItCannotHaveEmptyName [
 { #category : 'tests' }
 SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 
-	| aGame dice spaceShips probabilities distribution generatedCells aBoard |
+	| aGame dice spaceShips distribution aBoard tiles |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 4) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	probabilities := Dictionary new.
-	probabilities at: NoEffect put: 1.
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
 
-	distribution := EffectDistribution withProbabilities: probabilities.
-	generatedCells := distribution generateCells: 10.
-	aBoard := Board withCells: generatedCells.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
 

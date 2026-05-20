@@ -8,22 +8,10 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-Board class >> floatCellsErrorDescription [
-
-	^ 'Board can not be created with float cells'
-]
-
 { #category : 'validation' }
 Board class >> invalidCellsErrorDescription [
 
 	^ 'Board can not be created with less than 1 cell'
-]
-
-{ #category : 'validation' }
-Board class >> negativeCellsErrorDescription [
-
-	^ 'Board can not be created with negative cells'
 ]
 
 { #category : 'creation' }
@@ -32,13 +20,6 @@ Board class >> withCells: squares [
 	squares isEmpty ifTrue: [
 		Error signal: self invalidCellsErrorDescription ].
 
-	(squares anySatisfy: [ :cell | cell isNumber and: [ cell < 0 ] ])
-		ifTrue: [
-			Error signal: self negativeCellsErrorDescription ].
-
-	(squares anySatisfy: [ :cell | cell isFloat ])
-		ifTrue: [
-			Error signal: self floatCellsErrorDescription ].
 
 	^ self new initializeWithCells: squares
 ]
