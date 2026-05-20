@@ -11,7 +11,9 @@ Class {
 		'dice',
 		'winnerState',
 		'turnManager',
-		'board'
+		'board',
+		'lapsToWin',
+		'numberOfLaps'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -35,6 +37,12 @@ PharoGame class >> invalidSquaresErrorDescription [
 	^ 'Can not start game with less than 1 square'
 ]
 
+{ #category : 'as yet unclassified' }
+PharoGame class >> negativeLapErrorDescription [
+
+	^ 'Laps can not be negative'
+]
+
 { #category : 'creation' }
 PharoGame class >> playedOn: aBoard by: ships throwing: aDice [
 
@@ -47,6 +55,29 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice [
 		  initializePharoGamePlayedOn: aBoard
 		  by: ships
 		  using: aDice
+		  laps: 1
+]
+
+{ #category : 'creation' }
+PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
+
+	ships isEmpty ifTrue: [
+		Error signal: self invalidShipsErrorDescription ].
+	ships asSet size ~= ships size ifTrue: [
+		Error signal: self duplicatedShipNamesErrorDescription ].
+
+	laps < 0 ifTrue: [ Error signal: self negativeLapErrorDescription ].
+	^ self new
+		  initializePharoGamePlayedOn: aBoard
+		  by: ships
+		  using: aDice
+		  laps: laps
+]
+
+{ #category : 'accessing' }
+PharoGame >> currentLapOfShip: shipName [
+
+	^ turnManager lapOf: shipName
 ]
 
 { #category : 'accessing' }
@@ -70,7 +101,6 @@ PharoGame >> executeNextTurn [
 { #category : 'playing' }
 PharoGame >> executeTurnFor: currentSpaceShip [
 
-	"currentSpaceShip advanceBy: (dice roll) top: board."
 	board movingTo: (dice roll) crossMaxCellFor: currentSpaceShip from: self.
 	"self verifyWinner: currentSpaceShip"
 ]
@@ -100,6 +130,7 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice [
 	| spaceShips |
 	currentState := Started new.
 	board := aBoard.
+	lapsToWin := numberOfLaps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
 	turnManager := TurnManager withShips: spaceShips.

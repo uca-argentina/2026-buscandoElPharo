@@ -46,7 +46,7 @@ EffectDistributionTest >> test002WhenGeneratingCellsWithDefaultProbabilitiesThen
 ]
 
 { #category : 'tests' }
-EffectDistributionTest >> test007WhenCellsIsNegativeThenEffectDistributionCannotBeCreated [
+EffectDistributionTest >> test003WhenCellsIsNegativeThenEffectDistributionCannotBeCreated [
 
 	self
 		should: [ EffectDistribution generateForSize: -1 ]
@@ -58,7 +58,7 @@ EffectDistributionTest >> test007WhenCellsIsNegativeThenEffectDistributionCannot
 ]
 
 { #category : 'tests' }
-EffectDistributionTest >> test008WhenCellsContainsFloatNumberThenBoardCannotBeCreated [
+EffectDistributionTest >> test004WhenCellsContainsFloatNumberThenBoardCannotBeCreated [
 
 	self
 		should: [ EffectDistribution generateForSize: 1.5 ]

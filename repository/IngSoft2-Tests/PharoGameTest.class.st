@@ -139,7 +139,7 @@ PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntil
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 10.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 3.
 	self assert: (aGame currentPositionOfShip: 'bote') equals: 7
 ]
 
@@ -253,9 +253,8 @@ PharoGameTest >> test011WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsM
 	aBoard := Board withCells: tiles.
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
 	aGame playTurn.
-
 	self assert: aGame winner equals: 'sombrero'.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 10
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 3
 ]
 
 { #category : 'tests' }
@@ -351,4 +350,51 @@ PharoGameTest >> test015WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSam
 			self
 				assert: error messageText
 				equals: PharoGame duplicatedShipNamesErrorDescription ]
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test016WhenASpaceShipCompletesRequiredLapsThenItIsTheWinner [
+
+	| aGame dice spaceShips distribution tiles aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection with: 'sombrero' with: 'bote'.
+	distribution := EffectDistribution generateForSize: 5.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+	self assert: aGame winner equals: 'sombrero'
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test017WhenASpaceShipCompletesALapThenItIsSecondLap [
+
+	| aGame dice spaceShips distribution tiles aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection with: 'sombrero'.
+	distribution := EffectDistribution generateForSize: 5.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 3.
+	aGame playTurn.
+	aGame playTurn.
+	self assert: (aGame currentLapOfShip: 'sombrero') equals: 2.
 ]
