@@ -37,25 +37,10 @@ PharoGame class >> invalidSquaresErrorDescription [
 	^ 'Can not start game with less than 1 square'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 PharoGame class >> negativeLapErrorDescription [
 
 	^ 'Laps can not be negative'
-]
-
-{ #category : 'creation' }
-PharoGame class >> playedOn: aBoard by: ships throwing: aDice [
-
-	ships isEmpty ifTrue: [
-		Error signal: self invalidShipsErrorDescription ].
-	ships asSet size ~= ships size ifTrue: [
-		Error signal: self duplicatedShipNamesErrorDescription ].
-
-	^ self new
-		  initializePharoGamePlayedOn: aBoard
-		  by: ships
-		  using: aDice
-		  laps: 1
 ]
 
 { #category : 'creation' }
@@ -102,14 +87,6 @@ PharoGame >> executeNextTurn [
 PharoGame >> executeTurnFor: currentSpaceShip [
 
 	board movingTo: (dice roll) crossMaxCellFor: currentSpaceShip from: self.
-	"self verifyWinner: currentSpaceShip"
-]
-
-{ #category : 'accessing - private' }
-PharoGame >> finishGameWith: shipName [
-
-	currentState := Finished new.
-	winnerState := Winner withShip: shipName
 ]
 
 { #category : 'accessing' }
@@ -125,12 +102,12 @@ PharoGame >> hasWinner [
 ]
 
 { #category : 'initialization' }
-PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice [
+PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice laps: laps [
 
 	| spaceShips |
 	currentState := Started new.
 	board := aBoard.
-	lapsToWin := numberOfLaps.
+	lapsToWin := laps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
 	turnManager := TurnManager withShips: spaceShips.

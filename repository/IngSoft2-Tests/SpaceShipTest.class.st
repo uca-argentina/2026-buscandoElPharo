@@ -51,7 +51,7 @@ SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 5

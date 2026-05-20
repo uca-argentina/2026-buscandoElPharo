@@ -22,7 +22,7 @@ PharoGameTest >> test001WhenAGameIsCreatedThenAGameIsStarted [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+		aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 
 	self assert: aGame started equals: true
 ]
@@ -43,7 +43,7 @@ PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotRepla
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	aGame playTurn.
 	self
@@ -71,7 +71,11 @@ PharoGameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 1.
 	aGame playTurn.
 	aGame playTurn.
 	self assert: aGame finished equals: true
@@ -93,7 +97,7 @@ PharoGameTest >> test004WhenAGameHasAThrowLargerThanSquaresThenGameCanKeepPlayin
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	self assert: aGame finished equals: false
 ]
@@ -114,7 +118,7 @@ PharoGameTest >> test005WhenAGamePlayATurnThenGameKnowsSpaceShipsPosition [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
 ]
@@ -135,7 +139,7 @@ PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntil
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
@@ -159,7 +163,7 @@ PharoGameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 
 	self deny: aGame hasWinner
 ]
@@ -180,7 +184,7 @@ PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	aGame playTurn.
 	aGame playTurn.
@@ -205,7 +209,7 @@ PharoGameTest >> test009WhenAGameHasNoSpaceShipThenItCanNotStart [
 	aBoard := Board withCells: tiles.
 
 	self
-		should: [ PharoGame playedOn: aBoard by: spaceShips throwing: dice. ]
+		should: [ PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1. ]
 		raise: Error
 		withExceptionDo: [ :error |
 			self
@@ -229,7 +233,7 @@ PharoGameTest >> test010WhenAGameUseADiceThenSpaceShipsMoveDiceRollResult [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
@@ -251,7 +255,7 @@ PharoGameTest >> test011WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsM
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	self assert: aGame winner equals: 'sombrero'.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 3
@@ -273,7 +277,7 @@ PharoGameTest >> test012WhenAGameHasNotPlayedThenItHasNoWinner [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 
 	self
 		should: [ aGame winner ]
@@ -298,7 +302,7 @@ PharoGameTest >> test013WhenAGameIsFinishedThenCurrentStateIsFinished [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 
 	self assert: aGame finished
@@ -320,7 +324,7 @@ PharoGameTest >> test014WhenAGameIsFinishedThenItHasAWinner [
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice.
+	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 
 	self assert: aGame hasWinner
@@ -344,7 +348,7 @@ PharoGameTest >> test015WhenTwoSpaceShipsAreBeingCreatedThenTheyCannotHaveTheSam
 	aBoard := Board withCells: tiles.
 
 	self
-		should: [ PharoGame playedOn: aBoard by: spaceShips throwing: dice ]
+		should: [ PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1]
 		raise: Error
 		withExceptionDo: [ :error |
 			self
@@ -397,4 +401,33 @@ PharoGameTest >> test017WhenASpaceShipCompletesALapThenItIsSecondLap [
 	aGame playTurn.
 	aGame playTurn.
 	self assert: (aGame currentLapOfShip: 'sombrero') equals: 2.
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test018WhenAGameAreBeingCreatedThenALapCannotBeNegative [
+
+	| dice spaceShips distribution tiles aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection with: 'sombrero'.
+	distribution := EffectDistribution generateForSize: 5.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	self
+		should: [
+			PharoGame
+				playedOn: aBoard
+				by: spaceShips
+				throwing: dice
+				laps: -1 ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: PharoGame negativeLapErrorDescription ]
 ]

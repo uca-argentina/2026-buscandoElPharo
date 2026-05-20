@@ -57,12 +57,6 @@ SpaceShip >> initializeSpaceShipWithName: tag [
 	currentLap := 0.
 ]
 
-{ #category : 'accessing' }
-SpaceShip >> lap [
-
-	^ currentLap
-]
-
 { #category : 'as yet unclassified' }
 SpaceShip >> laps [
 
