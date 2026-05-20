@@ -15,7 +15,7 @@ Class {
 { #category : 'validation' }
 Dice class >> mustHaveAtLeastOneFixedDieErrorDescription [
 
-	^ 'Dice must have at least one fixed die'
+	^ 'Dice must have at least one die'
 ]
 
 { #category : 'creation' }
@@ -35,10 +35,5 @@ Dice >> initializeWith: aCollectionOfDice [
 { #category : 'transform' }
 Dice >> roll [
 
-	| total |
-	
-	total := 0.
-	dice do: [ :die | total := total + die roll ].
-	
-	^ total
+	^ dice sum: [ :die | die roll ]
 ]

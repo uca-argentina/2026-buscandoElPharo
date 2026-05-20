@@ -1,0 +1,95 @@
+Class {
+	#name : 'EffectTest',
+	#superclass : 'TestCase',
+	#category : 'IngSoft2-Tests',
+	#package : 'IngSoft2-Tests'
+}
+
+{ #category : 'tests' }
+EffectTest >> test001WhenSpeedUpIsCreatedThenItHasAnImpactOfFour [
+
+	| anEffect |
+	anEffect := SpeedUp new.
+	self assert: anEffect effectImpact equals: 4
+]
+
+{ #category : 'tests' }
+EffectTest >> test002WhenNoEffectIsCreatedThenItHasNoImpact [ 
+
+	| anEffect |
+	anEffect := NoEffect new.
+	self assert: anEffect effectImpact equals: 0
+]
+
+{ #category : 'tests' }
+EffectTest >> test003WhenWormHoleIsCreatedThenItHasAnImpactOfMinusFour [
+
+	| anEffect |
+	anEffect := WormHole new.
+	self assert: anEffect effectImpact equals: -4
+]
+
+{ #category : 'tests' }
+EffectTest >> test004WhenHyperJumpIsCreatedThenItStartsUsingTheLargestParsecJump [
+
+	| anEffect |
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 4)
+			             with: (Parsec distance: 8)
+			             with: (Parsec distance: 6)).
+
+	self assert: anEffect nextParsecJump equals: (Parsec distance: 8)
+]
+
+{ #category : 'tests' }
+EffectTest >> test005WhenHyperJumpIsUsedThenItReturnsTheNextParsecValue [
+
+	| anEffect |
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 8)
+			             with: (Parsec distance: 6)
+			             with: (Parsec distance: 4)).
+	anEffect nextParsecJump.
+	self assert: anEffect nextParsecJump equals: (Parsec distance: 6)
+]
+
+{ #category : 'tests' }
+EffectTest >> test006WhenHyperJumpUsesAllParsecValuesThenItStartsAgainFromTheLargestValue [
+
+	| anEffect |
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 8)
+			             with: (Parsec distance: 6)
+			             with: (Parsec distance: 4)).
+	anEffect nextParsecJump.
+	anEffect nextParsecJump.
+	anEffect nextParsecJump.
+	self assert: anEffect nextParsecJump equals: (Parsec distance: 8)
+]
+
+{ #category : 'tests' }
+EffectTest >> test007WhenMoonWalkIsCreatedThenItMovesBackTheGivenAmountOfCells [
+
+	| anEffect |
+	anEffect := MoonWalk movingBack: 3.
+
+	self assert: anEffect effectImpact equals: -3
+]
+
+{ #category : 'tests' }
+EffectTest >> test008WhenAtomicBombIsAppliedThenItMovesASpaceShipToFirstCell [
+
+    | anEffect firstSpaceShip secondSpaceShip spaceShips aGame |
+    anEffect := AtomicBomb new.
+    firstSpaceShip := SpaceShip namedAfter: 'sombrero'.
+    secondSpaceShip := SpaceShip namedAfter: 'bote'.
+    aGame := PharoGame new.
+    firstSpaceShip advanceBy: 5 top: 10 from: aGame.
+    secondSpaceShip advanceBy: 3 top: 10 from: aGame.
+    spaceShips := OrderedCollection
+                      with: firstSpaceShip
+                      with: secondSpaceShip.
+    anEffect applyTo: spaceShips.
+    self assert: firstSpaceShip position equals: 1.
+    self assert: secondSpaceShip position equals: 1
+]
