@@ -36,40 +36,61 @@ BoardTest >> test002WhenCellsIsLessThanOneThenBoardCannotBeCreated [
 { #category : 'tests' }
 BoardTest >> test003WhenABoardHasAllCellsWithSpeedUpThenAllCellsEffectsMovesFourCellsForward [
 
-	| aBoard fixedCells |
-	fixedCells := OrderedCollection
-		              with: SpeedUp new
-		              with: SpeedUp new
-		              with: SpeedUp new.
-	aBoard := Board withCells: fixedCells.
-
-	self assert: (aBoard effectAtCell: 1) equals: 4
+	| aGame tiles aBoard |
+	tiles := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: SpeedUp new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: #( 'sombrero' )
+		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 3) })
+		         laps: 2.
+	aGame playTurn.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 4
 ]
 
 { #category : 'tests' }
 BoardTest >> test004WhenABoardHasAllCellsWithNoEffectThenAllCellsHaveNoImpact [
 
-	| aBoard fixedCells |
-	fixedCells := OrderedCollection
-		              with: SpeedUp new
-		              with: SpeedUp new
-		              with: SpeedUp new.
-	aBoard := Board withCells: fixedCells.
-
-	self assert: (aBoard effectAtCell: 1) equals: 4
+	| aGame tiles aBoard |
+	tiles := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: #( 'sombrero' )
+		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 3) })
+		         laps: 2.
+	aGame playTurn.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 3
 ]
 
 { #category : 'tests' }
 BoardTest >> test005WhenABoardHasAllCellsWithWormHoleThenAllCellsEffectsMovesFourCellsBackwards [
 
-	| aBoard fixedCells |
-	fixedCells := OrderedCollection
-		              with: WormHole new
-		              with: WormHole new
-		              with: WormHole new.
-	aBoard := Board withCells: fixedCells.
-	
-	self assert: (aBoard effectAtCell: 1) equals: -4
+	| aGame tiles aBoard |
+	tiles := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: WormHole new.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: #( 'sombrero' )
+		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 6) })
+		         laps: 2.
+	aGame playTurn.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 2
 ]
 
 { #category : 'tests' }
@@ -93,14 +114,19 @@ BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectio
 { #category : 'tests' }
 BoardTest >> test007WhenABoardHasDifferentMoonWalksThenEachCellHasItsOwnEffectImpact [
 
-	| aBoard fixedCells |
-	fixedCells := OrderedCollection
-		              with: (MoonWalk movingBack: 3)
-		              with: (MoonWalk movingBack: 5)
-		              with: NoEffect new.
-
-	aBoard := Board withCells: fixedCells.
-
-	self assert: (aBoard effectAtCell: 1) equals: -3.
-	self assert: (aBoard effectAtCell: 2) equals: -5
+	| aGame tiles aBoard |
+	tiles := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: (MoonWalk movingBack: 2).
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: #( 'sombrero' 'bote' )
+		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 3) })
+		         laps: 2.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 1
 ]

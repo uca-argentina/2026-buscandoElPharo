@@ -71,3 +71,14 @@ TurnManager >> positionOf: aName [
 	^ (spaceShipsOrder detect: [ :ship | ship identification = aName ])
 		  position
 ]
+
+{ #category : 'playing' }
+TurnManager >> rankOfThis: aSpaceShip [
+
+	| sorted ship |
+	sorted := spaceShipsOrder asSortedCollection: [ :a :b |
+		          a laps > b laps or: [
+			          a laps = b laps and: [ a position > b position ] ] ].
+	ship := spaceShipsOrder detect: [ :s | s identification = aSpaceShip ].
+	^ sorted indexOf: ship
+]

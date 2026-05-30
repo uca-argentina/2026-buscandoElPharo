@@ -30,18 +30,6 @@ EffectTest >> test003WhenWormHoleIsCreatedThenItHasAnImpactOfMinusFour [
 ]
 
 { #category : 'tests' }
-EffectTest >> test004WhenHyperJumpIsCreatedThenItStartsUsingTheLargestParsecJump [
-
-	| anEffect |
-	anEffect := HyperJump withParsecs: (OrderedCollection
-			             with: (Parsec distance: 4)
-			             with: (Parsec distance: 8)
-			             with: (Parsec distance: 6)).
-
-	self assert: anEffect nextParsecJump equals: (Parsec distance: 8)
-]
-
-{ #category : 'tests' }
 EffectTest >> test005WhenHyperJumpIsUsedThenItReturnsTheNextParsecValue [
 
 	| anEffect |
@@ -79,17 +67,44 @@ EffectTest >> test007WhenMoonWalkIsCreatedThenItMovesBackTheGivenAmountOfCells [
 { #category : 'tests' }
 EffectTest >> test008WhenAtomicBombIsAppliedThenItMovesASpaceShipToFirstCell [
 
-    | anEffect firstSpaceShip secondSpaceShip spaceShips aGame |
-    anEffect := AtomicBomb new.
-    firstSpaceShip := SpaceShip namedAfter: 'sombrero'.
-    secondSpaceShip := SpaceShip namedAfter: 'bote'.
-    aGame := PharoGame new.
-    firstSpaceShip advanceBy: 5 top: 10 from: aGame.
-    secondSpaceShip advanceBy: 3 top: 10 from: aGame.
-    spaceShips := OrderedCollection
-                      with: firstSpaceShip
-                      with: secondSpaceShip.
-    anEffect applyTo: spaceShips.
-    self assert: firstSpaceShip position equals: 1.
-    self assert: secondSpaceShip position equals: 1
+	| anEffect firstSpaceShip secondSpaceShip spaceShips aGame |
+	anEffect := AtomicBomb new.
+	firstSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	secondSpaceShip := SpaceShip namedAfter: 'bote'.
+	aGame := PharoGame new.
+	firstSpaceShip advanceBy: 5 top: 10 from: aGame.
+	secondSpaceShip advanceBy: 3 top: 10 from: aGame.
+	spaceShips := OrderedCollection
+		              with: firstSpaceShip
+		              with: secondSpaceShip.
+	anEffect applyTo: firstSpaceShip affecting: spaceShips from: aGame.
+	self assert: firstSpaceShip position equals: 1.
+	self assert: secondSpaceShip position equals: 1
+]
+
+{ #category : 'tests' }
+EffectTest >> test009WhenAtomicBombIsAppliedThenItsLapsDoesntChange [
+
+	| aGame dice aBoard tiles distribution ships |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	distribution := EffectDistribution generateForSize: 5.
+	distribution addNoEffect: 0.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 1.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	ships := OrderedCollection with: 'sombrero'.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: ships
+		         throwing: dice
+		         laps: 3.
+
+	aGame playTurn.
+
+	self assert: (aGame currentLapOfShip: 'sombrero') equals: 1.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 1
 ]

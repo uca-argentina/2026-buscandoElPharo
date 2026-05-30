@@ -20,7 +20,7 @@ SpaceShipTest >> test002WhenASpaceShipIsCreatedThenItHasAInitialPositionInOne [
 	| aSpaceShip |
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
 
-	self assert: aSpaceShip position equals: 1
+	self assert: aSpaceShip position equals: 0
 ]
 
 { #category : 'tests' }
@@ -54,5 +54,5 @@ SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 5
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 4
 ]

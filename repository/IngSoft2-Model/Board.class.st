@@ -35,12 +35,6 @@ Board >> cells [
 	^ tiles size
 ]
 
-{ #category : 'playing' }
-Board >> effectAtCell: aCellNumber [
-
-	^ (tiles at: aCellNumber) effectImpact
-]
-
 { #category : 'initialization' }
 Board >> initializeWithCells: squares [
 
@@ -50,9 +44,8 @@ Board >> initializeWithCells: squares [
 { #category : 'playing' }
 Board >> movingTo: newPosition crossMaxCellFor: currentSpaceShip from: aGame [
 
-	| tile finalPosition |
+	| tile |
 	tile := tiles at: (newPosition min: self cells).
-	finalPosition := newPosition + tile effectImpact.
-	currentSpaceShip advanceBy: finalPosition top: self cells from: aGame.
+	currentSpaceShip moveTo: newPosition top: self cells from: aGame.
 	tile applyTo: currentSpaceShip affecting: aGame allShips from: aGame
 ]

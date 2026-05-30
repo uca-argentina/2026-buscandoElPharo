@@ -12,8 +12,7 @@ Class {
 		'winnerState',
 		'turnManager',
 		'board',
-		'lapsToWin',
-		'numberOfLaps'
+		'lapsToWin'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -65,7 +64,7 @@ PharoGame >> allShips [
 	^ turnManager allShips
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> boardSize [
 
 	^ board cells
@@ -140,6 +139,12 @@ PharoGame >> playTurn [
 
 	currentState playTurnOn: self.
 
+]
+
+{ #category : 'playing' }
+PharoGame >> rankOf: aSpaceShip [
+
+	^ turnManager rankOfThis: aSpaceShip
 ]
 
 { #category : 'validation' }

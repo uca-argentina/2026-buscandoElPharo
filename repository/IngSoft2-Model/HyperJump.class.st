@@ -20,13 +20,19 @@ HyperJump class >> withParsecs: parsecValues [
 	^ self new initializeWithParsecs: parsecValues
 ]
 
+{ #category : 'playing' }
+HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
+
+	aSpaceShip
+		advanceBy: self nextParsecJump distance
+		top: aGame boardSize "cambiar para que no exista tell dont ask"
+		from: aGame
+]
+
 { #category : 'initialization' }
 HyperJump >> initializeWithParsecs: someParsecs [
 
-	parsecsToMove := OrderedCollection new.
-	parsecsToMove addAll:
-		(someParsecs asSortedCollection: [ :aParsec :anotherParsec |
-			 aParsec > anotherParsec ])
+	parsecsToMove := someParsecs
 ]
 
 { #category : 'testing' }

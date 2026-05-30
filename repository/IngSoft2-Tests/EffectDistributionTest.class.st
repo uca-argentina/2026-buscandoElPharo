@@ -25,8 +25,10 @@ EffectDistributionTest >> test002WhenGeneratingCellsWithDefaultProbabilitiesThen
 	distribution addNoEffect: 0.4.
 	distribution addSpeedUp: 0.2.
 	distribution addWormHole: 0.2.
-	distribution addHyperJump: 0.08.
-	distribution addMoonWalk: 0.1.
+	distribution
+		addHyperJump: 0.08
+		withParsecs: (OrderedCollection withAll: { 1.2. 3 }).
+	distribution addMoonWalk: 0.1 movingBack: 2.
 	distribution addAtomicBomb: 0.02.
 
 	tiles := distribution build.
