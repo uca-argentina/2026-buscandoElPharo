@@ -29,6 +29,27 @@ HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
 		from: aGame
 ]
 
+{ #category : 'as yet unclassified' }
+HyperJump >> applyTo: aSpaceShip affecting: allShips onBoard: aBoard [
+
+	aSpaceShip advanceBy: (self effectImpactOn: aBoard) top: aBoard cells
+]
+
+{ #category : 'as yet unclassified' }
+HyperJump >> applyTo: aSpaceShip affecting: allShips onBoard: aBoard from: aGame [
+
+	aSpaceShip
+		advanceBy: (self effectImpactOn: aBoard)
+		top: aBoard cells
+		from: aGame
+]
+
+{ #category : 'as yet unclassified' }
+HyperJump >> effectImpactOn: aBoard [
+
+	^ aBoard cellsRepresenting: self nextParsecJump
+]
+
 { #category : 'initialization' }
 HyperJump >> initializeWithParsecs: someParsecs [
 

@@ -38,11 +38,16 @@ SpaceShip >> > anotherSpaceShip [
 		ifFalse: [ ^ self laps > anotherSpaceShip laps ]
 ]
 
+{ #category : 'as yet unclassified' }
+SpaceShip >> advanceBy: anInteger top: anInteger2 [ 
+	self shouldBeImplemented.
+]
+
 { #category : 'playing' }
 SpaceShip >> advanceBy: amount top: maxCell from: aGame [
 
 	| newPosition |
-	newPosition := (currentPosition + amount) max: 1.
+	newPosition := currentPosition + amount max: 1.
 	self moveTo: newPosition top: maxCell from: aGame
 ]
 
@@ -70,10 +75,12 @@ SpaceShip >> laps [
 SpaceShip >> moveTo: newPosition top: maxCell from: aGame [
 
 	| adjustedPosition |
-	adjustedPosition := currentPosition + newPosition.
+	adjustedPosition := newPosition.
+
 	[ adjustedPosition > maxCell ] whileTrue: [
 		adjustedPosition := adjustedPosition - maxCell.
 		currentLap := currentLap + 1 ].
+
 	currentPosition := adjustedPosition.
 	aGame checkWinnerFor: self with: currentLap
 ]

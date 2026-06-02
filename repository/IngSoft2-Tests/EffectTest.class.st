@@ -108,3 +108,90 @@ EffectTest >> test009WhenAtomicBombIsAppliedThenItsLapsDoesntChange [
 	self assert: (aGame currentLapOfShip: 'sombrero') equals: 1.
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 1
 ]
+
+{ #category : 'tests' }
+EffectTest >> test010WhenHyperJumpCalculatesImpactOnBoardThenItConvertsParsecsToCells [
+
+	| anEffect aBoard tiles |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	anEffect := HyperJump withParsecs:
+		            (OrderedCollection with: (Parsec distance: 20)).
+
+	self assert: (anEffect effectImpactOn: aBoard) equals: 2
+]
+
+{ #category : 'tests' }
+EffectTest >> test011WhenHyperJumpUsesNextParsecValueThenItConvertsItUsingTheBoard [
+
+	| anEffect aBoard tiles |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 20)
+			             with: (Parsec distance: 10)).
+
+	self assert: (anEffect effectImpactOn: aBoard) equals: 2.
+	self assert: (anEffect effectImpactOn: aBoard) equals: 1
+]
+
+{ #category : 'tests' }
+EffectTest >> test012WhenHyperJumpIsAppliedThenItMovesTheSpaceShipUsingBoardParsecsConversion [
+
+	| anEffect aBoard tiles aSpaceShip spaceShips |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	anEffect := HyperJump withParsecs:
+		            (OrderedCollection with: (Parsec distance: 20)).
+
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	spaceShips := OrderedCollection with: aSpaceShip.
+
+	anEffect
+		applyTo: aSpaceShip
+		affecting: spaceShips
+		onBoard: aBoard
+		from: PharoGame new.
+
+	self assert: aSpaceShip position equals: 2
+]
+
+{ #category : 'tests' }
+EffectTest >> test013WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
+
+	| anEffect aBoard tiles aSpaceShip spaceShips |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 20)
+			             with: (Parsec distance: 10)).
+
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	spaceShips := OrderedCollection with: aSpaceShip.
+
+	anEffect
+		applyTo: aSpaceShip
+		affecting: spaceShips
+		onBoard: aBoard
+		from: PharoGame new.
+
+	anEffect
+		applyTo: aSpaceShip
+		affecting: spaceShips
+		onBoard: aBoard
+		from: PharoGame new.
+
+	self assert: aSpaceShip position equals: 3
+]

@@ -51,7 +51,7 @@ BoardTest >> test003WhenABoardHasAllCellsWithSpeedUpThenAllCellsEffectsMovesFour
 		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 3) })
 		         laps: 2.
 	aGame playTurn.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 4
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 1
 ]
 
 { #category : 'tests' }
@@ -114,19 +114,40 @@ BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectio
 { #category : 'tests' }
 BoardTest >> test007WhenABoardHasDifferentMoonWalksThenEachCellHasItsOwnEffectImpact [
 
-	| aGame tiles aBoard |
-	tiles := OrderedCollection
-		         with: NoEffect new
-		         with: NoEffect new
-		         with: (MoonWalk movingBack: 2).
-	aBoard := Board withCells: tiles.
-	aGame := PharoGame
-		         playedOn: aBoard
-		         by: #( 'sombrero' 'bote' )
-		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 3) })
-		         laps: 2.
-	aGame playTurn.
-	aGame playTurn.
-	aGame playTurn.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 1
+	| tiles aBoard |
+
+    tiles := OrderedCollection
+        with: (MoonWalk movingBack: 2)
+        with: NoEffect new
+        with: (MoonWalk movingBack: 4).
+    aBoard := Board withCells: tiles.
+    self assert: ((aBoard effectAtCell: 1) effectImpact) equals: -2.
+    self assert: ((aBoard effectAtCell: 3) effectImpact) equals: -4
+]
+
+{ #category : 'tests' }
+BoardTest >> test008WhenABoardHasOneHundredParsecsAndTenCellsThenEachCellRepresentsTenParsecs [
+
+	| aBoard tiles |
+	tiles := OrderedCollection new.
+
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	self assert: aBoard parsecsPerCell equals: 10
+]
+
+{ #category : 'tests' }
+BoardTest >> test009WhenABoardHasTenParsecsPerCellThenTwentyParsecsRepresentTwoCells [
+
+	| aBoard tiles |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	self
+		assert: (aBoard cellsRepresenting: (Parsec distance: 20))
+		equals: 2
 ]
