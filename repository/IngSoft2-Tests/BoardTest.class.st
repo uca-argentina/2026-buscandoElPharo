@@ -151,3 +151,22 @@ BoardTest >> test009WhenABoardHasTenParsecsPerCellThenTwentyParsecsRepresentTwoC
 		assert: (aBoard cellsRepresenting: (Parsec distance: 20))
 		equals: 2
 ]
+
+{ #category : 'tests' }
+BoardTest >> test010WhenSpeedUpMovesASpaceShipToAWormHoleCellThenWormHoleIsNotApplied [
+
+	| aGame tiles aBoard |
+	tiles := OrderedCollection new.
+	2 timesRepeat: [ tiles add: NoEffect new ].
+	tiles add: SpeedUp new.
+	3 timesRepeat: [ tiles add: NoEffect new ].
+	tiles add: WormHole new.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: #( 'sombrero' )
+		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 3) })
+		         laps: 2.
+	aGame playTurn.
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
+]

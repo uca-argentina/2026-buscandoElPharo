@@ -15,7 +15,7 @@ SpaceShipTest >> test001WhenASpaceShipIsCreatedThenItHasAName [
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test002WhenASpaceShipIsCreatedThenItHasAInitialPositionInOne [
+SpaceShipTest >> test002WhenASpaceShipIsCreatedThenItHasAInitialPositionInZero [
 
 	| aSpaceShip |
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
@@ -55,4 +55,24 @@ SpaceShipTest >> test004WhenASpaceShipAdvancesThenItsPositionChanges [
 	aGame playTurn.
 
 	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 4
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test005WhenASpaceShipPassesTheLastCellThenItReturnsToTheBeginning [
+
+	| aSpaceShip aGame |
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	aGame := PharoGame new.
+	aSpaceShip advanceBy: 12 top: 10 from: aGame.
+	self assert: aSpaceShip position equals: 2
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test006WhenASpaceShipPassesTheLastCellThenItsLapCounterIncreases [
+
+	| aSpaceShip aGame |
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	aGame := PharoGame new.
+	aSpaceShip advanceBy: 12 top: 10 from: aGame.
+	self assert: aSpaceShip laps equals: 1
 ]

@@ -479,3 +479,28 @@ PharoGameTest >> test020WhenAShipHasMoreLapsThenItRanksHigherRegardlessOfPositio
     self assert: (aGame rankOf: 'sombrero') equals: 1.
     self assert: (aGame rankOf: 'bote') equals: 2.
 ]
+
+{ #category : 'tests' }
+PharoGameTest >> test021WhenSpaceShipsAreInSameLapThenRankingOrdersByPosition [
+
+	| aGame dice spaceShips distribution aBoard tiles |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+	aGame playTurn.
+	self assert: (aGame rankOf: 'sombrero') equals: 1.
+	self assert: (aGame rankOf: 'bote') equals: 2
+]
