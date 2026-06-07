@@ -8,7 +8,8 @@ Class {
 	#name : 'HyperJump',
 	#superclass : 'Effect',
 	#instVars : [
-		'parsecsToMove'
+		'parsecsToMove',
+		'turnManager'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -24,7 +25,7 @@ HyperJump class >> withParsecs: parsecValues [
 HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
 	aSpaceShip
-		advanceBy: self nextParsecJump distance
+		advanceBy: turnManager selectParsec
 		top: aGame boardSize "cambiar para que no exista tell dont ask"
 		from: aGame
 ]
@@ -45,6 +46,12 @@ HyperJump >> applyTo: aSpaceShip affecting: allShips onBoard: aBoard from: aGame
 ]
 
 { #category : 'as yet unclassified' }
+HyperJump >> currentParsec [
+
+	^ turnManager currentEntity
+]
+
+{ #category : 'as yet unclassified' }
 HyperJump >> effectImpactOn: aBoard [
 
 	^ aBoard cellsRepresenting: self nextParsecJump
@@ -53,7 +60,9 @@ HyperJump >> effectImpactOn: aBoard [
 { #category : 'initialization' }
 HyperJump >> initializeWithParsecs: someParsecs [
 
-	parsecsToMove := someParsecs
+	parsecsToMove := someParsecs.
+	turnManager := TurnManager madeOf: parsecsToMove.
+	
 ]
 
 { #category : 'testing' }

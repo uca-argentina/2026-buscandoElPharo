@@ -33,6 +33,7 @@ Parsec >> > anotherParsec [
 
 { #category : 'accessing' }
 Parsec >> distance [
+
 	^ distance
 ]
 

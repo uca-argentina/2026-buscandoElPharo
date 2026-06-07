@@ -1,84 +1,51 @@
-"
-I am responsible for managing the sequence of turns in the game
-"
 Class {
 	#name : 'TurnManager',
 	#superclass : 'Object',
 	#instVars : [
-		'spaceShipsOrder',
-		'currentTurn'
+		'listOfEntities',
+		'currentTurn',
+		'spaceShipsOrder'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'creation' }
-TurnManager class >> withShips: names [
+{ #category : 'as yet unclassified' }
+TurnManager class >> madeOf: aCollection [
 
-	^ self new initializeWithShips: names
+	^ self new initializeIterator: aCollection
+]
+
+{ #category : 'as yet unclassified' }
+TurnManager >> currentEntity [
+
+	^ listOfEntities at: currentTurn
 ]
 
 { #category : 'accessing' }
-TurnManager >> allShips [
+TurnManager >> currentTurn [
 
-	^ spaceShipsOrder
-]
-
-{ #category : 'playing' }
-TurnManager >> currentShip [
-
-	^ spaceShipsOrder at: currentTurn
-]
-
-{ #category : 'accessing' }
-TurnManager >> currentShipIdentification [
-
-	^ (spaceShipsOrder at: currentTurn) identification
+	^ currentTurn
 ]
 
 { #category : 'initialization' }
-TurnManager >> initializeWithShips: names [
+TurnManager >> initializeIterator: aCollection [
 
-	spaceShipsOrder := names.
-	currentTurn := 1.
-]
-
-{ #category : 'accessing' }
-TurnManager >> lapOf: aName [
-
-	^ (spaceShipsOrder detect: [ :ship | ship identification = aName ])
-		  laps
+	listOfEntities := aCollection.
+	currentTurn := 1
 ]
 
 { #category : 'playing' }
 TurnManager >> nextTurn [
 
-	currentTurn := (currentTurn \\ spaceShipsOrder size) + 1
+	currentTurn := (currentTurn \\ listOfEntities size) + 1
 ]
 
 { #category : 'playing' }
 TurnManager >> playTurnOn: aGame [
 
 	| currentSpaceShip |
-	currentSpaceShip := spaceShipsOrder at: currentTurn.
+	currentSpaceShip := listOfEntities at: currentTurn.
 	aGame executeTurnFor: currentSpaceShip.
 	self nextTurn
-]
-
-{ #category : 'accessing' }
-TurnManager >> positionOf: aName [
-
-	^ (spaceShipsOrder detect: [ :ship | ship identification = aName ])
-		  position
-]
-
-{ #category : 'playing' }
-TurnManager >> rankOfThis: aSpaceShip [
-
-	| sorted ship |
-	sorted := spaceShipsOrder asSortedCollection: [ :a :b |
-		          a laps > b laps or: [
-			          a laps = b laps and: [ a position > b position ] ] ].
-	ship := spaceShipsOrder detect: [ :s | s identification = aSpaceShip ].
-	^ sorted indexOf: ship
 ]

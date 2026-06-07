@@ -195,3 +195,49 @@ EffectTest >> test013WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
 
 	self assert: aSpaceShip position equals: 3
 ]
+
+{ #category : 'tests' }
+EffectTest >> test014WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
+
+	| anEffect aBoard tiles aSpaceShip spaceShips |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 20)
+			             with: (Parsec distance: 10)).
+
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	spaceShips := OrderedCollection with: aSpaceShip.
+
+
+	self assert: anEffect currentParsec equals: 20
+]
+
+{ #category : 'tests' }
+EffectTest >> test015WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
+
+	| anEffect aBoard tiles aSpaceShip spaceShips |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+
+	aBoard := Board withCells: tiles andParsecs: 100.
+
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 20)
+			             with: (Parsec distance: 10)).
+
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	spaceShips := OrderedCollection with: aSpaceShip.
+
+	anEffect
+		applyTo: aSpaceShip
+		affecting: spaceShips
+		onBoard: aBoard
+		from: PharoGame new.
+
+
+	self assert: anEffect currentParsec equals: 10
+]

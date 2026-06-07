@@ -504,3 +504,28 @@ PharoGameTest >> test021WhenSpaceShipsAreInSameLapThenRankingOrdersByPosition [
 	self assert: (aGame rankOf: 'sombrero') equals: 1.
 	self assert: (aGame rankOf: 'bote') equals: 2
 ]
+
+{ #category : 'tests' }
+PharoGameTest >> test022 [
+"cambiar num por 16"
+
+	| aGame dice spaceShips distribution tiles aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection with: 'sombrero' with: 'bote'.
+	distribution := EffectDistribution generateForSize: 5.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+	aGame playTurn.
+	self assert: aGame currentShip equals: 'bote'
+]

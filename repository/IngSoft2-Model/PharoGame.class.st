@@ -12,7 +12,8 @@ Class {
 		'winnerState',
 		'turnManager',
 		'board',
-		'lapsToWin'
+		'lapsToWin',
+		'shipManager'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -61,7 +62,7 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 { #category : 'accessing' }
 PharoGame >> allShips [
 
-	^ turnManager allShips
+	^ shipManager allShips
 ]
 
 { #category : 'playing' }
@@ -81,19 +82,19 @@ PharoGame >> checkWinnerFor: aSpaceShip with: laps [
 { #category : 'accessing' }
 PharoGame >> currentLapOfShip: shipName [
 
-	^ turnManager lapOf: shipName
+	^ shipManager lapOf: shipName
 ]
 
 { #category : 'accessing' }
 PharoGame >> currentPositionOfShip: shipName [
 
-	^ turnManager positionOf: shipName
+	^ shipManager positionOf: shipName
 ]
 
 { #category : 'playing' }
 PharoGame >> currentShip [
 
-	^ turnManager currentShipIdentification 
+	^ shipManager currentShipIdentification: turnManager currentTurn 
 ]
 
 { #category : 'playing' }
@@ -129,7 +130,8 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	lapsToWin := laps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
-	turnManager := TurnManager withShips: spaceShips.
+	shipManager := SpaceShipsManager withShips: spaceShips.
+	turnManager := TurnManager madeOf: spaceShips.
 	winnerState := NoWinner new.
 	dice := playableDice
 ]
@@ -144,7 +146,7 @@ PharoGame >> playTurn [
 { #category : 'playing' }
 PharoGame >> rankOf: aSpaceShip [
 
-	^ turnManager rankOfThis: aSpaceShip
+	^ shipManager rankOfThis: aSpaceShip
 ]
 
 { #category : 'validation' }
