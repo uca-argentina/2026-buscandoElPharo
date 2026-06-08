@@ -39,6 +39,15 @@ SpaceShip >> > anotherSpaceShip [
 ]
 
 { #category : 'as yet unclassified' }
+SpaceShip >> advanceBy: aParsec into: aPharoGame [
+
+	self
+		advanceBy: (aPharoGame cellsRepresenting: aParsec)
+		top: aPharoGame boardSize
+		from: aPharoGame
+]
+
+{ #category : 'as yet unclassified' }
 SpaceShip >> advanceBy: anInteger top: anInteger2 [ 
 	self shouldBeImplemented.
 ]
@@ -94,5 +103,5 @@ SpaceShip >> moveToFirstCell [
 { #category : 'accessing' }
 SpaceShip >> position [
 
-	^ currentPosition
+	^ currentPosition ceiling 
 ]

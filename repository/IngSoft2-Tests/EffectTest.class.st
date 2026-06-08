@@ -49,10 +49,8 @@ EffectTest >> test006WhenHyperJumpUsesAllParsecValuesThenItStartsAgainFromTheLar
 			             with: (Parsec distance: 8)
 			             with: (Parsec distance: 6)
 			             with: (Parsec distance: 4)).
-	anEffect nextParsecJump.
-	anEffect nextParsecJump.
-	anEffect nextParsecJump.
-	self assert: anEffect nextParsecJump equals: (Parsec distance: 8)
+
+	self assert: anEffect currentParsec distance equals: 8
 ]
 
 { #category : 'tests' }
@@ -129,13 +127,13 @@ EffectTest >> test011WhenHyperJumpUsesNextParsecValueThenItConvertsItUsingTheBoa
 
 	| anEffect aBoard tiles |
 	tiles := OrderedCollection new.
-	10 timesRepeat: [ tiles add: NoEffect new ].
+	5 timesRepeat: [ tiles add: NoEffect new ].
 
-	aBoard := Board withCells: tiles andParsecs: 100.
+	aBoard := Board withCells: tiles andParsecs: 10.
 
 	anEffect := HyperJump withParsecs: (OrderedCollection
-			             with: (Parsec distance: 20)
-			             with: (Parsec distance: 10)).
+			             with: (Parsec distance: 3)
+			             with: (Parsec distance: 2)).
 
 	self assert: (anEffect effectImpactOn: aBoard) equals: 2.
 	self assert: (anEffect effectImpactOn: aBoard) equals: 1
@@ -144,23 +142,27 @@ EffectTest >> test011WhenHyperJumpUsesNextParsecValueThenItConvertsItUsingTheBoa
 { #category : 'tests' }
 EffectTest >> test012WhenHyperJumpIsAppliedThenItMovesTheSpaceShipUsingBoardParsecsConversion [
 
-	| anEffect aBoard tiles aSpaceShip spaceShips |
+	| anEffect aBoard tiles aSpaceShip spaceShips aGame dice |
 	tiles := OrderedCollection new.
-	10 timesRepeat: [ tiles add: NoEffect new ].
+	5 timesRepeat: [
+		tiles add: (HyperJump withParsecs: (OrderedCollection withAll: {
+						  (Parsec distance: 3).
+						  (Parsec distance: 2).
+						  (Parsec distance: 1) })) ].
+	aBoard := Board withCells: tiles andParsecs: 10.
 
-	aBoard := Board withCells: tiles andParsecs: 100.
+	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
 
-	anEffect := HyperJump withParsecs:
-		            (OrderedCollection with: (Parsec distance: 20)).
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
 
-	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
-	spaceShips := OrderedCollection with: aSpaceShip.
+	aSpaceShip := aGame allShips at: 1.
 
-	anEffect
-		applyTo: aSpaceShip
-		affecting: spaceShips
-		onBoard: aBoard
-		from: PharoGame new.
+	aGame playTurn.
 
 	self assert: aSpaceShip position equals: 2
 ]
@@ -184,13 +186,11 @@ EffectTest >> test013WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
 	anEffect
 		applyTo: aSpaceShip
 		affecting: spaceShips
-		onBoard: aBoard
 		from: PharoGame new.
 
 	anEffect
 		applyTo: aSpaceShip
 		affecting: spaceShips
-		onBoard: aBoard
 		from: PharoGame new.
 
 	self assert: aSpaceShip position equals: 3
@@ -213,31 +213,31 @@ EffectTest >> test014WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
 	spaceShips := OrderedCollection with: aSpaceShip.
 
 
-	self assert: anEffect currentParsec equals: 20
+	self assert: anEffect currentParsec distance equals: 20
 ]
 
 { #category : 'tests' }
 EffectTest >> test015WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
 
-	| anEffect aBoard tiles aSpaceShip spaceShips |
+	
+
+	| anEffect aBoard tiles aSpaceShip spaceShips aGame |
 	tiles := OrderedCollection new.
 	10 timesRepeat: [ tiles add: NoEffect new ].
-
 	aBoard := Board withCells: tiles andParsecs: 100.
-
 	anEffect := HyperJump withParsecs: (OrderedCollection
-			             with: (Parsec distance: 20)
-			             with: (Parsec distance: 10)).
-
+		with: (Parsec distance: 20)
+		with: (Parsec distance: 10)).
 	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
 	spaceShips := OrderedCollection with: aSpaceShip.
-
+	aGame := PharoGame
+		playedOn: aBoard
+		by: (OrderedCollection with: 'sombrero')
+		throwing: (Dice with: { (FixedDie withNumberOfFaces: 1) })
+		laps: 2.
 	anEffect
 		applyTo: aSpaceShip
 		affecting: spaceShips
-		onBoard: aBoard
-		from: PharoGame new.
-
-
-	self assert: anEffect currentParsec equals: 10
+		from: aGame.
+	self assert: anEffect currentParsec distance equals: 10
 ]

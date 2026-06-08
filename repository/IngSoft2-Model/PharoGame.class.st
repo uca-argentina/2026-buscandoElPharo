@@ -13,7 +13,8 @@ Class {
 		'turnManager',
 		'board',
 		'lapsToWin',
-		'shipManager'
+		'shipManager',
+		'parsecsPerCell'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -71,6 +72,12 @@ PharoGame >> boardSize [
 	^ board cells
 ]
 
+{ #category : 'as yet unclassified' }
+PharoGame >> cellsRepresenting: aParsec [
+
+	^ board cellsRepresenting: aParsec 
+]
+
 { #category : 'playing' }
 PharoGame >> checkWinnerFor: aSpaceShip with: laps [
 
@@ -106,7 +113,18 @@ PharoGame >> executeNextTurn [
 { #category : 'playing' }
 PharoGame >> executeTurnFor: currentSpaceShip [
 
-	board movingTo: (dice roll) crossMaxCellFor: currentSpaceShip from: self.
+	| roll effect |
+
+	roll := dice roll.
+	currentSpaceShip
+		advanceBy: roll
+		top: board cells
+		from: self.
+	effect := board effectAtCell: currentSpaceShip position.
+	effect
+		applyTo: currentSpaceShip
+		affecting: self allShips
+		from: self
 ]
 
 { #category : 'accessing' }

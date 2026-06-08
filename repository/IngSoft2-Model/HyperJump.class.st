@@ -26,35 +26,19 @@ HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
 	aSpaceShip
 		advanceBy: turnManager selectParsec
-		top: aGame boardSize "cambiar para que no exista tell dont ask"
-		from: aGame
-]
-
-{ #category : 'as yet unclassified' }
-HyperJump >> applyTo: aSpaceShip affecting: allShips onBoard: aBoard [
-
-	aSpaceShip advanceBy: (self effectImpactOn: aBoard) top: aBoard cells
-]
-
-{ #category : 'as yet unclassified' }
-HyperJump >> applyTo: aSpaceShip affecting: allShips onBoard: aBoard from: aGame [
-
-	aSpaceShip
-		advanceBy: (self effectImpactOn: aBoard)
-		top: aBoard cells
-		from: aGame
+		into: aGame
 ]
 
 { #category : 'as yet unclassified' }
 HyperJump >> currentParsec [
 
-	^ turnManager currentEntity
+	^ parsecsToMove first
 ]
 
 { #category : 'as yet unclassified' }
 HyperJump >> effectImpactOn: aBoard [
 
-	^ aBoard cellsRepresenting: self nextParsecJump
+	^ aBoard cellsRepresenting: turnManager selectParsec 
 ]
 
 { #category : 'initialization' }

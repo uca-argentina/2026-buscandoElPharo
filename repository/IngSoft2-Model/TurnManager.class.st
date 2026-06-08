@@ -49,3 +49,12 @@ TurnManager >> playTurnOn: aGame [
 	aGame executeTurnFor: currentSpaceShip.
 	self nextTurn
 ]
+
+{ #category : 'as yet unclassified' }
+TurnManager >> selectParsec [
+
+	| parsec |
+	parsec := listOfEntities at: currentTurn.
+	self nextTurn.
+	^ parsec distance
+]

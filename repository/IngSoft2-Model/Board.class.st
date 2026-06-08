@@ -8,11 +8,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'tiles',
-		'parsecs',
-		'totalParsecs'
-	],
-	#classInstVars : [
-		'totalParsecs'
+		'totalParsecs',
+		'parsecsPerCell'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -35,11 +32,11 @@ Board class >> withCells: squares [
 ]
 
 { #category : 'as yet unclassified' }
-Board class >> withCells: cells andParsecs: totalParsecs [
+Board class >> withCells: cells andParsecs: parsecs [
 
 	cells isEmpty ifTrue: [
 		Error signal: self invalidCellsErrorDescription ].
-	^ self new initializeWithCells: cells andParsecs: totalParsecs
+	^ self new initializeWithCells: cells andParsecs: parsecs
 ]
 
 { #category : 'accessing' }
@@ -51,13 +48,14 @@ Board >> cells [
 { #category : 'as yet unclassified' }
 Board >> cellsRepresenting: aParsec [
 
-	^ aParsec distance / self parsecsPerCell
+	"^ tiles size / totalParsecs "
+	^ (tiles size / totalParsecs ) ceiling
 ]
 
 { #category : 'as yet unclassified' }
 Board >> effectAtCell: aCellNumber [
 
-	^ tiles at: aCellNumber
+	^ tiles at: (aCellNumber min: self cells)
 ]
 
 { #category : 'initialization' }
