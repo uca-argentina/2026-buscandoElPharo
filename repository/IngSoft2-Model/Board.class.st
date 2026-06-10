@@ -48,8 +48,7 @@ Board >> cells [
 { #category : 'as yet unclassified' }
 Board >> cellsRepresenting: aParsec [
 
-	"^ tiles size / totalParsecs "
-	^ (tiles size / totalParsecs ) ceiling
+	^ (aParsec distance / self parsecsPerCell) ceiling
 ]
 
 { #category : 'as yet unclassified' }

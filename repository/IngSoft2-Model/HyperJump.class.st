@@ -24,9 +24,7 @@ HyperJump class >> withParsecs: parsecValues [
 { #category : 'playing' }
 HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
-	aSpaceShip
-		advanceBy: turnManager selectParsec
-		into: aGame
+	aSpaceShip advanceBy: self nextParsecJump into: aGame
 ]
 
 { #category : 'as yet unclassified' }
@@ -38,15 +36,16 @@ HyperJump >> currentParsec [
 { #category : 'as yet unclassified' }
 HyperJump >> effectImpactOn: aBoard [
 
-	^ aBoard cellsRepresenting: turnManager selectParsec 
+	^ aBoard cellsRepresenting: self nextParsecJump
 ]
 
 { #category : 'initialization' }
 HyperJump >> initializeWithParsecs: someParsecs [
 
-	parsecsToMove := someParsecs.
-	turnManager := TurnManager madeOf: parsecsToMove.
-	
+	parsecsToMove := OrderedCollection new.
+	parsecsToMove addAll:
+		(someParsecs asSortedCollection: [ :aParsec :anotherParsec |
+			 aParsec > anotherParsec ])
 ]
 
 { #category : 'testing' }
@@ -62,6 +61,5 @@ HyperJump >> nextParsecJump [
 	nextParsec := parsecsToMove first.
 	parsecsToMove removeFirst.
 	parsecsToMove add: nextParsec.
-
 	^ nextParsec
 ]

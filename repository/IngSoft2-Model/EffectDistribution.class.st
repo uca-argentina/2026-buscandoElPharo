@@ -116,7 +116,11 @@ EffectDistribution >> initializeWithSize: squares [
 	speedUpEffectProbability := 0.
 	moonWalkEffectProbability := 0.
 	hyperJumpEffectProbability := 0.
-	atomicBombEffectProbability := 0
+	atomicBombEffectProbability := 0.
+	hyperJumpParsecs := OrderedCollection
+		                    with: (Parsec distance: 20)
+		                    with: (Parsec distance: 10)
+		                    with: (Parsec distance: 5)
 ]
 
 { #category : 'testing' }

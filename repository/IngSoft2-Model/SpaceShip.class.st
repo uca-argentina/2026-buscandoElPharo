@@ -56,7 +56,8 @@ SpaceShip >> advanceBy: anInteger top: anInteger2 [
 SpaceShip >> advanceBy: amount top: maxCell from: aGame [
 
 	| newPosition |
-	newPosition := currentPosition + amount max: 1.
+	newPosition := currentPosition + amount.
+
 	self moveTo: newPosition top: maxCell from: aGame
 ]
 
@@ -90,6 +91,9 @@ SpaceShip >> moveTo: newPosition top: maxCell from: aGame [
 		adjustedPosition := adjustedPosition - maxCell.
 		currentLap := currentLap + 1 ].
 
+	[ adjustedPosition < 1 ] whileTrue: [
+		adjustedPosition := adjustedPosition + maxCell ].
+
 	currentPosition := adjustedPosition.
 	aGame checkWinnerFor: self with: currentLap
 ]
@@ -103,5 +107,5 @@ SpaceShip >> moveToFirstCell [
 { #category : 'accessing' }
 SpaceShip >> position [
 
-	^ currentPosition ceiling 
+	^ currentPosition
 ]

@@ -30,7 +30,7 @@ EffectTest >> test003WhenWormHoleIsCreatedThenItHasAnImpactOfMinusFour [
 ]
 
 { #category : 'tests' }
-EffectTest >> test005WhenHyperJumpIsUsedThenItReturnsTheNextParsecValue [
+EffectTest >> test004WhenHyperJumpIsUsedThenItReturnsTheNextParsecValue [
 
 	| anEffect |
 	anEffect := HyperJump withParsecs: (OrderedCollection
@@ -38,11 +38,13 @@ EffectTest >> test005WhenHyperJumpIsUsedThenItReturnsTheNextParsecValue [
 			             with: (Parsec distance: 6)
 			             with: (Parsec distance: 4)).
 	anEffect nextParsecJump.
-	self assert: anEffect nextParsecJump equals: (Parsec distance: 6)
+	self
+		assert: anEffect nextParsecJump distance
+		equals: (Parsec distance: 6) distance
 ]
 
 { #category : 'tests' }
-EffectTest >> test006WhenHyperJumpUsesAllParsecValuesThenItStartsAgainFromTheLargestValue [
+EffectTest >> test005WhenHyperJumpUsesAllParsecValuesThenItStartsAgainFromTheLargestValue [
 
 	| anEffect |
 	anEffect := HyperJump withParsecs: (OrderedCollection
@@ -54,7 +56,7 @@ EffectTest >> test006WhenHyperJumpUsesAllParsecValuesThenItStartsAgainFromTheLar
 ]
 
 { #category : 'tests' }
-EffectTest >> test007WhenMoonWalkIsCreatedThenItMovesBackTheGivenAmountOfCells [
+EffectTest >> test006WhenMoonWalkIsCreatedThenItMovesBackTheGivenAmountOfCells [
 
 	| anEffect |
 	anEffect := MoonWalk movingBack: 3.
@@ -63,7 +65,7 @@ EffectTest >> test007WhenMoonWalkIsCreatedThenItMovesBackTheGivenAmountOfCells [
 ]
 
 { #category : 'tests' }
-EffectTest >> test008WhenAtomicBombIsAppliedThenItMovesASpaceShipToFirstCell [
+EffectTest >> test007WhenAtomicBombIsAppliedThenItMovesSpaceShipsToFirstCell [
 
 	| anEffect firstSpaceShip secondSpaceShip spaceShips aGame |
 	anEffect := AtomicBomb new.
@@ -81,7 +83,97 @@ EffectTest >> test008WhenAtomicBombIsAppliedThenItMovesASpaceShipToFirstCell [
 ]
 
 { #category : 'tests' }
-EffectTest >> test009WhenAtomicBombIsAppliedThenItsLapsDoesntChange [
+EffectTest >> test008WhenMoonWalkIsAppliedThenItDoesNotMoveTheSpaceShipThatTriggeredIt [
+
+	| anEffect affectedSpaceShip otherSpaceShip spaceShips aBoard aGame dice tiles |
+
+	anEffect := MoonWalk movingBack: 3.
+
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+	aBoard := Board withCells: tiles.
+
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	aGame := PharoGame
+		playedOn: aBoard
+		by: #( 'sombrero' 'bote' )
+		throwing: dice
+		laps: 2.
+
+	spaceShips := aGame allShips.
+	affectedSpaceShip := spaceShips first.
+	otherSpaceShip := spaceShips second.
+
+	affectedSpaceShip advanceBy: 5 top: aBoard cells from: aGame.
+	otherSpaceShip advanceBy: 5 top: aBoard cells from: aGame.
+
+	anEffect applyTo: affectedSpaceShip affecting: spaceShips from: aGame.
+
+	self assert: affectedSpaceShip position equals: 5
+]
+
+{ #category : 'tests' }
+EffectTest >> test009WhenMoonWalkIsAppliedThenItMovesAllOtherSpaceShipsBack [
+
+	| anEffect affectedSpaceShip otherSpaceShip spaceShips aBoard aGame dice tiles |
+
+	anEffect := MoonWalk movingBack: 3.
+
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+	aBoard := Board withCells: tiles.
+
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	aGame := PharoGame
+		playedOn: aBoard
+		by: #( 'sombrero' 'bote' )
+		throwing: dice
+		laps: 2.
+
+	spaceShips := aGame allShips.
+	affectedSpaceShip := spaceShips first.
+	otherSpaceShip := spaceShips second.
+
+	affectedSpaceShip advanceBy: 5 top: aBoard cells from: aGame.
+	otherSpaceShip advanceBy: 8 top: aBoard cells from: aGame.
+
+	anEffect applyTo: affectedSpaceShip affecting: spaceShips from: aGame.
+
+	self assert: otherSpaceShip position equals: 5
+]
+
+{ #category : 'tests' }
+EffectTest >> test010WhenMoonWalkHasDifferentAmountThenItMovesOtherSpaceShipsThatAmount [
+
+	| anEffect affectedSpaceShip otherSpaceShip spaceShips aBoard aGame dice tiles |
+
+	anEffect := MoonWalk movingBack: 5.
+
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+	aBoard := Board withCells: tiles.
+
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	aGame := PharoGame
+		playedOn: aBoard
+		by: #( 'sombrero' 'bote' )
+		throwing: dice
+		laps: 2.
+
+	spaceShips := aGame allShips.
+	affectedSpaceShip := spaceShips first.
+	otherSpaceShip := spaceShips second.
+
+	affectedSpaceShip advanceBy: 5 top: aBoard cells from: aGame.
+	otherSpaceShip advanceBy: 8 top: aBoard cells from: aGame.
+
+	anEffect applyTo: affectedSpaceShip affecting: spaceShips from: aGame.
+
+	self assert: otherSpaceShip position equals: 3
+]
+
+{ #category : 'tests' }
+EffectTest >> test011WhenAtomicBombIsAppliedThenItsLapsDoesntChange [
 
 	| aGame dice aBoard tiles distribution ships |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
@@ -108,7 +200,7 @@ EffectTest >> test009WhenAtomicBombIsAppliedThenItsLapsDoesntChange [
 ]
 
 { #category : 'tests' }
-EffectTest >> test010WhenHyperJumpCalculatesImpactOnBoardThenItConvertsParsecsToCells [
+EffectTest >> test012WhenHyperJumpCalculatesImpactOnBoardThenItConvertsParsecsToCells [
 
 	| anEffect aBoard tiles |
 	tiles := OrderedCollection new.
@@ -123,7 +215,7 @@ EffectTest >> test010WhenHyperJumpCalculatesImpactOnBoardThenItConvertsParsecsTo
 ]
 
 { #category : 'tests' }
-EffectTest >> test011WhenHyperJumpUsesNextParsecValueThenItConvertsItUsingTheBoard [
+EffectTest >> test013WhenHyperJumpCalculatesImpactThenBoardConvertsParsecsToCells [
 
 	| anEffect aBoard tiles |
 	tiles := OrderedCollection new.
@@ -140,9 +232,9 @@ EffectTest >> test011WhenHyperJumpUsesNextParsecValueThenItConvertsItUsingTheBoa
 ]
 
 { #category : 'tests' }
-EffectTest >> test012WhenHyperJumpIsAppliedThenItMovesTheSpaceShipUsingBoardParsecsConversion [
+EffectTest >> test014WhenHyperJumpIsAppliedThenTheSpaceShipAdvancesConvertedCells [
 
-	| anEffect aBoard tiles aSpaceShip spaceShips aGame dice |
+	| aBoard tiles aSpaceShip spaceShips aGame dice |
 	tiles := OrderedCollection new.
 	5 timesRepeat: [
 		tiles add: (HyperJump withParsecs: (OrderedCollection withAll: {
@@ -164,40 +256,55 @@ EffectTest >> test012WhenHyperJumpIsAppliedThenItMovesTheSpaceShipUsingBoardPars
 
 	aGame playTurn.
 
-	self assert: aSpaceShip position equals: 2
-]
-
-{ #category : 'tests' }
-EffectTest >> test013WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
-
-	| anEffect aBoard tiles aSpaceShip spaceShips |
-	tiles := OrderedCollection new.
-	10 timesRepeat: [ tiles add: NoEffect new ].
-
-	aBoard := Board withCells: tiles andParsecs: 100.
-
-	anEffect := HyperJump withParsecs: (OrderedCollection
-			             with: (Parsec distance: 20)
-			             with: (Parsec distance: 10)).
-
-	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
-	spaceShips := OrderedCollection with: aSpaceShip.
-
-	anEffect
-		applyTo: aSpaceShip
-		affecting: spaceShips
-		from: PharoGame new.
-
-	anEffect
-		applyTo: aSpaceShip
-		affecting: spaceShips
-		from: PharoGame new.
-
 	self assert: aSpaceShip position equals: 3
 ]
 
 { #category : 'tests' }
-EffectTest >> test014WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
+EffectTest >> test015WhenHyperJumpIsAppliedTwiceThenEachApplicationUsesTheNextParsecValue [
+
+	| anEffect aBoard tiles aSpaceShip spaceShips aGame dice |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+	aBoard := Board withCells: tiles andParsecs: 100.
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 20)
+			             with: (Parsec distance: 10)).
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: #( 'sombrero' )
+		         throwing: dice
+		         laps: 2.
+	spaceShips := aGame allShips.
+	aSpaceShip := spaceShips first.
+	anEffect applyTo: aSpaceShip affecting: spaceShips from: aGame.
+	anEffect applyTo: aSpaceShip affecting: spaceShips from: aGame.
+	self assert: aSpaceShip position equals: 3
+]
+
+{ #category : 'tests' }
+EffectTest >> test016WhenHyperJumpIsAppliedThenCurrentParsecAdvancesToTheNextValue [
+
+	| anEffect aBoard tiles aSpaceShip spaceShips aGame |
+	tiles := OrderedCollection new.
+	10 timesRepeat: [ tiles add: NoEffect new ].
+	aBoard := Board withCells: tiles andParsecs: 100.
+	anEffect := HyperJump withParsecs: (OrderedCollection
+			             with: (Parsec distance: 20)
+			             with: (Parsec distance: 10)).
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	spaceShips := OrderedCollection with: aSpaceShip.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: (OrderedCollection with: 'sombrero')
+		         throwing: (Dice with: { (FixedDie withNumberOfFaces: 1) })
+		         laps: 2.
+	anEffect applyTo: aSpaceShip affecting: spaceShips from: aGame.
+	self assert: anEffect currentParsec distance equals: 10
+]
+
+{ #category : 'tests' }
+EffectTest >> test017WhenHyperJumpIsCreatedThenCurrentParsecIsTheLargestOne [
 
 	| anEffect aBoard tiles aSpaceShip spaceShips |
 	tiles := OrderedCollection new.
@@ -217,27 +324,42 @@ EffectTest >> test014WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
 ]
 
 { #category : 'tests' }
-EffectTest >> test015WhenHyperJumpIsAppliedTwiceThenItUsesTheNextParsecValue [
+EffectTest >> test018WhenMoonWalkMovesAShipPastTheBeginningThenItWrapsAroundBoard [
 
-	
+	| anEffect affectedSpaceShip otherSpaceShip spaceShips aBoard aGame dice tiles |
 
-	| anEffect aBoard tiles aSpaceShip spaceShips aGame |
+	anEffect := MoonWalk movingBack: 4.
+
 	tiles := OrderedCollection new.
 	10 timesRepeat: [ tiles add: NoEffect new ].
-	aBoard := Board withCells: tiles andParsecs: 100.
-	anEffect := HyperJump withParsecs: (OrderedCollection
-		with: (Parsec distance: 20)
-		with: (Parsec distance: 10)).
-	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
-	spaceShips := OrderedCollection with: aSpaceShip.
+	aBoard := Board withCells: tiles.
+
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+
 	aGame := PharoGame
 		playedOn: aBoard
-		by: (OrderedCollection with: 'sombrero')
-		throwing: (Dice with: { (FixedDie withNumberOfFaces: 1) })
+		by: #( 'sombrero' 'bote' )
+		throwing: dice
 		laps: 2.
+
+	spaceShips := aGame allShips.
+	affectedSpaceShip := spaceShips first.
+	otherSpaceShip := spaceShips second.
+
+	affectedSpaceShip
+		advanceBy: 5
+		top: aBoard cells
+		from: aGame.
+
+	otherSpaceShip
+		advanceBy: 2
+		top: aBoard cells
+		from: aGame.
+
 	anEffect
-		applyTo: aSpaceShip
+		applyTo: affectedSpaceShip
 		affecting: spaceShips
 		from: aGame.
-	self assert: anEffect currentParsec distance equals: 10
+
+	self assert: otherSpaceShip position equals: 8
 ]
