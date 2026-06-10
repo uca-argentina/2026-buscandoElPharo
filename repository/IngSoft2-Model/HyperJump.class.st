@@ -8,7 +8,8 @@ Class {
 	#name : 'HyperJump',
 	#superclass : 'Effect',
 	#instVars : [
-		'parsecsToMove'
+		'parsecsToMove',
+		'turnManager'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -18,6 +19,24 @@ Class {
 HyperJump class >> withParsecs: parsecValues [
 
 	^ self new initializeWithParsecs: parsecValues
+]
+
+{ #category : 'playing' }
+HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
+
+	aSpaceShip advanceBy: self nextParsecJump into: aGame
+]
+
+{ #category : 'as yet unclassified' }
+HyperJump >> currentParsec [
+
+	^ parsecsToMove first
+]
+
+{ #category : 'as yet unclassified' }
+HyperJump >> effectImpactOn: aBoard [
+
+	^ aBoard cellsRepresenting: self nextParsecJump
 ]
 
 { #category : 'initialization' }
@@ -42,6 +61,5 @@ HyperJump >> nextParsecJump [
 	nextParsec := parsecsToMove first.
 	parsecsToMove removeFirst.
 	parsecsToMove add: nextParsec.
-
 	^ nextParsec
 ]

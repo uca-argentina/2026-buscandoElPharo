@@ -20,13 +20,7 @@ MoonWalk class >> movingBack: anAmountOfCells [
 	^ self new initializeMovingBack: anAmountOfCells
 ]
 
-{ #category : 'as yet unclassified' }
-MoonWalk >> applyTo: aSpaceShip affecting: spaceShips [
-
-	^ self
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 MoonWalk >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
 	allShips do: [ :ship |
@@ -37,7 +31,7 @@ MoonWalk >> applyTo: aSpaceShip affecting: allShips from: aGame [
 				from: aGame ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 MoonWalk >> effectImpact [
 
 	^ amountOfCellsToMoveBack negated

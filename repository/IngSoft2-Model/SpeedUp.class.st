@@ -10,13 +10,13 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpeedUp >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
 	aSpaceShip advanceBy: 4 top: aGame boardSize from: aGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 SpeedUp >> effectImpact [
 
 	^ 4

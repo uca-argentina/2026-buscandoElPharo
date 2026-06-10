@@ -10,28 +10,27 @@ TurnManagerTest >> test001WhenTurnManagerIsCreatedThenFirstSpaceShipHasTheTurn [
 
 	| aTurnManager spaceShips |
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	aTurnManager := TurnManager withShips: spaceShips.
-	self assert: aTurnManager currentShip equals: 'sombrero'
+	aTurnManager := TurnManager madeOf: spaceShips.
+	self assert: aTurnManager currentEntity equals: 'sombrero'
 ]
 
 { #category : 'tests' }
-TurnManagerTest >> test002WhenTurnAdvancesThenSecondSpaceShipHasTheTurn [
+TurnManagerTest >> test001WhenTurnManagerIsCreatedThenTurnStartsAtOne [
 
-	| aGame dice spaceShips distribution aBoard tiles |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
-	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
-	distribution := EffectDistribution generateForSize: 10.
-	distribution addNoEffect: 1.
-	distribution addSpeedUp: 0.
-	distribution addWormHole: 0.
-	distribution addHyperJump: 0.
-	distribution addMoonWalk: 0.
-	distribution addAtomicBomb: 0.
+	| parsec aTurnManager |
+	parsec := OrderedCollection withAll: { 1. 2. 3. 4 }.
 
-	tiles := distribution build.
-	aBoard := Board withCells: tiles.
-	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
-	aGame playTurn.
+	aTurnManager := TurnManager madeOf: parsec.
+	self assert: aTurnManager currentTurn equals: 1
+]
 
-	self assert: aGame currentShip equals: 'bote'
+{ #category : 'tests' }
+TurnManagerTest >> test002WhenTurnMovesForwardThenCurrentTurnIsAtTwo [
+
+	| parsec aTurnManager |
+	parsec := OrderedCollection withAll: { 1. 2. 3. 4 }.
+
+	aTurnManager := TurnManager madeOf: parsec.
+	aTurnManager nextTurn.
+	self assert: aTurnManager currentTurn equals: 2
 ]

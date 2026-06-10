@@ -10,14 +10,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 NoEffect >> applyTo: aSpaceShip affecting: allShips from: aGame [
-	"do nothing"
-
-	
+	"do nothing"	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 NoEffect >> effectImpact [
 
 	^ 0

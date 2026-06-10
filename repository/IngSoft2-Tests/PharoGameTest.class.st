@@ -31,7 +31,7 @@ PharoGameTest >> test001WhenAGameIsCreatedThenAGameIsStarted [
 PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotReplay [
 
 	| aGame dice spaceShips distribution aBoard tiles |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 11) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
 	distribution := EffectDistribution generateForSize: 10.
 	distribution addNoEffect: 1.
@@ -45,7 +45,7 @@ PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotRepla
 	aBoard := Board withCells: tiles.
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
-	aGame playTurn.
+
 	self
 		should: [ aGame playTurn ]
 		raise: Error
@@ -59,7 +59,7 @@ PharoGameTest >> test002WhenAGameHasAlreadyBeenFinishedThenSimulationCanNotRepla
 PharoGameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished [
 
 	| aGame dice spaceShips distribution aBoard tiles |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 11) }.
 	spaceShips := OrderedCollection with: 'sombrero'.
 	distribution := EffectDistribution generateForSize: 10.
 	distribution addNoEffect: 1.
@@ -76,7 +76,6 @@ PharoGameTest >> test003WhenAGameHasCompletedSequenceOfSquaresThenGameIsFinished
 		         by: spaceShips
 		         throwing: dice
 		         laps: 1.
-	aGame playTurn.
 	aGame playTurn.
 	self assert: aGame finished equals: true
 ]
@@ -120,14 +119,14 @@ PharoGameTest >> test005WhenAGamePlayATurnThenGameKnowsSpaceShipsPosition [
 	aBoard := Board withCells: tiles.
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 6
 ]
 
 { #category : 'tests' }
 PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntilFinished [
 
 	| aGame dice spaceShips distribution aBoard tiles |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 11) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
 	distribution := EffectDistribution generateForSize: 10.
 	distribution addNoEffect: 1.
@@ -141,10 +140,9 @@ PharoGameTest >> test006WhenAGameHasMoreThanOneSpaceShipThenGameCanPlayTurnUntil
 	aBoard := Board withCells: tiles.
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
-	aGame playTurn.
-	aGame playTurn.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 3.
-	self assert: (aGame currentPositionOfShip: 'bote') equals: 7
+
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 1.
+	self assert: (aGame currentPositionOfShip: 'bote') equals: 0
 ]
 
 { #category : 'tests' }
@@ -172,7 +170,7 @@ PharoGameTest >> test007WhenAGameHasNotStartedThenTheGameHasNoWinner [
 PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 
 	| aGame dice spaceShips distribution aBoard tiles |
-	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	dice := Dice with: { (FixedDie withNumberOfFaces: 11) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
 	distribution := EffectDistribution generateForSize: 10.
 	distribution addNoEffect: 1.
@@ -186,8 +184,7 @@ PharoGameTest >> test008WhenAGameIsFinishedThenTheGameKnowsTheWinner [
 	aBoard := Board withCells: tiles.
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
-	aGame playTurn.
-	aGame playTurn.
+
 	self assert: aGame winner equals: 'sombrero'
 ]
 
@@ -236,7 +233,7 @@ PharoGameTest >> test010WhenAGameUseADiceThenSpaceShipsMoveDiceRollResult [
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 7
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 6
 ]
 
 { #category : 'tests' }
@@ -258,7 +255,7 @@ PharoGameTest >> test011WhenDiceRollsIsLargerThanSquaresThenShipFinalPositionIsM
 	aGame := PharoGame playedOn: aBoard by: spaceShips throwing: dice laps: 1.
 	aGame playTurn.
 	self assert: aGame winner equals: 'sombrero'.
-	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 3
+	self assert: (aGame currentPositionOfShip: 'sombrero') equals: 2
 ]
 
 { #category : 'tests' }
@@ -430,4 +427,105 @@ PharoGameTest >> test018WhenAGameAreBeingCreatedThenALapCannotBeNegative [
 			self
 				assert: error messageText
 				equals: PharoGame negativeLapErrorDescription ]
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test019WhenTwoSpaceShipsPlayThenRankingShowsWhoIsAhead [
+
+	| aGame dice aBoard tiles distribution ships |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	ships := OrderedCollection with: 'sombrero' with: 'bote'.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: ships
+		         throwing: dice
+		         laps: 2.
+
+	aGame playTurn.
+
+	self assert: (aGame rankOf: 'sombrero') equals: 1.
+	self assert: (aGame rankOf: 'bote') equals: 2
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test020WhenAShipHasMoreLapsThenItRanksHigherRegardlessOfPosition [
+
+    | aGame dice aBoard tiles distribution |
+    dice := Dice with: { FixedDie withNumberOfFaces: 6 }.
+    distribution := EffectDistribution generateForSize: 5.
+    distribution addNoEffect: 1.
+    distribution addSpeedUp: 0.
+    distribution addWormHole: 0.
+    distribution addHyperJump: 0.
+    distribution addMoonWalk: 0.
+    distribution addAtomicBomb: 0.
+    tiles := distribution build.
+    aBoard := Board withCells: tiles.
+    aGame := PharoGame playedOn: aBoard by: #('sombrero' 'bote') throwing: dice laps: 3.
+
+    aGame playTurn.
+    aGame playTurn.
+    aGame playTurn.
+
+    self assert: (aGame rankOf: 'sombrero') equals: 1.
+    self assert: (aGame rankOf: 'bote') equals: 2.
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test021WhenSpaceShipsAreInSameLapThenRankingOrdersByPosition [
+
+	| aGame dice spaceShips distribution aBoard tiles |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+	aGame playTurn.
+	self assert: (aGame rankOf: 'sombrero') equals: 1.
+	self assert: (aGame rankOf: 'bote') equals: 2
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test022 [
+"cambiar num por 16"
+
+	| aGame dice spaceShips distribution tiles aBoard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 6) }.
+	spaceShips := OrderedCollection with: 'sombrero' with: 'bote'.
+	distribution := EffectDistribution generateForSize: 5.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+	aGame playTurn.
+	self assert: aGame currentShip equals: 'bote'
 ]

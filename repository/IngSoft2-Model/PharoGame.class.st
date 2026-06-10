@@ -13,7 +13,8 @@ Class {
 		'turnManager',
 		'board',
 		'lapsToWin',
-		'numberOfLaps'
+		'shipManager',
+		'parsecsPerCell'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -62,13 +63,19 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 { #category : 'accessing' }
 PharoGame >> allShips [
 
-	^ turnManager allShips
+	^ shipManager allShips
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> boardSize [
 
 	^ board cells
+]
+
+{ #category : 'as yet unclassified' }
+PharoGame >> cellsRepresenting: aParsec [
+
+	^ board cellsRepresenting: aParsec 
 ]
 
 { #category : 'playing' }
@@ -82,19 +89,19 @@ PharoGame >> checkWinnerFor: aSpaceShip with: laps [
 { #category : 'accessing' }
 PharoGame >> currentLapOfShip: shipName [
 
-	^ turnManager lapOf: shipName
+	^ shipManager lapOf: shipName
 ]
 
 { #category : 'accessing' }
 PharoGame >> currentPositionOfShip: shipName [
 
-	^ turnManager positionOf: shipName
+	^ shipManager positionOf: shipName
 ]
 
 { #category : 'playing' }
 PharoGame >> currentShip [
 
-	^ turnManager currentShipIdentification 
+	^ shipManager currentShipIdentification: turnManager currentTurn 
 ]
 
 { #category : 'playing' }
@@ -106,7 +113,18 @@ PharoGame >> executeNextTurn [
 { #category : 'playing' }
 PharoGame >> executeTurnFor: currentSpaceShip [
 
-	board movingTo: (dice roll) crossMaxCellFor: currentSpaceShip from: self.
+	| roll effect |
+
+	roll := dice roll.
+	currentSpaceShip
+		advanceBy: roll
+		top: board cells
+		from: self.
+	effect := board effectAtCell: currentSpaceShip position.
+	effect
+		applyTo: currentSpaceShip
+		affecting: self allShips
+		from: self
 ]
 
 { #category : 'accessing' }
@@ -130,7 +148,8 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	lapsToWin := laps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
-	turnManager := TurnManager withShips: spaceShips.
+	shipManager := SpaceShipsManager withShips: spaceShips.
+	turnManager := TurnManager madeOf: spaceShips.
 	winnerState := NoWinner new.
 	dice := playableDice
 ]
@@ -140,6 +159,12 @@ PharoGame >> playTurn [
 
 	currentState playTurnOn: self.
 
+]
+
+{ #category : 'playing' }
+PharoGame >> rankOf: aSpaceShip [
+
+	^ shipManager rankOfThis: aSpaceShip
 ]
 
 { #category : 'validation' }
