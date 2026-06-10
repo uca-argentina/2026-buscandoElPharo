@@ -1,5 +1,5 @@
 "
-I am responsible for managing the sequence of turns in the game
+I am responsible for managing the SpaceShips in the game
 "
 Class {
 	#name : 'SpaceShipsManager',
@@ -28,12 +28,6 @@ SpaceShipsManager >> allShips [
 SpaceShipsManager >> currentShip [
 
 	^ spaceShipsOrder at: currentTurn
-]
-
-{ #category : 'accessing' }
-SpaceShipsManager >> currentShipIdentification [
-
-	^ (spaceShipsOrder at: currentTurn) identification
 ]
 
 { #category : 'as yet unclassified' }

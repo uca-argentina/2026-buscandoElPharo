@@ -70,15 +70,6 @@ Board >> initializeWithCells: cells andParsecs: aTotalParsecs [
     totalParsecs := aTotalParsecs
 ]
 
-{ #category : 'playing' }
-Board >> movingTo: newPosition crossMaxCellFor: currentSpaceShip from: aGame [
-
-	| tile |
-	tile := tiles at: (newPosition min: self cells).
-	currentSpaceShip moveTo: newPosition top: self cells from: aGame.
-	tile applyTo: currentSpaceShip affecting: aGame allShips from: aGame
-]
-
 { #category : 'as yet unclassified' }
 Board >> parsecsPerCell [
 

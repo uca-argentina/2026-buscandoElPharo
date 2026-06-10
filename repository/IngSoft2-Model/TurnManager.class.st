@@ -1,10 +1,12 @@
+"
+I am responsible for managing the sequence of turns in the game
+"
 Class {
 	#name : 'TurnManager',
 	#superclass : 'Object',
 	#instVars : [
 		'listOfEntities',
-		'currentTurn',
-		'spaceShipsOrder'
+		'currentTurn'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -16,7 +18,7 @@ TurnManager class >> madeOf: aCollection [
 	^ self new initializeIterator: aCollection
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 TurnManager >> currentEntity [
 
 	^ listOfEntities at: currentTurn
@@ -48,13 +50,4 @@ TurnManager >> playTurnOn: aGame [
 	currentSpaceShip := listOfEntities at: currentTurn.
 	aGame executeTurnFor: currentSpaceShip.
 	self nextTurn
-]
-
-{ #category : 'as yet unclassified' }
-TurnManager >> selectParsec [
-
-	| parsec |
-	parsec := listOfEntities at: currentTurn.
-	self nextTurn.
-	^ parsec distance
 ]
