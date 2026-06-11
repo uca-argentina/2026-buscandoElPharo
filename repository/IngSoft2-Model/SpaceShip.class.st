@@ -10,7 +10,8 @@ Class {
 	#instVars : [
 		'name',
 		'currentPosition',
-		'currentLap'
+		'currentLap',
+		'cards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -38,6 +39,12 @@ SpaceShip >> > anotherSpaceShip [
 		ifFalse: [ ^ self laps > anotherSpaceShip laps ]
 ]
 
+{ #category : 'adding' }
+SpaceShip >> addCard: aCard [
+
+	cards add: aCard
+]
+
 { #category : 'as yet unclassified' }
 SpaceShip >> advanceBy: aParsec into: aPharoGame [
 
@@ -61,6 +68,18 @@ SpaceShip >> advanceBy: amount top: maxCell from: aGame [
 	self moveTo: newPosition top: maxCell from: aGame
 ]
 
+{ #category : 'as yet unclassified' }
+SpaceShip >> amountOfCards [
+
+	^ cards size
+]
+
+{ #category : 'testing' }
+SpaceShip >> hasCard: aCard [
+
+	^ cards includes: aCard
+]
+
 { #category : 'accessing' }
 SpaceShip >> identification [
 
@@ -73,6 +92,7 @@ SpaceShip >> initializeSpaceShipWithName: tag [
 	name := tag.
 	currentPosition := 0.
 	currentLap := 0.
+	cards := OrderedCollection new.
 ]
 
 { #category : 'accessing' }
