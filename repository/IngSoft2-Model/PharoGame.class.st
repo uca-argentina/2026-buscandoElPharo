@@ -14,7 +14,8 @@ Class {
 		'board',
 		'lapsToWin',
 		'shipManager',
-		'parsecsPerCell'
+		'parsecsPerCell',
+		'activeCards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -60,10 +61,22 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 		  laps: laps
 ]
 
+{ #category : 'as yet unclassified' }
+PharoGame >> activateCard: aCard [
+
+	activeCards add: aCard
+]
+
 { #category : 'accessing' }
 PharoGame >> allShips [
 
 	^ shipManager allShips
+]
+
+{ #category : 'as yet unclassified' }
+PharoGame >> amountOfActiveCards [
+
+	^ activeCards size
 ]
 
 { #category : 'playing' }
@@ -104,6 +117,14 @@ PharoGame >> currentShip [
 	^ shipManager currentShipIdentification: turnManager currentTurn 
 ]
 
+{ #category : 'as yet unclassified' }
+PharoGame >> dealInitialCards [
+
+	self allShips do: [ :aShip |
+		aShip addCard: InstantCard new.
+		aShip addCard: PermanentCard new ]
+]
+
 { #category : 'playing' }
 PharoGame >> executeNextTurn [
 
@@ -114,23 +135,28 @@ PharoGame >> executeNextTurn [
 PharoGame >> executeTurnFor: currentSpaceShip [
 
 	| roll effect |
-
-	roll := dice roll.
-	currentSpaceShip
-		advanceBy: roll
-		top: board cells
-		from: self.
+	roll := self rollFor: currentSpaceShip.
+	currentSpaceShip advanceBy: roll top: board cells from: self.
 	effect := board effectAtCell: currentSpaceShip position.
-	effect
-		applyTo: currentSpaceShip
-		affecting: self allShips
-		from: self
+	effect applyTo: currentSpaceShip affecting: self allShips from: self
 ]
 
 { #category : 'accessing' }
 PharoGame >> finished [
 
 	^ currentState finished
+]
+
+{ #category : 'as yet unclassified' }
+PharoGame >> giveCardTo: aSpaceShip [
+
+	aSpaceShip addCard: InstantCard new
+]
+
+{ #category : 'testing' }
+PharoGame >> hasActiveCard: aCard [
+
+	^ activeCards includes: aCard
 ]
 
 { #category : 'testing' }
@@ -151,7 +177,9 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	shipManager := SpaceShipsManager withShips: spaceShips.
 	turnManager := TurnManager madeOf: spaceShips.
 	winnerState := NoWinner new.
-	dice := playableDice
+	dice := playableDice.
+	self dealInitialCards.
+	activeCards := OrderedCollection new
 ]
 
 { #category : 'playing' }
@@ -171,6 +199,15 @@ PharoGame >> rankOf: aSpaceShip [
 PharoGame >> restartErrorDescription [
 
 	^ 'Can not restart the game'
+]
+
+{ #category : 'as yet unclassified' }
+PharoGame >> rollFor: aSpaceShip [
+
+	^ activeCards
+		  inject: dice roll
+		  into: [ :currentRoll :aCard |
+		  aCard modifyRoll: currentRoll for: aSpaceShip ]
 ]
 
 { #category : 'accessing' }

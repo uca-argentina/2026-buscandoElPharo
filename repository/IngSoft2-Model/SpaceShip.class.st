@@ -17,6 +17,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'as yet unclassified' }
+SpaceShip class >> cardNotOwnedErrorDescription [
+
+	^ 'SpaceShip does not own that card'
+]
+
 { #category : 'validation' }
 SpaceShip class >> invalidNameErrorDescription [
 
@@ -124,8 +130,32 @@ SpaceShip >> moveToFirstCell [
 	currentPosition := 1
 ]
 
+{ #category : 'as yet unclassified' }
+SpaceShip >> play: aCard [
+
+	(self hasCard: aCard) ifFalse: [
+		Error signal: self class cardNotOwnedErrorDescription ].
+
+	aCard playedBy: self
+]
+
+{ #category : 'as yet unclassified' }
+SpaceShip >> play: aCard in: aGame [
+
+	(self hasCard: aCard) ifFalse: [
+		Error signal: self class cardNotOwnedErrorDescription ].
+
+	aCard playedBy: self in: aGame
+]
+
 { #category : 'accessing' }
 SpaceShip >> position [
 
 	^ currentPosition
+]
+
+{ #category : 'removing' }
+SpaceShip >> removeCard: aCard [
+
+	cards remove: aCard
 ]

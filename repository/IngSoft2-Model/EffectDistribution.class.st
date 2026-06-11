@@ -16,7 +16,8 @@ Class {
 		'atomicBombEffectProbability',
 		'tiles',
 		'moonWalkSteps',
-		'hyperJumpParsecs'
+		'hyperJumpParsecs',
+		'cardGiverEffectProbability'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -51,6 +52,12 @@ EffectDistribution class >> negativeCellsErrorDescription [
 EffectDistribution >> addAtomicBomb: aProbability [
 
 	atomicBombEffectProbability := aProbability
+]
+
+{ #category : 'adding' }
+EffectDistribution >> addCardGiver: aProbability [
+
+	cardGiverEffectProbability := aProbability
 ]
 
 { #category : 'adding' }
@@ -117,6 +124,7 @@ EffectDistribution >> initializeWithSize: squares [
 	moonWalkEffectProbability := 0.
 	hyperJumpEffectProbability := 0.
 	atomicBombEffectProbability := 0.
+	cardGiverEffectProbability := 0.
 	hyperJumpParsecs := OrderedCollection
 		                    with: (Parsec distance: 20)
 		                    with: (Parsec distance: 10)
@@ -167,7 +175,8 @@ EffectDistribution >> theSumIsOne [
 	                      + speedUpEffectProbability
 	                      + moonWalkEffectProbability
 	                      + hyperJumpEffectProbability
-	                      + atomicBombEffectProbability) ceiling.
+	                      + atomicBombEffectProbability
+	                      + cardGiverEffectProbability) ceiling.
 
 	sumOfProbabilites = 1 ifFalse: [
 		Error signal: 'The Sum Of All Probabilities should be 1' ]
@@ -177,6 +186,8 @@ EffectDistribution >> theSumIsOne [
 EffectDistribution >> tileFor: randomProbability [
 
 	| accumulated |
+	accumulated := cardGiverEffectProbability.
+	randomProbability < accumulated ifTrue: [ ^ CardGiver new ].
 	accumulated := atomicBombEffectProbability.
 	randomProbability < accumulated ifTrue: [ ^ AtomicBomb new ].
 	accumulated := accumulated + moonWalkEffectProbability.

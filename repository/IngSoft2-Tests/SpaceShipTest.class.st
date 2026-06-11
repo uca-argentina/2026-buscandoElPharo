@@ -109,3 +109,50 @@ SpaceShipTest >> test009WhenASpaceShipHasACardThenItKnowsIt [
 
 	self assert: (aSpaceShip hasCard: aCard) equals: true
 ]
+
+{ #category : 'tests' }
+SpaceShipTest >> test010WhenASpaceShipRemovesACardThenItNoLongerHasIt [
+
+	| aSpaceShip aCard |
+
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	aCard := InstantCard new.
+
+	aSpaceShip addCard: aCard.
+	aSpaceShip removeCard: aCard.
+
+	self deny: (aSpaceShip hasCard: aCard).
+	self assert: aSpaceShip amountOfCards equals: 0
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test011WhenASpaceShipPlaysACardThenItIsRemovedFromTheSpaceShipHand [
+
+	| aCard aSpaceShip |
+
+	aCard := InstantCard new.
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+
+	aSpaceShip addCard: aCard.
+
+	aCard playedBy: aSpaceShip.
+
+	self deny: (aSpaceShip hasCard: aCard).
+	self assert: aSpaceShip amountOfCards equals: 0
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test012WhenASpaceShipPlaysAPermanentCardThenCardIsRemovedFromHand [
+
+	| aSpaceShip aCard |
+
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	aCard := PermanentCard new.
+
+	aSpaceShip addCard: aCard.
+
+	aSpaceShip play: aCard.
+
+	self deny: (aSpaceShip hasCard: aCard).
+	self assert: aSpaceShip amountOfCards equals: 0
+]

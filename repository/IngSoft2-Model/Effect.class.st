@@ -11,11 +11,17 @@ Class {
 { #category : 'as yet unclassified' }
 Effect >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
-	self subclassResponsibility
+	aGame giveCardTo: aSpaceShip
 ]
 
 { #category : 'testing' }
 Effect >> isAtomicBomb [
+
+	^ false
+]
+
+{ #category : 'testing' }
+Effect >> isCardGiver [
 
 	^ false
 ]

@@ -70,3 +70,22 @@ EffectDistributionTest >> test004WhenCellsContainsFloatNumberThenBoardCannotBeCr
 				assert: error messageText
 				equals: EffectDistribution floatCellsErrorDescription ]
 ]
+
+{ #category : 'tests' }
+EffectDistributionTest >> test005WhenEffectDistributionHasCardGiverProbabilityThenItCanGenerateACardGiverTile [
+
+	| distribution tiles |
+
+	distribution := EffectDistribution generateForSize: 1.
+	distribution addNoEffect: 0.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 1.
+
+	tiles := distribution build.
+
+	self assert: tiles first isCardGiver
+]

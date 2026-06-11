@@ -16,3 +16,28 @@ PermanentCard >> isPermanent [
 
 	^ true
 ]
+
+{ #category : 'as yet unclassified' }
+PermanentCard >> modifyRoll: aRoll [
+
+	^ aRoll
+]
+
+{ #category : 'as yet unclassified' }
+PermanentCard >> modifyRoll: aRoll for: aSpaceShip [
+
+	^ aRoll
+]
+
+{ #category : 'as yet unclassified' }
+PermanentCard >> playedBy: aSpaceShip [
+
+	aSpaceShip removeCard: self
+]
+
+{ #category : 'as yet unclassified' }
+PermanentCard >> playedBy: aSpaceShip in: aGame [
+
+	aSpaceShip removeCard: self.
+	aGame activateCard: self
+]
