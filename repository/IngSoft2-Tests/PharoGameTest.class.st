@@ -745,3 +745,78 @@ PharoGameTest >> test028WhenSpeedCardTargetsOneSpaceShipThenItDoesNotModifyAnoth
 	self assert: firstShip position equals: 5.
 	self assert: secondShip position equals: 4
 ]
+
+{ #category : 'tests' }
+PharoGameTest >> test029WhenOverloadCardIsActiveThenTargetSpaceShipRollIsReducedByTwo [
+
+	| dice spaceShips distribution tiles aBoard aGame aSpaceShip aCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 4) }.
+	spaceShips := OrderedCollection with: 'sombrero'.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	aCard := OverloadCard targeting: aSpaceShip.
+
+	aSpaceShip addCard: aCard.
+	aSpaceShip play: aCard in: aGame.
+
+	aGame playTurn.
+
+	self assert: aSpaceShip position equals: 2
+]
+
+{ #category : 'tests' }
+PharoGameTest >> test030WhenAccelerationCardIsActiveThenAllSpaceShipsIncreaseTheirRollByOne [
+
+	| aGame dice spaceShips distribution aBoard tiles firstSpaceShip secondSpaceShip aCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 4) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero'. 'bote' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	firstSpaceShip := aGame allShips first.
+	secondSpaceShip := aGame allShips second.
+
+	aCard := AccelerationCard new.
+	firstSpaceShip addCard: aCard.
+	firstSpaceShip play: aCard in: aGame.
+
+	aGame playTurn.
+	aGame playTurn.
+
+	self assert: firstSpaceShip position equals: 5.
+	self assert: secondSpaceShip position equals: 5
+]

@@ -153,3 +153,53 @@ CardTest >> test009WhenSpeedCardIsAppliedThenItAddsOneToARoll [
 
 	self assert: (aCard modifyRoll: 4) equals: 5
 ]
+
+{ #category : 'tests' }
+CardTest >> test010WhenOverloadCardIsCreatedThenItIsPermanent [
+
+	| aCard |
+
+	aCard := OverloadCard targeting: (SpaceShip namedAfter: 'sombrero').
+
+	self assert: aCard isPermanent equals: true
+]
+
+{ #category : 'tests' }
+CardTest >> test011WhenOverloadCardModifiesARollThenItReducesItByTwo [
+
+	| targetSpaceShip aCard |
+	targetSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	aCard := OverloadCard targeting: targetSpaceShip.
+
+	self assert: (aCard modifyRoll: 4 for: targetSpaceShip) equals: 2
+]
+
+{ #category : 'tests' }
+CardTest >> test012WhenOverloadCardModifiesAnotherSpaceShipRollThenItDoesNotAffectIt [
+
+	| targetSpaceShip aCard otherShip |
+	targetSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	otherShip := SpaceShip namedAfter: 'bote'.
+	aCard := OverloadCard targeting: targetSpaceShip.
+
+	self assert: (aCard modifyRoll: 4 for: otherShip) equals: 4
+]
+
+{ #category : 'tests' }
+CardTest >> test013WhenAccelerationCardIsCreatedThenItIsPermanent [
+
+	| aCard |
+	aCard := AccelerationCard new.
+
+	self assert: aCard isPermanent
+]
+
+{ #category : 'tests' }
+CardTest >> test014WhenAccelerationCardModifiesARollThenItIncreasesItByOne [
+
+	| aCard aSpaceShip |
+	aSpaceShip := SpaceShip namedAfter: 'sombrero'.
+	aCard := AccelerationCard new.
+
+	self assert: (aCard modifyRoll: 4 for: aSpaceShip) equals: 5
+]
