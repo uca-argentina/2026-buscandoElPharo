@@ -145,7 +145,10 @@ SpaceShip >> play: aCard in: aGame [
 	(self hasCard: aCard) ifFalse: [
 		Error signal: self class cardNotOwnedErrorDescription ].
 
-	aCard playedBy: self in: aGame
+	aCard playedBy: self in: aGame.
+
+	aCard shouldBeRememberedAsLastPlayedCard ifTrue: [
+		aGame rememberPlayedCard: aCard ]
 ]
 
 { #category : 'accessing' }

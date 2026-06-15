@@ -39,5 +39,11 @@ PermanentCard >> playedBy: aSpaceShip [
 PermanentCard >> playedBy: aSpaceShip in: aGame [
 
 	aSpaceShip removeCard: self.
+	self replayedBy: aSpaceShip in: aGame
+]
+
+{ #category : 'as yet unclassified' }
+PermanentCard >> replayedBy: aSpaceShip in: aGame [
+
 	aGame activateCard: self
 ]

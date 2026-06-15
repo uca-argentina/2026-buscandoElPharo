@@ -28,3 +28,9 @@ InstantCard >> playedBy: aSpaceShip in: aGame [
 
 	aSpaceShip removeCard: self
 ]
+
+{ #category : 'as yet unclassified' }
+InstantCard >> replayedBy: aSpaceShip in: aGame [
+
+	self playedBy: aSpaceShip in: aGame
+]

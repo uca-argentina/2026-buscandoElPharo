@@ -16,3 +16,9 @@ Card >> isPermanent [
 
 	^ false
 ]
+
+{ #category : 'testing' }
+Card >> shouldBeRememberedAsLastPlayedCard [
+
+	^ true
+]

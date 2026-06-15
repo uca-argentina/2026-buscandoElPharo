@@ -16,7 +16,8 @@ Class {
 		'shipManager',
 		'parsecsPerCell',
 		'activeCards',
-		'lastAppliedEffect'
+		'lastAppliedEffect',
+		'lastPlayedCard'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -50,6 +51,12 @@ PharoGame class >> invalidSquaresErrorDescription [
 PharoGame class >> negativeLapErrorDescription [
 
 	^ 'Laps can not be negative'
+]
+
+{ #category : 'validation' }
+PharoGame class >> noCardToRedoErrorDescription [
+
+	^ 'There is no card to redo'
 ]
 
 { #category : 'validation' }
@@ -210,6 +217,12 @@ PharoGame >> lastAppliedEffect [
 	^ lastAppliedEffect
 ]
 
+{ #category : 'accessing' }
+PharoGame >> lastPlayedCard [
+
+	^ lastPlayedCard
+]
+
 { #category : 'playing' }
 PharoGame >> playTurn [
 
@@ -224,9 +237,24 @@ PharoGame >> rankOf: aSpaceShip [
 ]
 
 { #category : 'validation' }
+PharoGame >> redoLastPlayedCardFor: aSpaceShip [
+
+	lastPlayedCard ifNil: [
+		Error signal: self class noCardToRedoErrorDescription ].
+
+	lastPlayedCard replayedBy: aSpaceShip in: self
+]
+
+{ #category : 'validation' }
 PharoGame >> rememberAppliedEffect: anEffect [
 
 	lastAppliedEffect := anEffect
+]
+
+{ #category : 'validation' }
+PharoGame >> rememberPlayedCard: aCard [
+
+	lastPlayedCard := aCard
 ]
 
 { #category : 'removing' }
