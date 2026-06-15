@@ -203,3 +203,129 @@ CardTest >> test014WhenAccelerationCardModifiesARollThenItIncreasesItByOne [
 
 	self assert: (aCard modifyRoll: 4 for: aSpaceShip) equals: 5
 ]
+
+{ #category : 'tests' }
+CardTest >> test015WhenCancellationCardIsCreatedThenItIsInstant [
+
+	| aCard |
+	aCard := CancellationCard new.
+
+	self assert: aCard isInstant
+]
+
+{ #category : 'tests' }
+CardTest >> test016WhenCancellationCardCancelsAPermanentCardThenItIsRemovedFromActiveCards [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip aSpeedCard aCancellationCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	aSpeedCard := SpeedCard targeting: aSpaceShip.
+	aCancellationCard := CancellationCard new.
+
+	aSpaceShip addCard: aSpeedCard.
+	aSpaceShip play: aSpeedCard in: aGame.
+
+	aCancellationCard cancel: aSpeedCard from: aGame.
+
+	self deny: (aGame hasActiveCard: aSpeedCard)
+]
+
+{ #category : 'tests' }
+CardTest >> test017WhenCancellationCardIsPlayedThenItCancelsTheSelectedPermanentCard [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip aSpeedCard aCancellationCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	aSpeedCard := SpeedCard targeting: aSpaceShip.
+	aCancellationCard := CancellationCard cancelling: aSpeedCard.
+
+	aSpaceShip addCard: aSpeedCard.
+	aSpaceShip addCard: aCancellationCard.
+
+	aSpaceShip play: aSpeedCard in: aGame.
+	aSpaceShip play: aCancellationCard in: aGame.
+
+	self deny: (aGame hasActiveCard: aSpeedCard).
+	self deny: (aSpaceShip hasCard: aCancellationCard).
+	self assert: aGame amountOfActiveCards equals: 0
+]
+
+{ #category : 'tests' }
+CardTest >> test018WhenCancellationCardTriesToCancelANonActivePermanentCardThenItRaisesAnError [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip aSpeedCard aCancellationCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	aSpeedCard := SpeedCard targeting: aSpaceShip.
+	aCancellationCard := CancellationCard cancelling: aSpeedCard.
+
+	aSpaceShip addCard: aCancellationCard.
+
+	self
+		should: [ aSpaceShip play: aCancellationCard in: aGame ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: PharoGame cardIsNotActiveErrorDescription ]
+]

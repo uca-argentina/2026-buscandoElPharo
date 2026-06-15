@@ -21,6 +21,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'as yet unclassified' }
+PharoGame class >> cardIsNotActiveErrorDescription [
+
+	^ 'Card is not active'
+]
+
 { #category : 'validation' }
 PharoGame class >> duplicatedShipNamesErrorDescription [
 
@@ -118,6 +124,15 @@ PharoGame >> currentShip [
 ]
 
 { #category : 'as yet unclassified' }
+PharoGame >> deactivateCard: aCard [
+
+	(self hasActiveCard: aCard) ifFalse: [
+		Error signal: self class cardIsNotActiveErrorDescription ].
+
+	activeCards remove: aCard
+]
+
+{ #category : 'as yet unclassified' }
 PharoGame >> dealInitialCards [
 
 	self allShips do: [ :aShip |
@@ -193,6 +208,12 @@ PharoGame >> playTurn [
 PharoGame >> rankOf: aSpaceShip [
 
 	^ shipManager rankOfThis: aSpaceShip
+]
+
+{ #category : 'removing' }
+PharoGame >> removeActiveCard: aCard [
+
+	activeCards remove: aCard
 ]
 
 { #category : 'validation' }
