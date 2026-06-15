@@ -21,6 +21,12 @@ SpeedCard >> initializeTargeting: aSpaceShip [
 	
 ]
 
+{ #category : 'initialization' }
+SpeedCard >> isSpeedCard [
+
+	^ true
+]
+
 { #category : 'as yet unclassified' }
 SpeedCard >> modifyRoll: aRoll [
 

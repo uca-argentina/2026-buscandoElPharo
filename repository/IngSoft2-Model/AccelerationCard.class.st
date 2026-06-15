@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+AccelerationCard >> isAccelerationCard [
+
+	^ true
+]
+
+{ #category : 'as yet unclassified' }
 AccelerationCard >> modifyRoll: aRoll for: aSpaceShip [
 
 	^ aRoll + 1

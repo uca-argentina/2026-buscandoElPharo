@@ -20,6 +20,12 @@ OverloadCard >> initializeTargeting: aSpaceShip [
 	target := aSpaceShip
 ]
 
+{ #category : 'initialization' }
+OverloadCard >> isOverloadCard [
+
+	^ true
+]
+
 { #category : 'as yet unclassified' }
 OverloadCard >> modifyRoll: aRoll for: aSpaceShip [
 

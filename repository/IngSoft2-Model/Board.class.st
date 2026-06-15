@@ -46,9 +46,9 @@ Board >> cells [
 ]
 
 { #category : 'as yet unclassified' }
-Board >> cellsRepresenting: aParsec [
+Board >> cellsRepresenting: aDistance [
 
-	^ (aParsec distance / self parsecsPerCell) ceiling
+	^ (aDistance asParsecs / self parsecsPerCell) ceiling
 ]
 
 { #category : 'as yet unclassified' }

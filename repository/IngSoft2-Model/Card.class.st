@@ -6,13 +6,31 @@ Class {
 }
 
 { #category : 'testing' }
+Card >> isAccelerationCard [
+
+	^ false
+]
+
+{ #category : 'testing' }
 Card >> isInstant [
 
 	^ false
 ]
 
 { #category : 'testing' }
+Card >> isOverloadCard [
+
+	^ false
+]
+
+{ #category : 'testing' }
 Card >> isPermanent [
+
+	^ false
+]
+
+{ #category : 'testing' }
+Card >> isSpeedCard [
 
 	^ false
 ]

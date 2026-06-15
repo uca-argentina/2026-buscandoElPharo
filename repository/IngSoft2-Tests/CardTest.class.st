@@ -1,6 +1,9 @@
 Class {
 	#name : 'CardTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		'aSpaceShip'
+	],
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
@@ -639,9 +642,9 @@ CardTest >> test028WhenRedoCardIsPlayedThenGameKeepsPreviousCardAsLastPlayedCard
 ]
 
 { #category : 'tests' }
-CardTest >> test029WhenGameGivesCardToSpaceShipThenCardComesFromCardProvider [
+CardTest >> test029WhenGameGivesCardToSpaceShipThenSpaceShipHasOneMoreCard [
 
-	| aGame dice spaceShips distribution aBoard tiles aSpaceShip |
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip provider |
 	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
 	spaceShips := OrderedCollection withAll: { 'sombrero' }.
 
@@ -663,6 +666,10 @@ CardTest >> test029WhenGameGivesCardToSpaceShipThenCardComesFromCardProvider [
 		         throwing: dice
 		         laps: 2.
 
+	provider := CardProvider withCards:
+		            (OrderedCollection with: SpeedCard new).
+	aGame cardProvider: provider.
+
 	aSpaceShip := aGame allShips first.
 
 	aGame giveCardTo: aSpaceShip.
@@ -671,10 +678,56 @@ CardTest >> test029WhenGameGivesCardToSpaceShipThenCardComesFromCardProvider [
 ]
 
 { #category : 'tests' }
-CardTest >> test030WhenLightYearsAreConvertedToParsecsThenThreeLightYearsEqualOneParsec [
+CardTest >> test030WhenCardProviderGivesCardsThenItCyclesThroughAvailableCardsUniformly [
 
-	| distance |
-	distance := LightYear distance: 3.
+	| provider firstCard secondCard thirdCard |
+	provider := CardProvider withCards: (OrderedCollection
+			             with: SpeedCard new
+			             with: OverloadCard new
+			             with: AccelerationCard new).
 
-	self assert: distance asParsecs equals: 1
+	firstCard := provider nextCard.
+	secondCard := provider nextCard.
+	thirdCard := provider nextCard.
+
+	self assert: firstCard isSpeedCard.
+	self assert: secondCard isOverloadCard.
+	self assert: thirdCard isAccelerationCard
+]
+
+{ #category : 'tests' }
+CardTest >> test031WhenGameGivesCardToSpaceShipThenItUsesCardProvider [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip provider aCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0 withParsecs: (OrderedCollection with: 1).
+	distribution addMoonWalk: 0 movingBack: 2.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aCard := SpeedCard new.
+	provider := CardProvider withCards: (OrderedCollection with: aCard).
+
+	aGame cardProvider: provider.
+
+	aSpaceShip := aGame allShips first.
+	aGame giveCardTo: aSpaceShip.
+
+	self assert: aSpaceShip amountOfCards equals: 3.
+	self assert: (aSpaceShip hasCard: aCard)
 ]

@@ -17,7 +17,8 @@ Class {
 		'parsecsPerCell',
 		'activeCards',
 		'lastAppliedEffect',
-		'lastPlayedCard'
+		'lastPlayedCard',
+		'cardProvider'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -105,6 +106,12 @@ PharoGame >> boardSize [
 	^ board cells
 ]
 
+{ #category : 'accessing' }
+PharoGame >> cardProvider: aCardProvider [
+
+	cardProvider := aCardProvider
+]
+
 { #category : 'as yet unclassified' }
 PharoGame >> cellsRepresenting: aParsec [
 
@@ -179,7 +186,7 @@ PharoGame >> finished [
 { #category : 'as yet unclassified' }
 PharoGame >> giveCardTo: aSpaceShip [
 
-	aSpaceShip addCard: InstantCard new
+	aSpaceShip addCard: cardProvider nextCard
 ]
 
 { #category : 'testing' }
@@ -203,12 +210,21 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	lapsToWin := laps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
+
 	shipManager := SpaceShipsManager withShips: spaceShips.
 	turnManager := TurnManager madeOf: spaceShips.
 	winnerState := NoWinner new.
 	dice := playableDice.
-	self dealInitialCards.
-	activeCards := OrderedCollection new
+	activeCards := OrderedCollection new.
+	cardProvider := CardProvider withCards: (OrderedCollection
+			                 with: SpeedCard new
+			                 with: OverloadCard new
+			                 with: AccelerationCard new
+			                 with: CancellationCard new
+			                 with: RepeatCard new
+			                 with: RedoCard new).
+
+	self dealInitialCards
 ]
 
 { #category : 'accessing' }
