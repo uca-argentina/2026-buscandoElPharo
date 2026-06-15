@@ -20,21 +20,22 @@ EffectDistributionTest >> test001WhenGeneratingCellsWithOneHundredPercentProbabi
 { #category : 'tests' }
 EffectDistributionTest >> test002WhenGeneratingCellsWithDefaultProbabilitiesThenCellsRespectExpectedPercentages [
 
-	| distribution tiles |
+	| distribution |
 	distribution := EffectDistribution generateForSize: 1500.
-	distribution addNoEffect: 0.4.
+	distribution addNoEffect: 0.3.
 	distribution addSpeedUp: 0.2.
 	distribution addWormHole: 0.2.
 	distribution
 		addHyperJump: 0.08
-		withParsecs: (OrderedCollection withAll: { 1.2. 3 }).
+		withParsecs: (OrderedCollection withAll: { 1. 2. 3 }).
 	distribution addMoonWalk: 0.1 movingBack: 2.
 	distribution addAtomicBomb: 0.02.
+	distribution addCardGiver: 0.1.
 
-	tiles := distribution build.
+	distribution build.
 
 	self assert:
-		(distribution percentageOfNoEffect between: 0.37 and: 0.43).
+		(distribution percentageOfNoEffect between: 0.27 and: 0.33).
 	self assert:
 		(distribution percentageOfWormHole between: 0.18 and: 0.22).
 	self assert:
@@ -44,7 +45,9 @@ EffectDistributionTest >> test002WhenGeneratingCellsWithDefaultProbabilitiesThen
 	self assert:
 		(distribution percentageOfSpeedUp between: 0.18 and: 0.22).
 	self assert:
-		(distribution percentageOfAtomicBomb between: 0.01 and: 0.04)
+		(distribution percentageOfAtomicBomb between: 0.01 and: 0.04).
+	self assert:
+		(distribution percentageOfCardGiver between: 0.08 and: 0.12)
 ]
 
 { #category : 'tests' }

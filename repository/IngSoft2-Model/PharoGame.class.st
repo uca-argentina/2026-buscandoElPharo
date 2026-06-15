@@ -15,7 +15,8 @@ Class {
 		'lapsToWin',
 		'shipManager',
 		'parsecsPerCell',
-		'activeCards'
+		'activeCards',
+		'lastAppliedEffect'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -49,6 +50,12 @@ PharoGame class >> invalidSquaresErrorDescription [
 PharoGame class >> negativeLapErrorDescription [
 
 	^ 'Laps can not be negative'
+]
+
+{ #category : 'validation' }
+PharoGame class >> noEffectToRepeatErrorDescription [
+
+	^ 'There is no effect to repeat'
 ]
 
 { #category : 'creation' }
@@ -197,6 +204,12 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	activeCards := OrderedCollection new
 ]
 
+{ #category : 'accessing' }
+PharoGame >> lastAppliedEffect [
+
+	^ lastAppliedEffect
+]
+
 { #category : 'playing' }
 PharoGame >> playTurn [
 
@@ -210,10 +223,28 @@ PharoGame >> rankOf: aSpaceShip [
 	^ shipManager rankOfThis: aSpaceShip
 ]
 
+{ #category : 'validation' }
+PharoGame >> rememberAppliedEffect: anEffect [
+
+	lastAppliedEffect := anEffect
+]
+
 { #category : 'removing' }
 PharoGame >> removeActiveCard: aCard [
 
 	activeCards remove: aCard
+]
+
+{ #category : 'validation' }
+PharoGame >> repeatLastAppliedEffectOn: aSpaceShip [
+
+	lastAppliedEffect ifNil: [
+		Error signal: self class noEffectToRepeatErrorDescription ].
+
+	lastAppliedEffect
+		applyTo: aSpaceShip
+		affecting: self allShips
+		from: self
 ]
 
 { #category : 'validation' }

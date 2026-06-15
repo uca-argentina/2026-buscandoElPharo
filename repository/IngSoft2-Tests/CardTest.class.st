@@ -329,3 +329,131 @@ CardTest >> test018WhenCancellationCardTriesToCancelANonActivePermanentCardThenI
 				assert: error messageText
 				equals: PharoGame cardIsNotActiveErrorDescription ]
 ]
+
+{ #category : 'tests' }
+CardTest >> test019WhenRepeatCardIsCreatedThenItIsInstant [
+
+	| aCard |
+	aCard := RepeatCard new.
+
+	self assert: aCard isInstant
+]
+
+{ #category : 'tests' }
+CardTest >> test020WhenAnEffectIsAppliedThenGameRemembersItAsLastAppliedEffect [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip anEffect |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	anEffect := WormHole new.
+
+	anEffect applyTo: aSpaceShip affecting: aGame allShips from: aGame.
+
+	self assert: aGame lastAppliedEffect equals: anEffect
+]
+
+{ #category : 'tests' }
+CardTest >> test021WhenRepeatCardIsPlayedThenItRepeatsTheLastAppliedEffect [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip aCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	aCard := RepeatCard new.
+
+	aSpaceShip advanceBy: 8 top: aBoard cells from: aGame.
+	aGame rememberAppliedEffect: WormHole new.
+
+	aSpaceShip addCard: aCard.
+	aSpaceShip play: aCard in: aGame.
+
+	self assert: aSpaceShip position equals: 4
+]
+
+{ #category : 'tests' }
+CardTest >> test022WhenRepeatCardIsPlayedWithoutPreviousEffectThenItRaisesAnError [
+
+	| aGame dice spaceShips distribution aBoard tiles aSpaceShip aCard |
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		         playedOn: aBoard
+		         by: spaceShips
+		         throwing: dice
+		         laps: 2.
+
+	aSpaceShip := aGame allShips first.
+	aCard := RepeatCard new.
+
+	aSpaceShip addCard: aCard.
+
+	self
+		should: [ aSpaceShip play: aCard in: aGame ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: PharoGame noEffectToRepeatErrorDescription ]
+]
+
+{ #category : 'tests' }
+CardTest >> test023WhenARedoCardIsCreatedThenItIsInstant [
+
+	| aCard |
+
+	aCard := RedoCard new.
+
+	self assert: aCard isInstant
+]
