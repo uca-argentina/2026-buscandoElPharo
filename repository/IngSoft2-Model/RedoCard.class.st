@@ -16,7 +16,7 @@ RedoCard >> playedBy: aSpaceShip in: aGame [
 	aGame redoLastPlayedCardFor: aSpaceShip
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 RedoCard >> shouldBeRememberedAsLastPlayedCard [
 
 	^ false

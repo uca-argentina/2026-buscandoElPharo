@@ -30,10 +30,10 @@ SpaceShipsManager >> currentShip [
 	^ spaceShipsOrder at: currentTurn
 ]
 
-{ #category : 'as yet unclassified' }
-SpaceShipsManager >> currentShipIdentification: currentTurn [
+{ #category : 'playing' }
+SpaceShipsManager >> currentShipIdentification: currentTurns [
 
-	^ (spaceShipsOrder at: currentTurn) identification
+	^ (spaceShipsOrder at: currentTurns ) identification
 ]
 
 { #category : 'initialization' }
