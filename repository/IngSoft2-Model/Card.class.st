@@ -38,6 +38,21 @@ Card >> isSpeedCard [
 	^ false
 ]
 
+{ #category : 'playing' }
+Card >> playedBy: aSpaceShip [ 
+	^ self subclassResponsibility
+]
+
+{ #category : 'playing' }
+Card >> playedBy: aSpaceShip in: aGame [ 
+	^ self subclassResponsibility
+]
+
+{ #category : 'playing' }
+Card >> replayedBy: aSpaceShip in: aGame [ 
+	^ self subclassResponsibility
+]
+
 { #category : 'testing' }
 Card >> shouldBeRememberedAsLastPlayedCard [
 
