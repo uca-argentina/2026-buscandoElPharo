@@ -363,3 +363,46 @@ EffectTest >> test018WhenMoonWalkMovesAShipPastTheBeginningThenItWrapsAroundBoar
 
 	self assert: otherSpaceShip position equals: 8
 ]
+
+{ #category : 'tests' }
+EffectTest >> test019WhenCardGiverIsAppliedThenItGivesACardToTheSpaceShip [
+
+	| anEffect aGame dice spaceShips distribution aBoard tiles aSpaceShip |
+
+	anEffect := CardGiver new.
+
+	dice := Dice with: { (FixedDie withNumberOfFaces: 1) }.
+	spaceShips := OrderedCollection withAll: { 'sombrero' }.
+
+	distribution := EffectDistribution generateForSize: 10.
+	distribution addNoEffect: 1.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+
+	tiles := distribution build.
+	aBoard := Board withCells: tiles.
+
+	aGame := PharoGame
+		playedOn: aBoard
+		by: spaceShips
+		throwing: dice
+		laps: 2.
+
+	aSpaceShip := aGame allShips first.
+
+	anEffect applyTo: aSpaceShip affecting: aGame allShips from: aGame.
+
+	self assert: aSpaceShip amountOfCards equals: 3
+]
+
+{ #category : 'tests' }
+EffectTest >> test020WhenCardGiverIsCreatedThenItIdentifiesAsCardGiver [
+
+	| anEffect |
+	anEffect := CardGiver new.
+
+	self assert: anEffect isCardGiver
+]

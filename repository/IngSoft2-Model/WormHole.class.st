@@ -13,7 +13,8 @@ Class {
 { #category : 'playing' }
 WormHole >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
-	aSpaceShip advanceBy: -4 top: aGame boardSize from: aGame
+	aSpaceShip advanceBy: -4 top: aGame boardSize from: aGame.
+	aGame rememberAppliedEffect: self
 ]
 
 { #category : 'testing' }

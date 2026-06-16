@@ -20,31 +20,34 @@ EffectDistributionTest >> test001WhenGeneratingCellsWithOneHundredPercentProbabi
 { #category : 'tests' }
 EffectDistributionTest >> test002WhenGeneratingCellsWithDefaultProbabilitiesThenCellsRespectExpectedPercentages [
 
-	| distribution tiles |
+	| distribution |
 	distribution := EffectDistribution generateForSize: 1500.
-	distribution addNoEffect: 0.4.
+	distribution addNoEffect: 0.38.
 	distribution addSpeedUp: 0.2.
 	distribution addWormHole: 0.2.
 	distribution
 		addHyperJump: 0.08
-		withParsecs: (OrderedCollection withAll: { 1.2. 3 }).
-	distribution addMoonWalk: 0.1 movingBack: 2.
+		withParsecs: (OrderedCollection withAll: { 1. 2. 3 }).
+	distribution addMoonWalk: 0.02 movingBack: 2.
 	distribution addAtomicBomb: 0.02.
+	distribution addCardGiver: 0.1.
 
-	tiles := distribution build.
+	distribution build.
 
 	self assert:
-		(distribution percentageOfNoEffect between: 0.37 and: 0.43).
+		(distribution percentageOfNoEffect between: 0.35 and: 0.41).
 	self assert:
 		(distribution percentageOfWormHole between: 0.18 and: 0.22).
 	self assert:
 		(distribution percentageOfHyperJump between: 0.06 and: 0.10).
 	self assert:
-		(distribution percentageOfMoonWalk between: 0.08 and: 0.12).
+		(distribution percentageOfMoonWalk between: 0.01 and: 0.04).
 	self assert:
 		(distribution percentageOfSpeedUp between: 0.18 and: 0.22).
 	self assert:
-		(distribution percentageOfAtomicBomb between: 0.01 and: 0.04)
+		(distribution percentageOfAtomicBomb between: 0.01 and: 0.04).
+	self assert:
+		(distribution percentageOfCardGiver between: 0.08 and: 0.12)
 ]
 
 { #category : 'tests' }
@@ -69,4 +72,23 @@ EffectDistributionTest >> test004WhenCellsContainsFloatNumberThenBoardCannotBeCr
 			self
 				assert: error messageText
 				equals: EffectDistribution floatCellsErrorDescription ]
+]
+
+{ #category : 'tests' }
+EffectDistributionTest >> test005WhenEffectDistributionHasCardGiverProbabilityThenItCanGenerateACardGiverTile [
+
+	| distribution tiles |
+
+	distribution := EffectDistribution generateForSize: 1.
+	distribution addNoEffect: 0.
+	distribution addSpeedUp: 0.
+	distribution addWormHole: 0.
+	distribution addHyperJump: 0.
+	distribution addMoonWalk: 0.
+	distribution addAtomicBomb: 0.
+	distribution addCardGiver: 1.
+
+	tiles := distribution build.
+
+	self assert: tiles first isCardGiver
 ]

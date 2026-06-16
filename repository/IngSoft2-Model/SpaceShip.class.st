@@ -10,11 +10,18 @@ Class {
 	#instVars : [
 		'name',
 		'currentPosition',
-		'currentLap'
+		'currentLap',
+		'cards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
+
+{ #category : 'as yet unclassified' }
+SpaceShip class >> cardNotOwnedErrorDescription [
+
+	^ 'SpaceShip does not own that card'
+]
 
 { #category : 'validation' }
 SpaceShip class >> invalidNameErrorDescription [
@@ -38,7 +45,13 @@ SpaceShip >> > anotherSpaceShip [
 		ifFalse: [ ^ self laps > anotherSpaceShip laps ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'adding' }
+SpaceShip >> addCard: aCard [
+
+	cards add: aCard
+]
+
+{ #category : 'playing' }
 SpaceShip >> advanceBy: aParsec into: aPharoGame [
 
 	self
@@ -47,7 +60,7 @@ SpaceShip >> advanceBy: aParsec into: aPharoGame [
 		from: aPharoGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpaceShip >> advanceBy: anInteger top: anInteger2 [ 
 	self shouldBeImplemented.
 ]
@@ -59,6 +72,18 @@ SpaceShip >> advanceBy: amount top: maxCell from: aGame [
 	newPosition := currentPosition + amount.
 
 	self moveTo: newPosition top: maxCell from: aGame
+]
+
+{ #category : 'playing' }
+SpaceShip >> amountOfCards [
+
+	^ cards size
+]
+
+{ #category : 'testing' }
+SpaceShip >> hasCard: aCard [
+
+	^ cards includes: aCard
 ]
 
 { #category : 'accessing' }
@@ -73,6 +98,7 @@ SpaceShip >> initializeSpaceShipWithName: tag [
 	name := tag.
 	currentPosition := 0.
 	currentLap := 0.
+	cards := OrderedCollection new.
 ]
 
 { #category : 'accessing' }
@@ -104,8 +130,35 @@ SpaceShip >> moveToFirstCell [
 	currentPosition := 1
 ]
 
+{ #category : 'playing' }
+SpaceShip >> play: aCard [
+
+	(self hasCard: aCard) ifFalse: [
+		Error signal: self class cardNotOwnedErrorDescription ].
+
+	aCard playedBy: self
+]
+
+{ #category : 'playing' }
+SpaceShip >> play: aCard in: aGame [
+
+	(self hasCard: aCard) ifFalse: [
+		Error signal: self class cardNotOwnedErrorDescription ].
+
+	aCard playedBy: self in: aGame.
+
+	aCard shouldBeRememberedAsLastPlayedCard ifTrue: [
+		aGame rememberPlayedCard: aCard ]
+]
+
 { #category : 'accessing' }
 SpaceShip >> position [
 
 	^ currentPosition
+]
+
+{ #category : 'removing' }
+SpaceShip >> removeCard: aCard [
+
+	cards remove: aCard
 ]

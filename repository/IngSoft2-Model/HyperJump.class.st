@@ -27,13 +27,13 @@ HyperJump >> applyTo: aSpaceShip affecting: allShips from: aGame [
 	aSpaceShip advanceBy: self nextParsecJump into: aGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 HyperJump >> currentParsec [
 
 	^ parsecsToMove first
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 HyperJump >> effectImpactOn: aBoard [
 
 	^ aBoard cellsRepresenting: self nextParsecJump

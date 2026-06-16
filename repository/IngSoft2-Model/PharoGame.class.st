@@ -14,11 +14,21 @@ Class {
 		'board',
 		'lapsToWin',
 		'shipManager',
-		'parsecsPerCell'
+		'parsecsPerCell',
+		'activeCards',
+		'lastAppliedEffect',
+		'lastPlayedCard',
+		'cardProvider'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
+
+{ #category : 'as yet unclassified' }
+PharoGame class >> cardIsNotActiveErrorDescription [
+
+	^ 'Card is not active'
+]
 
 { #category : 'validation' }
 PharoGame class >> duplicatedShipNamesErrorDescription [
@@ -44,6 +54,18 @@ PharoGame class >> negativeLapErrorDescription [
 	^ 'Laps can not be negative'
 ]
 
+{ #category : 'validation' }
+PharoGame class >> noCardToRedoErrorDescription [
+
+	^ 'There is no card to redo'
+]
+
+{ #category : 'validation' }
+PharoGame class >> noEffectToRepeatErrorDescription [
+
+	^ 'There is no effect to repeat'
+]
+
 { #category : 'creation' }
 PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 
@@ -60,10 +82,22 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 		  laps: laps
 ]
 
+{ #category : 'playing' }
+PharoGame >> activateCard: aCard [
+
+	activeCards add: aCard
+]
+
 { #category : 'accessing' }
 PharoGame >> allShips [
 
 	^ shipManager allShips
+]
+
+{ #category : 'playing' }
+PharoGame >> amountOfActiveCards [
+
+	^ activeCards size
 ]
 
 { #category : 'playing' }
@@ -72,7 +106,13 @@ PharoGame >> boardSize [
 	^ board cells
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
+PharoGame >> cardProvider: aCardProvider [
+
+	cardProvider := aCardProvider
+]
+
+{ #category : 'initialization' }
 PharoGame >> cellsRepresenting: aParsec [
 
 	^ board cellsRepresenting: aParsec 
@@ -105,6 +145,22 @@ PharoGame >> currentShip [
 ]
 
 { #category : 'playing' }
+PharoGame >> deactivateCard: aCard [
+
+	(self hasActiveCard: aCard) ifFalse: [
+		Error signal: self class cardIsNotActiveErrorDescription ].
+
+	activeCards remove: aCard
+]
+
+{ #category : 'playing' }
+PharoGame >> dealInitialCards [
+
+	self allShips do: [ :aShip |
+		2 timesRepeat: [ self giveCardTo: aShip ] ]
+]
+
+{ #category : 'playing' }
 PharoGame >> executeNextTurn [
 
 	turnManager playTurnOn: self
@@ -114,23 +170,28 @@ PharoGame >> executeNextTurn [
 PharoGame >> executeTurnFor: currentSpaceShip [
 
 	| roll effect |
-
-	roll := dice roll.
-	currentSpaceShip
-		advanceBy: roll
-		top: board cells
-		from: self.
+	roll := self rollFor: currentSpaceShip.
+	currentSpaceShip advanceBy: roll top: board cells from: self.
 	effect := board effectAtCell: currentSpaceShip position.
-	effect
-		applyTo: currentSpaceShip
-		affecting: self allShips
-		from: self
+	effect applyTo: currentSpaceShip affecting: self allShips from: self
 ]
 
 { #category : 'accessing' }
 PharoGame >> finished [
 
 	^ currentState finished
+]
+
+{ #category : 'playing' }
+PharoGame >> giveCardTo: aSpaceShip [
+
+	aSpaceShip addCard: cardProvider nextCard
+]
+
+{ #category : 'testing' }
+PharoGame >> hasActiveCard: aCard [
+
+	^ activeCards includes: aCard
 ]
 
 { #category : 'testing' }
@@ -148,10 +209,33 @@ PharoGame >> initializePharoGamePlayedOn: aBoard by: ships using: playableDice l
 	lapsToWin := laps.
 	spaceShips := ships collect: [ :nombre |
 		              SpaceShip namedAfter: nombre ].
+
 	shipManager := SpaceShipsManager withShips: spaceShips.
 	turnManager := TurnManager madeOf: spaceShips.
 	winnerState := NoWinner new.
-	dice := playableDice
+	dice := playableDice.
+	activeCards := OrderedCollection new.
+	cardProvider := CardProvider withCards: (OrderedCollection
+			                 with: SpeedCard new
+			                 with: OverloadCard new
+			                 with: AccelerationCard new
+			                 with: CancellationCard new
+			                 with: RepeatCard new
+			                 with: RedoCard new).
+
+	self dealInitialCards
+]
+
+{ #category : 'accessing' }
+PharoGame >> lastAppliedEffect [
+
+	^ lastAppliedEffect
+]
+
+{ #category : 'accessing' }
+PharoGame >> lastPlayedCard [
+
+	^ lastPlayedCard
 ]
 
 { #category : 'playing' }
@@ -168,9 +252,57 @@ PharoGame >> rankOf: aSpaceShip [
 ]
 
 { #category : 'validation' }
+PharoGame >> redoLastPlayedCardFor: aSpaceShip [
+
+	lastPlayedCard ifNil: [
+		Error signal: self class noCardToRedoErrorDescription ].
+
+	lastPlayedCard replayedBy: aSpaceShip in: self
+]
+
+{ #category : 'validation' }
+PharoGame >> rememberAppliedEffect: anEffect [
+
+	lastAppliedEffect := anEffect
+]
+
+{ #category : 'validation' }
+PharoGame >> rememberPlayedCard: aCard [
+
+	lastPlayedCard := aCard
+]
+
+{ #category : 'removing' }
+PharoGame >> removeActiveCard: aCard [
+
+	activeCards remove: aCard
+]
+
+{ #category : 'validation' }
+PharoGame >> repeatLastAppliedEffectOn: aSpaceShip [
+
+	lastAppliedEffect ifNil: [
+		Error signal: self class noEffectToRepeatErrorDescription ].
+
+	lastAppliedEffect
+		applyTo: aSpaceShip
+		affecting: self allShips
+		from: self
+]
+
+{ #category : 'validation' }
 PharoGame >> restartErrorDescription [
 
 	^ 'Can not restart the game'
+]
+
+{ #category : 'playing' }
+PharoGame >> rollFor: aSpaceShip [
+
+	^ activeCards
+		  inject: dice roll
+		  into: [ :currentRoll :aCard |
+		  aCard modifyRoll: currentRoll for: aSpaceShip ]
 ]
 
 { #category : 'accessing' }
