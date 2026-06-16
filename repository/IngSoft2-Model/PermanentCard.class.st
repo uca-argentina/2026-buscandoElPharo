@@ -38,6 +38,9 @@ PermanentCard >> playedBy: aSpaceShip [
 { #category : 'as yet unclassified' }
 PermanentCard >> playedBy: aSpaceShip in: aGame [
 
+	aGame currentShip = aSpaceShip identification ifFalse: [
+		Error signal:
+			'Las cartas permanentes solo se pueden jugar en el turno de la nave' ].
 	aSpaceShip removeCard: self.
 	self replayedBy: aSpaceShip in: aGame
 ]

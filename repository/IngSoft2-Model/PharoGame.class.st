@@ -157,8 +157,7 @@ PharoGame >> deactivateCard: aCard [
 PharoGame >> dealInitialCards [
 
 	self allShips do: [ :aShip |
-		aShip addCard: InstantCard new.
-		aShip addCard: PermanentCard new ]
+		2 timesRepeat: [ self giveCardTo: aShip ] ]
 ]
 
 { #category : 'playing' }
