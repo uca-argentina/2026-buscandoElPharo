@@ -10,9 +10,9 @@ Class {
 }
 
 { #category : 'operations' }
-AtomicBomb >> applyTo: spaceShips [
+AtomicBomb >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
-	spaceShips do: [ :spaceShip | spaceShip moveToFirstCell ]
+	allShips do: [ :ship | ship moveToFirstCell ]
 ]
 
 { #category : 'testing' }

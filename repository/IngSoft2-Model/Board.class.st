@@ -7,7 +7,9 @@ Class {
 	#name : 'Board',
 	#superclass : 'Object',
 	#instVars : [
-		'tiles'
+		'tiles',
+		'totalParsecs',
+		'parsecsPerCell'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -29,6 +31,14 @@ Board class >> withCells: squares [
 	^ self new initializeWithCells: squares
 ]
 
+{ #category : 'as yet unclassified' }
+Board class >> withCells: cells andParsecs: parsecs [
+
+	cells isEmpty ifTrue: [
+		Error signal: self invalidCellsErrorDescription ].
+	^ self new initializeWithCells: cells andParsecs: parsecs
+]
+
 { #category : 'accessing' }
 Board >> cells [
 
@@ -36,9 +46,15 @@ Board >> cells [
 ]
 
 { #category : 'playing' }
+Board >> cellsRepresenting: aDistance [
+
+	^ (aDistance asParsecs / self parsecsPerCell) ceiling
+]
+
+{ #category : 'playing' }
 Board >> effectAtCell: aCellNumber [
 
-	^ (tiles at: aCellNumber) effectImpact
+	^ tiles at: (aCellNumber min: self cells)
 ]
 
 { #category : 'initialization' }
@@ -47,12 +63,15 @@ Board >> initializeWithCells: squares [
 	tiles := squares.
 ]
 
-{ #category : 'playing' }
-Board >> movingTo: newPosition crossMaxCellFor: currentSpaceShip from: aGame [
+{ #category : 'initialization' }
+Board >> initializeWithCells: cells andParsecs: aTotalParsecs [
 
-	| tile finalPosition |
-	tile := tiles at: (newPosition min: self cells).
-	finalPosition := newPosition + tile effectImpact.
-	currentSpaceShip advanceBy: finalPosition top: self cells from: aGame.
-	tile applyTo: currentSpaceShip affecting: aGame allShips from: aGame
+    tiles := cells.
+    totalParsecs := aTotalParsecs
+]
+
+{ #category : 'playing' }
+Board >> parsecsPerCell [
+
+    ^ totalParsecs / self cells
 ]

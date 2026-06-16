@@ -14,7 +14,10 @@ Class {
 		'moonWalkEffectProbability',
 		'hyperJumpEffectProbability',
 		'atomicBombEffectProbability',
-		'tiles'
+		'tiles',
+		'moonWalkSteps',
+		'hyperJumpParsecs',
+		'cardGiverEffectProbability'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -52,15 +55,35 @@ EffectDistribution >> addAtomicBomb: aProbability [
 ]
 
 { #category : 'adding' }
+EffectDistribution >> addCardGiver: aProbability [
+
+	cardGiverEffectProbability := aProbability
+]
+
+{ #category : 'adding' }
 EffectDistribution >> addHyperJump: aProbability [
 
 	hyperJumpEffectProbability := aProbability
 ]
 
 { #category : 'adding' }
+EffectDistribution >> addHyperJump: aProbability withParsecs: parsecs [
+
+	hyperJumpEffectProbability := aProbability.
+	hyperJumpParsecs := parsecs
+]
+
+{ #category : 'adding' }
 EffectDistribution >> addMoonWalk: aProbability [
 
 	moonWalkEffectProbability := aProbability
+]
+
+{ #category : 'adding' }
+EffectDistribution >> addMoonWalk: aProbability movingBack: steps [
+
+	moonWalkEffectProbability := aProbability.
+	moonWalkSteps := steps
 ]
 
 { #category : 'adding' }
@@ -84,7 +107,7 @@ EffectDistribution >> addWormHole: aProbability [
 { #category : 'building' }
 EffectDistribution >> build [
 
-	"self theSumIsOne."
+	self theSumIsOne.
 	tiles := (1 to: cells) collect: [ :i |
 		         self tileFor: Random new next ].
 	^ tiles
@@ -100,60 +123,97 @@ EffectDistribution >> initializeWithSize: squares [
 	speedUpEffectProbability := 0.
 	moonWalkEffectProbability := 0.
 	hyperJumpEffectProbability := 0.
-	atomicBombEffectProbability := 0
+	atomicBombEffectProbability := 0.
+	cardGiverEffectProbability := 0.
+	hyperJumpParsecs := OrderedCollection
+		                    with: (Parsec distance: 20)
+		                    with: (Parsec distance: 10)
+		                    with: (Parsec distance: 5)
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 EffectDistribution >> percentageOfAtomicBomb [
 
 	^ (tiles select: [ :effect | effect isAtomicBomb ]) size / tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
+EffectDistribution >> percentageOfCardGiver [
+
+	^ (tiles select: [ :effect | effect isCardGiver ]) size / tiles size
+]
+
+{ #category : 'testing' }
 EffectDistribution >> percentageOfHyperJump [
 
 	^ (tiles select: [ :effect | effect isHyperJump ]) size / tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 EffectDistribution >> percentageOfMoonWalk [
 
 	^ (tiles select: [ :effect | effect isMoonWalk ]) size / tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 EffectDistribution >> percentageOfNoEffect [
 
 	^ (tiles select: [ :effect | effect isNoEffect ]) size / tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 EffectDistribution >> percentageOfSpeedUp [
 
 	^ (tiles select: [ :effect | effect isSpeedUp ]) size / tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 EffectDistribution >> percentageOfWormHole [
 
 	^ (tiles select: [ :effect | effect isWormHole ]) size / tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'adding' }
+EffectDistribution >> theSumIsOne [
+
+	| sumOfProbabilites |
+	sumOfProbabilites := (noEffectProbability + wormHoleEffectProbability
+	                      + speedUpEffectProbability
+	                      + moonWalkEffectProbability
+	                      + hyperJumpEffectProbability
+	                      + atomicBombEffectProbability
+	                      + cardGiverEffectProbability) ceiling.
+
+	sumOfProbabilites = 1 ifFalse: [
+		Error signal: 'The Sum Of All Probabilities should be 1' ]
+]
+
+{ #category : 'building' }
 EffectDistribution >> tileFor: randomProbability [
 
 	| accumulated |
-	accumulated := atomicBombEffectProbability.
-	randomProbability < accumulated ifTrue: [ ^ AtomicBomb new ].
-	accumulated := accumulated + noEffectProbability.
+	accumulated := noEffectProbability.
 	randomProbability < accumulated ifTrue: [ ^ NoEffect new ].
-	accumulated := accumulated + moonWalkEffectProbability .
-	randomProbability < accumulated ifTrue: [ ^ MoonWalk new ].
-	accumulated := accumulated + hyperJumpEffectProbability.
-	randomProbability < accumulated ifTrue: [ ^ HyperJump new ].
-	accumulated := accumulated + wormHoleEffectProbability .
+
+	accumulated := accumulated + cardGiverEffectProbability.
+	randomProbability < accumulated ifTrue: [ ^ CardGiver new ].
+
+	accumulated := accumulated + wormHoleEffectProbability.
 	randomProbability < accumulated ifTrue: [ ^ WormHole new ].
-	accumulated := accumulated + speedUpEffectProbability .
+
+	accumulated := accumulated + speedUpEffectProbability.
 	randomProbability < accumulated ifTrue: [ ^ SpeedUp new ].
 
+	accumulated := accumulated + moonWalkEffectProbability.
+	randomProbability < accumulated ifTrue: [
+		^ MoonWalk movingBack: moonWalkSteps ].
+
+	accumulated := accumulated + hyperJumpEffectProbability.
+	randomProbability < accumulated ifTrue: [
+		^ HyperJump withParsecs: hyperJumpParsecs ].
+
+	accumulated := accumulated + atomicBombEffectProbability.
+	randomProbability < accumulated ifTrue: [ ^ AtomicBomb new ].
+
+	^ NoEffect new
 ]

@@ -10,11 +10,18 @@ Class {
 	#instVars : [
 		'name',
 		'currentPosition',
-		'currentLap'
+		'currentLap',
+		'cards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
+
+{ #category : 'as yet unclassified' }
+SpaceShip class >> cardNotOwnedErrorDescription [
+
+	^ 'SpaceShip does not own that card'
+]
 
 { #category : 'validation' }
 SpaceShip class >> invalidNameErrorDescription [
@@ -30,17 +37,53 @@ SpaceShip class >> namedAfter: tag [
 	^ self new initializeSpaceShipWithName: tag
 ]
 
+{ #category : 'comparing' }
+SpaceShip >> > anotherSpaceShip [
+
+	self laps = anotherSpaceShip laps
+		ifTrue: [ ^ self position > anotherSpaceShip position ]
+		ifFalse: [ ^ self laps > anotherSpaceShip laps ]
+]
+
+{ #category : 'adding' }
+SpaceShip >> addCard: aCard [
+
+	cards add: aCard
+]
+
 { #category : 'playing' }
-SpaceShip >> advanceBy: newRoll top: maxCell from: aGame [
+SpaceShip >> advanceBy: aParsec into: aPharoGame [
+
+	self
+		advanceBy: (aPharoGame cellsRepresenting: aParsec)
+		top: aPharoGame boardSize
+		from: aPharoGame
+]
+
+{ #category : 'playing' }
+SpaceShip >> advanceBy: anInteger top: anInteger2 [ 
+	self shouldBeImplemented.
+]
+
+{ #category : 'playing' }
+SpaceShip >> advanceBy: amount top: maxCell from: aGame [
 
 	| newPosition |
-	newPosition := currentPosition + newRoll.
-	newPosition > maxCell ifTrue: [
-		newPosition := newPosition - maxCell.
-		currentLap := currentLap + 1.
-		aGame checkWinnerFor: self with: self laps ].
-	newPosition := newPosition max: 1.
-	currentPosition := newPosition
+	newPosition := currentPosition + amount.
+
+	self moveTo: newPosition top: maxCell from: aGame
+]
+
+{ #category : 'playing' }
+SpaceShip >> amountOfCards [
+
+	^ cards size
+]
+
+{ #category : 'testing' }
+SpaceShip >> hasCard: aCard [
+
+	^ cards includes: aCard
 ]
 
 { #category : 'accessing' }
@@ -53,24 +96,69 @@ SpaceShip >> identification [
 SpaceShip >> initializeSpaceShipWithName: tag [
 
 	name := tag.
-	currentPosition := 1.
+	currentPosition := 0.
 	currentLap := 0.
+	cards := OrderedCollection new.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 SpaceShip >> laps [
 
 	^ currentLap
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
+SpaceShip >> moveTo: newPosition top: maxCell from: aGame [
+
+	| adjustedPosition |
+	adjustedPosition := newPosition.
+
+	[ adjustedPosition > maxCell ] whileTrue: [
+		adjustedPosition := adjustedPosition - maxCell.
+		currentLap := currentLap + 1 ].
+
+	[ adjustedPosition < 1 ] whileTrue: [
+		adjustedPosition := adjustedPosition + maxCell ].
+
+	currentPosition := adjustedPosition.
+	aGame checkWinnerFor: self with: currentLap
+]
+
+{ #category : 'private' }
 SpaceShip >> moveToFirstCell [
 
 	currentPosition := 1
+]
+
+{ #category : 'playing' }
+SpaceShip >> play: aCard [
+
+	(self hasCard: aCard) ifFalse: [
+		Error signal: self class cardNotOwnedErrorDescription ].
+
+	aCard playedBy: self
+]
+
+{ #category : 'playing' }
+SpaceShip >> play: aCard in: aGame [
+
+	(self hasCard: aCard) ifFalse: [
+		Error signal: self class cardNotOwnedErrorDescription ].
+
+	aCard playedBy: self in: aGame.
+
+	aCard shouldBeRememberedAsLastPlayedCard ifTrue: [
+		aGame rememberPlayedCard: aCard ]
 ]
 
 { #category : 'accessing' }
 SpaceShip >> position [
 
 	^ currentPosition
+]
+
+{ #category : 'removing' }
+SpaceShip >> removeCard: aCard [
+
+	cards remove: aCard
 ]

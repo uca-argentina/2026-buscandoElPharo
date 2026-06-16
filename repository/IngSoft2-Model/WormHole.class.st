@@ -10,13 +10,14 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 WormHole >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
-	aSpaceShip advanceBy: -4 top: aGame boardSize from: aGame
+	aSpaceShip advanceBy: -4 top: aGame boardSize from: aGame.
+	aGame rememberAppliedEffect: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 WormHole >> effectImpact [
 
 	^ -4

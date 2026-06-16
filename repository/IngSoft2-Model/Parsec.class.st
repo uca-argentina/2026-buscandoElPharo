@@ -20,26 +20,21 @@ Parsec class >> distance: aDistance [
 ]
 
 { #category : 'comparing' }
-Parsec >> = anotherParsec [
-
-	^ self distance = anotherParsec distance
-]
-
-{ #category : 'comparing' }
 Parsec >> > anotherParsec [
 
 	^ distance > anotherParsec distance
 ]
 
 { #category : 'accessing' }
-Parsec >> distance [
+Parsec >> asParsecs [
+
 	^ distance
 ]
 
-{ #category : 'comparing' }
-Parsec >> hash [
+{ #category : 'accessing' }
+Parsec >> distance [
 
-	^ distance hash
+	^ distance
 ]
 
 { #category : 'initialization' }
