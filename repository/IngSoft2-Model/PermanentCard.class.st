@@ -1,3 +1,6 @@
+"
+I represent a permanent card. I can only be played during the turn of the spaceship that owns me, and my effect remains active until removed.
+"
 Class {
 	#name : 'PermanentCard',
 	#superclass : 'Card',
@@ -17,35 +20,35 @@ PermanentCard >> isPermanent [
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PermanentCard >> modifyRoll: aRoll [
 
 	^ aRoll
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PermanentCard >> modifyRoll: aRoll for: aSpaceShip [
 
 	^ aRoll
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PermanentCard >> playedBy: aSpaceShip [
 
 	aSpaceShip removeCard: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PermanentCard >> playedBy: aSpaceShip in: aGame [
 
 	aGame currentShip = aSpaceShip identification ifFalse: [
 		Error signal:
-			'Las cartas permanentes solo se pueden jugar en el turno de la nave' ].
+			'Permanent cards can only be played during the spaceship''s turn'].
 	aSpaceShip removeCard: self.
 	self replayedBy: aSpaceShip in: aGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PermanentCard >> replayedBy: aSpaceShip in: aGame [
 
 	aGame activateCard: self

@@ -1,3 +1,6 @@
+"
+I represent a Repeat card. When played, I apply the last executed board cell effect to a specific spaceship.
+"
 Class {
 	#name : 'RepeatCard',
 	#superclass : 'InstantCard',
@@ -6,7 +9,7 @@ Class {
 	#tag : 'Cards'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 RepeatCard >> playedBy: aSpaceShip in: aGame [
 
 	aSpaceShip removeCard: self.

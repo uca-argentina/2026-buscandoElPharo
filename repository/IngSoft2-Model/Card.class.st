@@ -1,3 +1,6 @@
+"
+'I represent the abstract concept of a card within the game. I define the interface and common behavior for all card types.'.
+"
 Class {
 	#name : 'Card',
 	#superclass : 'Object',

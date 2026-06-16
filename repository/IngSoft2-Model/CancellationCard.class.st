@@ -1,3 +1,6 @@
+"
+I represent a Cancellation card. When played, I remove a specific active permanent card from the game.
+"
 Class {
 	#name : 'CancellationCard',
 	#superclass : 'InstantCard',
@@ -14,7 +17,7 @@ CancellationCard class >> cancelling: aPermanentCard [
 	^ self new initializeCancelling: aPermanentCard
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 CancellationCard >> cancel: aPermanentCard from: aGame [
 
 	aGame deactivateCard: aPermanentCard
@@ -26,7 +29,7 @@ CancellationCard >> initializeCancelling: aPermanentCard [
 	cardToCancel := aPermanentCard
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 CancellationCard >> playedBy: aSpaceShip in: aGame [
 
 	aSpaceShip removeCard: self.

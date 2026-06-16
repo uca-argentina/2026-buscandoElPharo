@@ -51,7 +51,7 @@ SpaceShip >> addCard: aCard [
 	cards add: aCard
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpaceShip >> advanceBy: aParsec into: aPharoGame [
 
 	self
@@ -60,7 +60,7 @@ SpaceShip >> advanceBy: aParsec into: aPharoGame [
 		from: aPharoGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpaceShip >> advanceBy: anInteger top: anInteger2 [ 
 	self shouldBeImplemented.
 ]
@@ -74,7 +74,7 @@ SpaceShip >> advanceBy: amount top: maxCell from: aGame [
 	self moveTo: newPosition top: maxCell from: aGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpaceShip >> amountOfCards [
 
 	^ cards size
@@ -130,7 +130,7 @@ SpaceShip >> moveToFirstCell [
 	currentPosition := 1
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpaceShip >> play: aCard [
 
 	(self hasCard: aCard) ifFalse: [
@@ -139,7 +139,7 @@ SpaceShip >> play: aCard [
 	aCard playedBy: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 SpaceShip >> play: aCard in: aGame [
 
 	(self hasCard: aCard) ifFalse: [

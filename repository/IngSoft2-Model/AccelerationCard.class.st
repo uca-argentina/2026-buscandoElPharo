@@ -1,3 +1,6 @@
+"
+I represent an Acceleration card. When active, I increase the total dice roll of all spaceships in the game by 1.
+"
 Class {
 	#name : 'AccelerationCard',
 	#superclass : 'PermanentCard',
@@ -11,7 +14,7 @@ AccelerationCard >> isAccelerationCard [
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 AccelerationCard >> modifyRoll: aRoll for: aSpaceShip [
 
 	^ aRoll + 1

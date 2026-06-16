@@ -8,7 +8,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 Effect >> applyTo: aSpaceShip affecting: allShips from: aGame [
 
 	aGame giveCardTo: aSpaceShip

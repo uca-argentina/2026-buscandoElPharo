@@ -1,3 +1,6 @@
+"
+I am responsible for managing the deck of cards. I provide a sequential and cyclic distribution of cards to the spaceships.
+"
 Class {
 	#name : 'CardProvider',
 	#superclass : 'Object',

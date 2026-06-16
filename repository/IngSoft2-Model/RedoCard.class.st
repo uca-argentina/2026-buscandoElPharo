@@ -1,3 +1,6 @@
+"
+I represent a Redo card. When played, I replicate the exact behavior of the last card played in the game, allowing a new target to be chosen if necessary.
+"
 Class {
 	#name : 'RedoCard',
 	#superclass : 'InstantCard',
@@ -6,7 +9,7 @@ Class {
 	#tag : 'Cards'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 RedoCard >> playedBy: aSpaceShip in: aGame [
 
 	aSpaceShip removeCard: self.

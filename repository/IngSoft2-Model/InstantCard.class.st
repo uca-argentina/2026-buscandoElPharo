@@ -1,3 +1,6 @@
+"
+I represent an instant card. I can be played at any time during the game, and my effect is applied immediately.
+"
 Class {
 	#name : 'InstantCard',
 	#superclass : 'Card',
@@ -17,19 +20,19 @@ InstantCard >> isPermanent [
 	^ false
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 InstantCard >> playedBy: aSpaceShip [
 
 	aSpaceShip removeCard: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 InstantCard >> playedBy: aSpaceShip in: aGame [
 
 	aSpaceShip removeCard: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 InstantCard >> replayedBy: aSpaceShip in: aGame [
 
 	self playedBy: aSpaceShip in: aGame

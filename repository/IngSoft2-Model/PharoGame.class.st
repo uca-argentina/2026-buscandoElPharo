@@ -82,7 +82,7 @@ PharoGame class >> playedOn: aBoard by: ships throwing: aDice laps: laps [
 		  laps: laps
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> activateCard: aCard [
 
 	activeCards add: aCard
@@ -94,7 +94,7 @@ PharoGame >> allShips [
 	^ shipManager allShips
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> amountOfActiveCards [
 
 	^ activeCards size
@@ -112,7 +112,7 @@ PharoGame >> cardProvider: aCardProvider [
 	cardProvider := aCardProvider
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 PharoGame >> cellsRepresenting: aParsec [
 
 	^ board cellsRepresenting: aParsec 
@@ -144,7 +144,7 @@ PharoGame >> currentShip [
 	^ shipManager currentShipIdentification: turnManager currentTurn 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> deactivateCard: aCard [
 
 	(self hasActiveCard: aCard) ifFalse: [
@@ -153,7 +153,7 @@ PharoGame >> deactivateCard: aCard [
 	activeCards remove: aCard
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> dealInitialCards [
 
 	self allShips do: [ :aShip |
@@ -182,7 +182,7 @@ PharoGame >> finished [
 	^ currentState finished
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> giveCardTo: aSpaceShip [
 
 	aSpaceShip addCard: cardProvider nextCard
@@ -296,7 +296,7 @@ PharoGame >> restartErrorDescription [
 	^ 'Can not restart the game'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 PharoGame >> rollFor: aSpaceShip [
 
 	^ activeCards

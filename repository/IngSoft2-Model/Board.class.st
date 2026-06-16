@@ -45,13 +45,13 @@ Board >> cells [
 	^ tiles size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 Board >> cellsRepresenting: aDistance [
 
 	^ (aDistance asParsecs / self parsecsPerCell) ceiling
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 Board >> effectAtCell: aCellNumber [
 
 	^ tiles at: (aCellNumber min: self cells)
@@ -70,7 +70,7 @@ Board >> initializeWithCells: cells andParsecs: aTotalParsecs [
     totalParsecs := aTotalParsecs
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 Board >> parsecsPerCell [
 
     ^ totalParsecs / self cells

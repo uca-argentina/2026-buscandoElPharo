@@ -1,3 +1,6 @@
+"
+I represent a spatial distance measured in light-years. I can convert my value into parsecs to integrate with the board''s movement logic.
+"
 Class {
 	#name : 'LightYear',
 	#superclass : 'Object',

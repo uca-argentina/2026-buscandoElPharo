@@ -1,3 +1,6 @@
+"
+I represent an Overload card. When active, I decrease the total dice roll of a target spaceship by 2.
+"
 Class {
 	#name : 'OverloadCard',
 	#superclass : 'PermanentCard',
@@ -26,7 +29,7 @@ OverloadCard >> isOverloadCard [
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'playing' }
 OverloadCard >> modifyRoll: aRoll for: aSpaceShip [
 
 	aSpaceShip = target ifTrue: [ ^ aRoll - 2 ].
