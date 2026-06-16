@@ -98,16 +98,16 @@ BoardTest >> test006WhenABoardIsCreatedThenReceivesAnAlreadyDistributedCollectio
 
 	| distribution tiles aBoard |
 	distribution := EffectDistribution generateForSize: 100.
-	distribution addNoEffect: 0.4.
+	distribution addNoEffect: 0.38.
 	distribution addSpeedUp: 0.2.
 	distribution addWormHole: 0.2.
 	distribution addHyperJump: 0.08.
-	distribution addMoonWalk: 0.1.
+	distribution addMoonWalk: 0.02.
 	distribution addAtomicBomb: 0.02.
+	distribution addCardGiver: 0.1.
 
 	tiles := distribution build.
 	aBoard := Board withCells: tiles.
-
 	self assert: aBoard cells equals: 100
 ]
 

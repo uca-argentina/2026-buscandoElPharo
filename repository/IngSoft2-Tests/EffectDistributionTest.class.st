@@ -22,26 +22,26 @@ EffectDistributionTest >> test002WhenGeneratingCellsWithDefaultProbabilitiesThen
 
 	| distribution |
 	distribution := EffectDistribution generateForSize: 1500.
-	distribution addNoEffect: 0.3.
+	distribution addNoEffect: 0.38.
 	distribution addSpeedUp: 0.2.
 	distribution addWormHole: 0.2.
 	distribution
 		addHyperJump: 0.08
 		withParsecs: (OrderedCollection withAll: { 1. 2. 3 }).
-	distribution addMoonWalk: 0.1 movingBack: 2.
+	distribution addMoonWalk: 0.02 movingBack: 2.
 	distribution addAtomicBomb: 0.02.
 	distribution addCardGiver: 0.1.
 
 	distribution build.
 
 	self assert:
-		(distribution percentageOfNoEffect between: 0.27 and: 0.33).
+		(distribution percentageOfNoEffect between: 0.35 and: 0.41).
 	self assert:
 		(distribution percentageOfWormHole between: 0.18 and: 0.22).
 	self assert:
 		(distribution percentageOfHyperJump between: 0.06 and: 0.10).
 	self assert:
-		(distribution percentageOfMoonWalk between: 0.08 and: 0.12).
+		(distribution percentageOfMoonWalk between: 0.01 and: 0.04).
 	self assert:
 		(distribution percentageOfSpeedUp between: 0.18 and: 0.22).
 	self assert:
